@@ -70,8 +70,6 @@ public class EmployIndexFrame extends JFrame {
         salesMangerFrame.init();
         selfInformationFrame.init();
         settingFrame.init();
-        userMangerFrame.init();
-        logFrame.init();
     }
 
     private void init() {
@@ -107,6 +105,8 @@ public class EmployIndexFrame extends JFrame {
         JPanel menu = new JPanel(new GridLayout(8, 1));
         menu.setSize(200, 800);
         menu.setLocation(50, 100);
+        menu.setBackground(null);
+        menu.setOpaque(false);
         mainPanel.add(menu);
 
         JButton button0 = new JButton("主页");
@@ -114,16 +114,14 @@ public class EmployIndexFrame extends JFrame {
         JButton button2 = new JButton("采购管理");
         JButton button3 = new JButton("用户管理");
         JButton button4 = new JButton("群组在线");
-        JButton button5 = new JButton("日志记录");
+        JButton button5 = new JButton("登陆日志");
         JButton button6 = new JButton("个人信息");
         JButton button7 = new JButton("个性设置");
 
         menu.add(button0);
         menu.add(button1);
         menu.add(button2);
-        menu.add(button3);
         menu.add(button4);
-        menu.add(button5);
         menu.add(button6);
         menu.add(button7);
 
@@ -137,11 +135,20 @@ public class EmployIndexFrame extends JFrame {
         card.add(homeFrame, "主页");
         card.add(salesMangerFrame, "销售管理");
         card.add(procurementManagerFrame, "采购管理");
-        card.add(userMangerFrame, "用户管理");
         card.add(chatFrame, "群组在线");
-        card.add(logFrame, "日志记录");
         card.add(selfInformationFrame, "个人信息");
         card.add(settingFrame, "个性设置");
+
+        //超级管理员模块
+        if (StaticConfiguration.getEmploy().getType() == IndexConstant.LOGIN_TYPE_ADMIN) {
+            userMangerFrame.init();
+            logFrame.init();
+
+            menu.add(button3);
+            menu.add(button5);
+            card.add(userMangerFrame, "用户管理");
+            card.add(logFrame, "登陆日志");
+        }
 
         //顶部信息面板
         JPanel top = new JPanel(null);
@@ -232,7 +239,7 @@ public class EmployIndexFrame extends JFrame {
         });
 
         button5.addActionListener(e -> {
-            cardLayout.show(card, "日志记录");
+            cardLayout.show(card, "登陆日志");
             button5.setBackground(Color.GREEN);
             if (lastButton != button5) {
                 lastButton.setBackground(null);
