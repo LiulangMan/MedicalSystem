@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjw.mapper.AnnouncementMapper">
+    <resultMap id="BaseResultMap" type="com.zjw.domain.Announcement">
+        <!--@mbg.generated-->
+        <!--@Table sys_announcement-->
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="text" jdbcType="LONGVARCHAR" property="text"/>
+        <result column="write_time" jdbcType="TIMESTAMP" property="writeTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        title, `text`, write_time
+    </sql>
+    <insert id="insert" parameterType="com.zjw.domain.Announcement">
+        <!--@mbg.generated-->
+        insert into sys_announcement (title, `text`, write_time)
+        values (#{title,jdbcType=VARCHAR}, #{text,jdbcType=LONGVARCHAR}, #{writeTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.zjw.domain.Announcement">
+        <!--@mbg.generated-->
+        insert into sys_announcement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                title,
+            </if>
+            <if test="text != null">
+                `text`,
+            </if>
+            <if test="writeTime != null">
+                write_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="text != null">
+                #{text,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="writeTime != null">
+                #{writeTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectTopNAnnouncement" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_announcement
+        order by write_time desc
+        limit #{n,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectAllByTitle" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_announcement
+        where title = #{title,jdbcType=VARCHAR}
+        order by write_time desc
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_announcement
+        order by write_time desc
+    </select>
+
+    <update id="updateAnnouncement" parameterType="com.zjw.domain.Announcement">
+        update sys_announcement
+        set title = #{title,jdbcType=VARCHAR},
+            text  = #{text,jdbcType=VARCHAR}
+        where write_time = #{writeTime,jdbcType=TIMESTAMP}
+    </update>
+
+    <delete id="deleteAnnouncement" parameterType="com.zjw.domain.Announcement">
+        delete
+        from sys_announcement
+        where write_time = #{writeTime,jdbcType=TIMESTAMP}
+          and title = #{title,jdbcType=VARCHAR}
+    </delete>
+</mapper>

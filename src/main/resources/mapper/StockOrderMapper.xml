@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjw.mapper.StockOrderMapper">
+    <resultMap id="BaseResultMap" type="com.zjw.domain.StockOrder">
+        <!--@mbg.generated-->
+        <!--@Table bus_stock_order-->
+        <id column="stock_id" jdbcType="VARCHAR" property="stockId"/>
+        <result column="stock_employ" jdbcType="VARCHAR" property="stockEmploy"/>
+        <result column="stock_money" jdbcType="DOUBLE" property="stockMoney"/>
+        <result column="stock_time" jdbcType="TIMESTAMP" property="stockTime"/>
+    </resultMap>
+    <resultMap id="GoodsResultMap" type="com.zjw.domain.util.GoodsIdAndGoodsCntForOrder">
+        <result column="goods_id" jdbcType="INTEGER" property="goodsId"/>
+        <result column="goods_cnt" jdbcType="INTEGER" property="goodsCnt"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        stock_id, stock_employ, stock_money, stock_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from bus_stock_order
+        where stock_id = #{stockId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectGoodsAndCntForOrderId" parameterType="java.lang.String" resultMap="GoodsResultMap">
+        <!--@mbg.generated-->
+        select goods_id,goods_cnt
+        from bus_stock_for_goods
+        where order_id = #{orderId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from bus_stock_order
+        order by stock_time desc
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        <!--@mbg.generated-->
+        delete
+        from bus_stock_order
+        where stock_id = #{stockId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.zjw.domain.StockOrder">
+        <!--@mbg.generated-->
+        insert into bus_stock_order (stock_id, stock_employ, stock_money,
+                                     stock_time)
+        values (#{stockId,jdbcType=VARCHAR}, #{stockEmploy,jdbcType=VARCHAR}, #{stockMoney,jdbcType=DOUBLE},
+                #{stockTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertGoodsAndCnt">
+        <!--@mbg.generated-->
+        insert into bus_stock_for_goods (order_id, goods_id, supplier_id, goods_cnt)
+        values (#{orderId,jdbcType=VARCHAR}, #{goodsId,jdbcType=INTEGER}, #{suppliedId,jdbcType=INTEGER},
+                #{cnt,jdbcType=INTEGER})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.zjw.domain.StockOrder">
+        <!--@mbg.generated-->
+        insert into bus_stock_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stockId != null">
+                stock_id,
+            </if>
+            <if test="stockEmploy != null">
+                stock_employ,
+            </if>
+            <if test="stockMoney != null">
+                stock_money,
+            </if>
+            <if test="stockTime != null">
+                stock_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stockId != null">
+                #{stockId,jdbcType=VARCHAR},
+            </if>
+            <if test="stockEmploy != null">
+                #{stockEmploy,jdbcType=VARCHAR},
+            </if>
+            <if test="stockMoney != null">
+                #{stockMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="stockTime != null">
+                #{stockTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zjw.domain.StockOrder">
+        <!--@mbg.generated-->
+        update bus_stock_order
+        <set>
+            <if test="stockEmploy != null">
+                stock_employ = #{stockEmploy,jdbcType=VARCHAR},
+            </if>
+            <if test="stockMoney != null">
+                stock_money = #{stockMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="stockTime != null">
+                stock_time = #{stockTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where stock_id = #{stockId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zjw.domain.StockOrder">
+        <!--@mbg.generated-->
+        update bus_stock_order
+        set stock_employ = #{stockEmploy,jdbcType=VARCHAR},
+            stock_money  = #{stockMoney,jdbcType=DOUBLE},
+            stock_time   = #{stockTime,jdbcType=TIMESTAMP}
+        where stock_id = #{stockId,jdbcType=VARCHAR}
+    </update>
+</mapper>

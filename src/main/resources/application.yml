@@ -1,0 +1,16 @@
+spring:
+  # datasource配置
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://zjw.life:3310/MedicalSystem?serverTimezone=UTC&useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+# mybatis 配置
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:mapper/*Mapper.xml
+

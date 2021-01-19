@@ -1,0 +1,109 @@
+package com.zjw.swing.salesManager;
+
+import com.zjw.constant.IndexConstant;
+import com.zjw.domain.Goods;
+import com.zjw.domain.Order;
+import com.zjw.domain.util.GoodsIdAndGoodsCntForOrder;
+import com.zjw.service.OrderService;
+import com.zjw.swing.message.MessageShowByTable;
+import com.zjw.swing.message.MessageShows;
+import com.zjw.swing.utils.DefaultJTable;
+import com.zjw.swing.utils.ImageJPanel;
+import com.zjw.config.StaticConfiguration;
+import com.zjw.utils.DataUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+/**
+ * @program: medical_sales_management_system
+ * @author: 一树
+ * @data: 2021/1/7 0:14
+ */
+@Component
+public class SaleRecordPanel extends ImageJPanel {
+
+    @Autowired
+    private OrderService orderService;
+
+    private DefaultJTable recordTable;
+
+    public SaleRecordPanel() {
+        super(null, "/images/login/t4.jpg");
+    }
+
+    public void init() {
+        this.setBackground(Color.CYAN);
+        this.setSize(1100, 800);
+
+
+        recordTable = new DefaultJTable(
+                new Object[]{"订单ID", "顾客账户", "顾客姓名", "顾客电话", "出售人", "金额", "创建时间"},
+                new DefaultTableModel());
+        recordTable.getJScrollPane().setSize(1100, 600);
+        recordTable.getJScrollPane().setLocation(0, 0);
+        recordTable.setOpaque(false);
+        recordTable.getJScrollPane().setOpaque(false);
+        recordTable.getJScrollPane().getViewport().setOpaque(false);
+        this.add(recordTable.getJScrollPane());
+
+        //加载信息
+        List<Order> orders = StaticConfiguration.getEmploy() != null ? orderService.queryAll() :
+                orderService.queryAllOnlyCustomerId(StaticConfiguration.getCustomer().getLoginName());
+
+        StaticConfiguration.refreshOrderCache(orders);
+        recordTable.refreshData(DataUtils.OrderSimpleInformationToArray(orders));
+
+        JButton fullButton = new JButton("药品明细");
+        fullButton.setSize(100, 30);
+        fullButton.setLocation(950, 650);
+        this.add(fullButton);
+
+        JButton downLoadButton = new JButton("打印订单");
+        downLoadButton.setSize(100, 30);
+        downLoadButton.setLocation(950, 700);
+        this.add(downLoadButton);
+
+        /*监听*/
+        fullButton.addActionListener(e -> {
+            int row = recordTable.getSelectedRow();
+
+            String orderId = String.valueOf(recordTable.getValueAt(row, 0));
+            List<GoodsIdAndGoodsCntForOrder> goodsIdMap = StaticConfiguration.getOrderInCache(orderId).getGoodsIdMap();
+            Object[][] objects = new Object[goodsIdMap.size()][7];
+            Object[] colName = {"ID", "药名", "描述", "类型", "单价", "数量", "总价"};
+            for (int i = 0; i < goodsIdMap.size(); i++) {
+                Goods goods = StaticConfiguration.getGoodsInCache(goodsIdMap.get(i).getGoodsId());
+                Integer cnt = goodsIdMap.get(i).getGoodsCnt();
+                objects[i][0] = goods.getGoodId();
+                objects[i][1] = goods.getGoodName();
+                objects[i][2] = goods.getGoodText();
+                objects[i][3] = goods.getGoodType() == IndexConstant.PRESCRIPTION_TYPE ? "处方药" : "非处方药";
+                objects[i][4] = goods.getGoodMoney();
+                objects[i][5] = cnt;
+                objects[i][6] = goods.getGoodMoney() * cnt;
+            }
+
+            //展示商品信息
+            MessageShowByTable.show(colName, objects);
+        });
+
+        downLoadButton.addActionListener(e -> {
+            MessageShows.ShowMessageText(this, "打印", "打印成功");
+        });
+
+    }
+
+    void refreshRecordTable() {
+        Collection<Order> values = StaticConfiguration.getOrderCache().values();
+        ArrayList<Order> list = new ArrayList<>(values);
+        list.sort((o1, o2) -> o2.getOrderTime().compareTo(o1.getOrderTime()));
+        recordTable.refreshData(DataUtils.OrderSimpleInformationToArray(list));
+    }
+}

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjw.mapper.GoodsMapper">
+    <resultMap id="BaseResultMap" type="com.zjw.domain.Goods">
+        <!--@mbg.generated-->
+        <!--@Table bus_goods-->
+        <id column="good_id" jdbcType="INTEGER" property="goodId"/>
+        <result column="good_name" jdbcType="VARCHAR" property="goodName"/>
+        <result column="good_stock" jdbcType="INTEGER" property="goodStock"/>
+        <result column="good_text" jdbcType="VARCHAR" property="goodText"/>
+        <result column="good_money" jdbcType="DOUBLE" property="goodMoney"/>
+        <result column="good_type" jdbcType="INTEGER" property="goodType"/>
+        <result column="good_supplier_id" jdbcType="INTEGER" property="supplierId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        good_id, good_name, good_stock, good_text, good_money,good_type,good_supplier_id
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from bus_goods
+        where good_id = #{goodId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectAllForName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from bus_goods
+        where good_name like #{name,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectOneByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from bus_goods
+        where good_name = #{name,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectAllForDescription" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from bus_goods
+        where good_text like #{description,jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from bus_goods
+    </select>
+
+    <select id="selectByLeftPrice" parameterType="java.lang.Double" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from bus_goods
+        where good_money &lt;= #{price,jdbcType=DOUBLE}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from bus_goods
+        where good_id = #{goodId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.zjw.domain.Goods">
+        <!--@mbg.generated-->
+        insert into bus_goods (good_id, good_name, good_stock,
+                               good_text, good_money, good_type, good_supplier_id)
+        values (#{goodId,jdbcType=INTEGER}, #{goodName,jdbcType=VARCHAR}, #{goodStock,jdbcType=INTEGER},
+                #{goodText,jdbcType=VARCHAR}, #{goodMoney,jdbcType=DOUBLE}, #{goodType,jdbcType=INTEGER},
+                #{supplierId,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.zjw.domain.Goods">
+        <!--@mbg.generated-->
+        insert into bus_goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodId != null">
+                good_id,
+            </if>
+            <if test="goodName != null">
+                good_name,
+            </if>
+            <if test="goodStock != null">
+                good_stock,
+            </if>
+            <if test="goodText != null">
+                good_text,
+            </if>
+            <if test="goodMoney != null">
+                good_money,
+            </if>
+            <if test="goodType != null">
+                good_money,
+            </if>
+            <if test="supplierId != null">
+                good_supplier_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodId != null">
+                #{goodId,jdbcType=INTEGER},
+            </if>
+            <if test="goodName != null">
+                #{goodName,jdbcType=VARCHAR},
+            </if>
+            <if test="goodStock != null">
+                #{goodStock,jdbcType=INTEGER},
+            </if>
+            <if test="goodText != null">
+                #{goodText,jdbcType=VARCHAR},
+            </if>
+            <if test="goodMoney != null">
+                #{goodMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="goodType != null">
+                #{goodType,jdbcType=INTEGER},
+            </if>
+            <if test="supplierId != null">
+                #{supplierId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zjw.domain.Goods">
+        <!--@mbg.generated-->
+        update bus_goods
+        <set>
+            <if test="goodName != null">
+                good_name = #{goodName,jdbcType=VARCHAR},
+            </if>
+            <if test="goodStock != null">
+                good_stock = #{goodStock,jdbcType=INTEGER},
+            </if>
+            <if test="goodText != null">
+                good_text = #{goodText,jdbcType=VARCHAR},
+            </if>
+            <if test="goodMoney != null">
+                good_money = #{goodMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="goodType != null">
+                good_money = #{goodType,jdbcType=INTEGER},
+            </if>
+            <if test="supplierId != null">
+                good_supplier_id = #{supplierId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where good_id = #{goodId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zjw.domain.Goods">
+        <!--@mbg.generated-->
+        update bus_goods
+        set good_name        = #{goodName,jdbcType=VARCHAR},
+            good_stock       = #{goodStock,jdbcType=INTEGER},
+            good_text        = #{goodText,jdbcType=VARCHAR},
+            good_money       = #{goodMoney,jdbcType=DOUBLE},
+            good_type        = #{goodType,jdbcType=INTEGER},
+            good_supplier_id = #{supplierId,jdbcType=INTEGER}
+        where good_id = #{goodId,jdbcType=INTEGER}
+    </update>
+
+
+    <!--采购相关-->
+    <insert id="insertToStockList" parameterType="com.zjw.domain.Goods">
+        <!--@mbg.generated-->
+        insert into bus_stock_goods (good_id, good_name,
+                                     good_text, good_money, good_type, good_supplier_id)
+        values (#{goodId,jdbcType=INTEGER}, #{goodName,jdbcType=VARCHAR},
+                #{goodText,jdbcType=VARCHAR}, #{goodMoney,jdbcType=DOUBLE}, #{goodType,jdbcType=INTEGER},
+                #{supplierId,jdbcType=INTEGER})
+    </insert>
+
+    <select id="selectAllStockGoods" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from bus_stock_goods
+    </select>
+
+    <select id="selectMaxStockGoodsId" resultType="java.lang.Integer">
+        select max(good_id)
+        from bus_stock_goods
+    </select>
+
+    <delete id="deleteStockGoodsById" parameterType="_integer">
+        delete
+        from bus_stock_goods
+        where good_id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <update id="updateStockGoodsById" parameterType="com.zjw.domain.Goods">
+        update bus_stock_goods
+        set good_name        = #{goodName,jdbcType=VARCHAR},
+            good_stock       = #{goodStock,jdbcType=INTEGER},
+            good_text        = #{goodText,jdbcType=VARCHAR},
+            good_money       = #{goodMoney,jdbcType=DOUBLE},
+            good_type        = #{goodType,jdbcType=INTEGER},
+            good_supplier_id = #{supplierId,jdbcType=INTEGER}
+        where good_id = #{goodId,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectStockOneById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bus_stock_goods
+        where good_id = #{id,jdbcType=INTEGER}
+    </select>
+</mapper>

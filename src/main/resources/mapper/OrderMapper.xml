@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjw.mapper.OrderMapper">
+    <resultMap id="BaseResultMap" type="com.zjw.domain.Order">
+        <!--@mbg.generated-->
+        <!--@Table bus_order-->
+        <id column="order_id" jdbcType="VARCHAR" property="orderId"/>
+        <result column="customer_id" jdbcType="VARCHAR" property="customerId"/>
+        <result column="customer_name" jdbcType="VARCHAR" property="customerName"/>
+        <result column="customer_phone" jdbcType="VARCHAR" property="customerPhone"/>
+        <result column="sale_employ_name" jdbcType="VARCHAR" property="saleEmployName"/>
+        <result column="order_money" jdbcType="DOUBLE" property="orderMoney"/>
+        <result column="order_time" jdbcType="TIMESTAMP" property="orderTime"/>
+    </resultMap>
+
+    <resultMap id="GoodsResultMap" type="com.zjw.domain.util.GoodsIdAndGoodsCntForOrder">
+        <result column="good_id" jdbcType="INTEGER" property="goodsId"/>
+        <result column="good_cnt" jdbcType="INTEGER" property="goodsCnt"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        order_id, customer_id, customer_name, customer_phone, sale_employ_name, order_money,
+        order_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from bus_order
+        where order_id = #{orderId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAllSimpleInformation" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from bus_order
+        order by order_time desc
+    </select>
+
+    <select id="selectAllSimpleInformationOnlyCustomerId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from bus_order
+        where customer_id = #{customerId,jdbcType=VARCHAR}
+        order by order_time desc
+    </select>
+
+    <select id="selectAllForGoodsInformationByOrderId" resultMap="GoodsResultMap">
+        select good_id, good_cnt
+        from bus_order_good
+        where order_id = #{orderId,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        <!--@mbg.generated-->
+        delete
+        from bus_order
+        where order_id = #{orderId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" keyColumn="order_id" keyProperty="orderId" parameterType="com.zjw.domain.Order"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into bus_order (order_id, customer_id, customer_name, customer_phone,
+                               sale_employ_name, order_money, order_time)
+        values (#{orderId,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR},
+                #{customerPhone,jdbcType=VARCHAR},
+                #{saleEmployName,jdbcType=VARCHAR}, #{orderMoney,jdbcType=DOUBLE}, #{orderTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertOrderAndGoods">
+        insert into bus_order_good (order_id, good_id, good_cnt)
+        values (#{param1,jdbcType=VARCHAR}, #{param2,jdbcType=INTEGER},
+                #{param3,jdbcType=INTEGER});
+    </insert>
+
+    <insert id="insertSelective" keyColumn="order_id" keyProperty="orderId" parameterType="com.zjw.domain.Order"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into bus_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">
+                customer_id,
+            </if>
+            <if test="customerName != null">
+                customer_name,
+            </if>
+            <if test="customerPhone != null">
+                customer_phone,
+            </if>
+            <if test="saleEmployName != null">
+                sale_employ_name,
+            </if>
+            <if test="orderMoney != null">
+                order_money,
+            </if>
+            <if test="orderTime != null">
+                order_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">
+                #{customerId,jdbcType=VARCHAR},
+            </if>
+            <if test="customerName != null">
+                #{customerName,jdbcType=VARCHAR},
+            </if>
+            <if test="customerPhone != null">
+                #{customerPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="saleEmployName != null">
+                #{saleEmployName,jdbcType=VARCHAR},
+            </if>
+            <if test="orderMoney != null">
+                #{orderMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="orderTime != null">
+                #{orderTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zjw.domain.Order">
+        <!--@mbg.generated-->
+        update bus_order
+        <set>
+            <if test="customerId != null">
+                customer_id = #{customerId,jdbcType=VARCHAR},
+            </if>
+            <if test="customerName != null">
+                customer_name = #{customerName,jdbcType=VARCHAR},
+            </if>
+            <if test="customerPhone != null">
+                customer_phone = #{customerPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="saleEmployName != null">
+                sale_employ_name = #{saleEmployName,jdbcType=VARCHAR},
+            </if>
+            <if test="orderMoney != null">
+                order_money = #{orderMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="orderTime != null">
+                order_time = #{orderTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where order_id = #{orderId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zjw.domain.Order">
+        <!--@mbg.generated-->
+        update bus_order
+        set customer_id      = #{customerId,jdbcType=VARCHAR},
+            customer_name    = #{customerName,jdbcType=VARCHAR},
+            customer_phone   = #{customerPhone,jdbcType=VARCHAR},
+            sale_employ_name = #{saleEmployName,jdbcType=VARCHAR},
+            order_money      = #{orderMoney,jdbcType=DOUBLE},
+            order_time       = #{orderTime,jdbcType=TIMESTAMP}
+        where order_id = #{orderId,jdbcType=VARCHAR}
+    </update>
+</mapper>
