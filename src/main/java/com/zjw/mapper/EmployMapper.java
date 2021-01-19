@@ -24,4 +24,8 @@ public interface EmployMapper {
     Employ selectByUserNameForOne(String username);
 
     void deleteByUserName(String userName);
+
+    List<Employ> selectAllByName(String name);
+
+    List<Employ> selectAllByAddress(String address);
 }

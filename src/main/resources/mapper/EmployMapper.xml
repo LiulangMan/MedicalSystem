@@ -34,6 +34,14 @@
     where login_name = #{username,jdbcType=VARCHAR}
   </select>
 
+  <select id="selectAllByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from sys_employ
+    where name like #{name,jdbcType=VARCHAR}
+  </select>
+
    <select id="selectAll" resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select
@@ -41,6 +49,13 @@
     from sys_employ
   </select>
 
+<select id="selectAllByAddress" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from sys_employ
+    where address like #{address,jdbcType=VARCHAR}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--@mbg.generated-->
     delete from sys_employ

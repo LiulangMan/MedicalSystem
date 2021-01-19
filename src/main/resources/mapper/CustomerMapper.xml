@@ -1,165 +1,184 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zjw.mapper.CustomerMapper">
-  <resultMap id="BaseResultMap" type="com.zjw.domain.Customer">
-    <!--@mbg.generated-->
-    <!--@Table sys_customer-->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
-    <result column="login_name" jdbcType="VARCHAR" property="loginName" />
-    <result column="login_password" jdbcType="VARCHAR" property="loginPassword" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="sex" jdbcType="INTEGER" property="sex" />
-    <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="phone" jdbcType="VARCHAR" property="phone" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, customer_id, login_name, login_password, `name`, sex, address, phone
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select 
-    <include refid="Base_Column_List" />
-    from sys_customer
-    where id = #{id,jdbcType=INTEGER}
-  </select>
+    <resultMap id="BaseResultMap" type="com.zjw.domain.Customer">
+        <!--@mbg.generated-->
+        <!--@Table sys_customer-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="customer_id" jdbcType="VARCHAR" property="customerId"/>
+        <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
+        <result column="login_password" jdbcType="VARCHAR" property="loginPassword"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="sex" jdbcType="INTEGER" property="sex"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, customer_id, login_name, login_password, `name`, sex, address, phone
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from sys_customer
+        where id = #{id,jdbcType=INTEGER}
+    </select>
 
     <select id="selectByLoginUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select
-    <include refid="Base_Column_List" />
-    from sys_customer
-    where login_name = #{username,jdbcType=VARCHAR}
-  </select>
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from sys_customer
+        where login_name = #{username,jdbcType=VARCHAR}
+    </select>
 
-  <select id="selectAll" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select
-    <include refid="Base_Column_List" />
-    from sys_customer
-  </select>
+    <select id="selectAllByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from sys_customer
+        where name like #{name,jdbcType=VARCHAR}
+    </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from sys_customer
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByUserName" parameterType="java.lang.String">
-    <!--@mbg.generated-->
-    delete from sys_customer
-    where login_name = #{userName,jdbcType=VARCHAR}
-  </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.zjw.domain.Customer" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into sys_customer (customer_id, login_name, login_password, 
-      `name`, sex, address, 
-      phone)
-    values (#{customerId,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, #{loginPassword,jdbcType=VARCHAR},
-      #{name,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR},
-      #{phone,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.zjw.domain.Customer" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into sys_customer
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="customerId != null">
-        customer_id,
-      </if>
-      <if test="loginName != null">
-        login_name,
-      </if>
-      <if test="loginPassword != null">
-        login_password,
-      </if>
-      <if test="name != null">
-        `name`,
-      </if>
-      <if test="sex != null">
-        sex,
-      </if>
-      <if test="address != null">
-        address,
-      </if>
-      <if test="phone != null">
-        phone,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="customerId != null">
-        #{customerId,jdbcType=VARCHAR},
-      </if>
-      <if test="loginName != null">
-        #{loginName,jdbcType=VARCHAR},
-      </if>
-      <if test="loginPassword != null">
-        #{loginPassword,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="sex != null">
-        #{sex,jdbcType=VARCHAR},
-      </if>
-      <if test="address != null">
-        #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="phone != null">
-        #{phone,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zjw.domain.Customer">
-    <!--@mbg.generated-->
-    update sys_customer
-    <set>
-      <if test="customerId != null">
-        customer_id = #{customerId,jdbcType=VARCHAR},
-      </if>
-      <if test="loginName != null">
-        login_name = #{loginName,jdbcType=VARCHAR},
-      </if>
-      <if test="loginPassword != null">
-        login_password = #{loginPassword,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null">
-        `name` = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="sex != null">
-        sex = #{sex,jdbcType=INTEGER},
-      </if>
-      <if test="address != null">
-        address = #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="phone != null">
-        phone = #{phone,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zjw.domain.Customer">
-    <!--@mbg.generated-->
-    update sys_customer
-    set customer_id = #{customerId,jdbcType=VARCHAR},
-      login_name = #{loginName,jdbcType=VARCHAR},
-      login_password = #{loginPassword,jdbcType=VARCHAR},
-      `name` = #{name,jdbcType=VARCHAR},
-      sex = #{sex,jdbcType=INTEGER},
-      address = #{address,jdbcType=VARCHAR},
-      phone = #{phone,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+    <select id="selectAll" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from sys_customer
+    </select>
+
+    <select id="selectAllByAddress" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from sys_customer
+        where address like #{address,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from sys_customer
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByUserName" parameterType="java.lang.String">
+        <!--@mbg.generated-->
+        delete
+        from sys_customer
+        where login_name = #{userName,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.zjw.domain.Customer" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sys_customer (customer_id, login_name, login_password,
+                                  `name`, sex, address,
+                                  phone)
+        values (#{customerId,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, #{loginPassword,jdbcType=VARCHAR},
+                #{name,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR},
+                #{phone,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.zjw.domain.Customer"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sys_customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">
+                customer_id,
+            </if>
+            <if test="loginName != null">
+                login_name,
+            </if>
+            <if test="loginPassword != null">
+                login_password,
+            </if>
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">
+                #{customerId,jdbcType=VARCHAR},
+            </if>
+            <if test="loginName != null">
+                #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="loginPassword != null">
+                #{loginPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zjw.domain.Customer">
+        <!--@mbg.generated-->
+        update sys_customer
+        <set>
+            <if test="customerId != null">
+                customer_id = #{customerId,jdbcType=VARCHAR},
+            </if>
+            <if test="loginName != null">
+                login_name = #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="loginPassword != null">
+                login_password = #{loginPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                sex = #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zjw.domain.Customer">
+        <!--@mbg.generated-->
+        update sys_customer
+        set customer_id    = #{customerId,jdbcType=VARCHAR},
+            login_name     = #{loginName,jdbcType=VARCHAR},
+            login_password = #{loginPassword,jdbcType=VARCHAR},
+            `name`         = #{name,jdbcType=VARCHAR},
+            sex            = #{sex,jdbcType=INTEGER},
+            address        = #{address,jdbcType=VARCHAR},
+            phone          = #{phone,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 
 
     <update id="updateByUsername" parameterType="com.zjw.domain.Customer">
-    <!--@mbg.generated-->
-    update sys_customer
-    set customer_id = #{customerId,jdbcType=VARCHAR},
-      login_password = #{loginPassword,jdbcType=VARCHAR},
-      `name` = #{name,jdbcType=VARCHAR},
-      sex = #{sex,jdbcType=INTEGER},
-      address = #{address,jdbcType=VARCHAR},
-      phone = #{phone,jdbcType=VARCHAR}
-    where login_name = #{loginName,jdbcType=VARCHAR}
-  </update>
+        <!--@mbg.generated-->
+        update sys_customer
+        set customer_id    = #{customerId,jdbcType=VARCHAR},
+            login_password = #{loginPassword,jdbcType=VARCHAR},
+            `name`         = #{name,jdbcType=VARCHAR},
+            sex            = #{sex,jdbcType=INTEGER},
+            address        = #{address,jdbcType=VARCHAR},
+            phone          = #{phone,jdbcType=VARCHAR}
+        where login_name = #{loginName,jdbcType=VARCHAR}
+    </update>
 </mapper>

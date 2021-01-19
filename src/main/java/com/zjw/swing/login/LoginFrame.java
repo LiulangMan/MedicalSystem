@@ -174,7 +174,7 @@ public class LoginFrame extends JFrame {
             String pwd = Md5Utils.Md5(String.valueOf(passwordText));
             try {
                 if (employButton.isSelected()) {
-                    Employ employ = employService.selectByLoginNameForOne(usernameText);
+                    Employ employ = employService.queryByLoginNameForOne(usernameText);
                     if (employ == null || !employ.getLoginPassword().equals(pwd)) {
                         //抛出用户名不存在或者密码错误
                         MessageShows.ErrorUserOrPwd(this);
@@ -194,7 +194,7 @@ public class LoginFrame extends JFrame {
                     employIndex.run();
                     this.dispose();
                 } else {
-                    Customer customer = customerService.selectByLoginNameForOne(usernameText);
+                    Customer customer = customerService.queryByLoginNameForOne(usernameText);
                     if (customer == null || !customer.getLoginPassword().equals(pwd)) {
                         //抛出用户名不存在或者密码错误
                         MessageShows.ErrorUserOrPwd(this);

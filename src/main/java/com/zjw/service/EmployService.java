@@ -15,7 +15,11 @@ public interface EmployService {
 
     List<Employ> queryAll();
 
-    Employ selectByLoginNameForOne(String username);
+    Employ queryByLoginNameForOne(String username);
 
     void deleteByUserName(String userName);
+
+    List<Employ> queryAllByName(String name);
+
+    List<Employ> queryAllByAddress(String address);
 }

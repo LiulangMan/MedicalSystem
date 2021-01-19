@@ -47,13 +47,23 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer selectByLoginNameForOne(String username) {
+    public Customer queryByLoginNameForOne(String username) {
         return mapper.selectByLoginUsername(username);
     }
 
     @Override
     public void deleteByUserName(String userName) {
         mapper.deleteByUserName(userName);
+    }
+
+    @Override
+    public List<Customer> queryAllByName(String name) {
+        return mapper.selectAllByName("%" + name + "%");
+    }
+
+    @Override
+    public List<Customer> queryByAddress(String address) {
+        return mapper.selectAllByAddress("%" + address + "%");
     }
 
 }

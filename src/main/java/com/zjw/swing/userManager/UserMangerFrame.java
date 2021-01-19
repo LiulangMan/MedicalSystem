@@ -13,6 +13,7 @@ import com.zjw.swing.message.MessageShowByTable;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.utils.DefaultJTable;
 import com.zjw.utils.DataUtils;
+import com.zjw.utils.MysqlUtils;
 import com.zjw.utils.interfaceImpl.DefaultMouseListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -68,7 +69,33 @@ public class UserMangerFrame extends JPanel {
         jPopupMenu.add(addButton);
         jPopupMenu.add(deleteButton);
 
+        //搜索栏
+        String[] typeF = {"用户名", "姓名", "地址"};
+        JComboBox<String> typeList = new JComboBox<>(typeF);
+        typeList.setSize(80, 30);
+        typeList.setLocation(10, 600);
+        this.add(typeList);
 
+        //搜索域
+        JTextField searchField = new JTextField();
+        searchField.setSize(300, 30);
+        searchField.setLocation(100, 600);
+        this.add(searchField);
+
+        JButton searchButton = new JButton("搜索");
+        searchButton.setSize(100, 30);
+        searchButton.setLocation(400, 600);
+        this.add(searchButton);
+
+        JButton dumpButton = new JButton("备份数据");
+        dumpButton.setSize(100, 30);
+        dumpButton.setLocation(1000, 600);
+        this.add(dumpButton);
+
+        JButton backupButton = new JButton("还原数据");
+        backupButton.setSize(100, 30);
+        backupButton.setLocation(1000, 650);
+        this.add(backupButton);
 
         /*监听*/
         userTable.addMouseListener(new DefaultMouseListener() {
@@ -80,6 +107,7 @@ public class UserMangerFrame extends JPanel {
             }
         });
 
+        //登陆日志
         recordButton.addActionListener(e -> {
             int row = userTable.getSelectedRow();
             String userName = (String) userTable.getValueAt(row, 1);
@@ -88,6 +116,7 @@ public class UserMangerFrame extends JPanel {
             MessageShowByTable.show(new Object[]{"登陆账户", "登陆类型", "登陆时间"}, DataUtils.LoginInfoToArray(infoLogins));
         });
 
+        //删除用户
         deleteButton.addActionListener(e -> {
             boolean b = MessageShows.ShowMessageAboutDeleteLogName(this);
             if (!b) return;
@@ -111,6 +140,7 @@ public class UserMangerFrame extends JPanel {
             refreshData();
         });
 
+        //添加用户-注册系统
         addButton.addActionListener(e -> {
             StaticConfiguration.addThreadPoolTask(new Runnable() {
                 @Override
@@ -120,6 +150,39 @@ public class UserMangerFrame extends JPanel {
             });
         });
 
+        searchButton.addActionListener(e -> {
+            int index = typeList.getSelectedIndex();
+            String text = searchField.getText();
+
+            if (text.equals("")) {
+                refreshData();
+                return;
+            }
+            if (index == 0) {
+                //用户名搜索
+                refreshDataForUserName(text);
+
+            } else if (index == 1) {
+                //姓名搜索
+                refreshDataForName(text);
+
+            } else if (index == 2) {
+                //地区搜索
+                refreshDataForAddress(text);
+            }
+        });
+
+
+        dumpButton.addActionListener(e -> {
+
+            MysqlUtils.component = this;
+            
+
+        });
+
+        backupButton.addActionListener(e -> {
+            MysqlUtils.component = this;
+        });
     }
 
     public void refreshData() {
@@ -129,6 +192,45 @@ public class UserMangerFrame extends JPanel {
         List<Object> list = new ArrayList<>();
         list.addAll(employs);
         list.addAll(customers);
+        userTable.refreshData(DataUtils.UserToArray(list));
+    }
+
+    private void refreshDataForUserName(String username) {
+        Employ employ = employService.queryByLoginNameForOne(username);
+        Customer customer = customerService.queryByLoginNameForOne(username);
+
+        List<Object> list = new ArrayList<Object>(){
+            @Override
+            public boolean add(Object o) {
+                if (o == null){
+                    //null不添入
+                    return false;
+                }
+                return super.add(o);
+            }
+        };
+        list.add(employ);
+        list.add(customer);
+        userTable.refreshData(DataUtils.UserToArray(list));
+    }
+
+    private void refreshDataForName(String username) {
+        List<Employ> employ = employService.queryAllByName(username);
+        List<Customer> customer = customerService.queryAllByName(username);
+
+        List<Object> list = new ArrayList<>();
+        list.addAll(employ);
+        list.addAll(customer);
+        userTable.refreshData(DataUtils.UserToArray(list));
+    }
+
+    private void refreshDataForAddress(String address) {
+        List<Employ> employ = employService.queryAllByAddress(address);
+        List<Customer> customer = customerService.queryByAddress(address);
+
+        List<Object> list = new ArrayList<>();
+        list.addAll(employ);
+        list.addAll(customer);
         userTable.refreshData(DataUtils.UserToArray(list));
     }
 }

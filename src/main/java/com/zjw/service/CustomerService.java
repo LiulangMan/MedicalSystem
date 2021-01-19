@@ -20,7 +20,11 @@ public interface CustomerService {
 
     List<Customer> queryAll();
 
-    Customer selectByLoginNameForOne(String username);
+    Customer queryByLoginNameForOne(String username);
 
     void deleteByUserName(String userName);
+
+    List<Customer> queryAllByName(String name);
+
+    List<Customer> queryByAddress(String address);
 }

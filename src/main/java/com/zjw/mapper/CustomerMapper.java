@@ -24,4 +24,8 @@ public interface CustomerMapper {
     Customer selectByLoginUsername(String username);
 
     void deleteByUserName(String userName);
+
+    List<Customer> selectAllByName(String name);
+
+    List<Customer> selectAllByAddress(String address);
 }

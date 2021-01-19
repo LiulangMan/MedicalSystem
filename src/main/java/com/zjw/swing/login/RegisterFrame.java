@@ -222,7 +222,7 @@ public class RegisterFrame extends JFrame {
 
             try {
                 if (isEmploy) {
-                    Employ select = employService.selectByLoginNameForOne(usernameText);
+                    Employ select = employService.queryByLoginNameForOne(usernameText);
                     if (select != null) {
                         //用户名已经存在
                         MessageShows.ExistUsername(this);
@@ -245,7 +245,7 @@ public class RegisterFrame extends JFrame {
                     employService.insert(employ);
                 } else {
                     //客户
-                    Customer select = customerService.selectByLoginNameForOne(usernameText);
+                    Customer select = customerService.queryByLoginNameForOne(usernameText);
                     if (select != null) {
                         //用户名已经存在
                         MessageShows.ExistUsername(this);

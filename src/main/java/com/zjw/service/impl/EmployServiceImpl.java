@@ -46,12 +46,22 @@ public class EmployServiceImpl implements EmployService {
     }
 
     @Override
-    public Employ selectByLoginNameForOne(String username) {
+    public Employ queryByLoginNameForOne(String username) {
         return mapper.selectByUserNameForOne(username);
     }
 
     @Override
     public void deleteByUserName(String userName) {
         mapper.deleteByUserName(userName);
+    }
+
+    @Override
+    public List<Employ> queryAllByName(String name) {
+        return mapper.selectAllByName("%" + name + "%");
+    }
+
+    @Override
+    public List<Employ> queryAllByAddress(String address) {
+        return mapper.selectAllByAddress("%" + address + "%");
     }
 }
