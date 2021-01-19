@@ -186,7 +186,6 @@ public class EmployIndexFrame extends JFrame {
         role = new JLabel("角色：" + (StaticConfiguration.getEmploy().getType() == IndexConstant.LOGIN_TYPE_ADMIN ? "超级管理员" : "员工"));
         information.add(role);
 
-
         this.setVisible(true);
 
         //颜色变化
