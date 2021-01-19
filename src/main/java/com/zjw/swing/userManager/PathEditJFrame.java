@@ -1,5 +1,6 @@
 package com.zjw.swing.userManager;
 
+import com.zjw.swing.message.MessageShows;
 import com.zjw.utils.MysqlUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,7 @@ public class PathEditJFrame extends JFrame {
         this.setTitle("数据备份目录");
     }
 
-    public void run() {
+    public void run(boolean isDump) {
 
         init();
 
@@ -43,7 +44,7 @@ public class PathEditJFrame extends JFrame {
         //文件
         JTextField file = new JTextField();
         file.setBounds(10, 60, 300, 30);
-        panel.add(file);
+        if (isDump) panel.add(file);
 
 
         JButton pathButton = new JButton("目录");
@@ -66,8 +67,17 @@ public class PathEditJFrame extends JFrame {
             String fileText = file.getText();
             try {
                 //备份
-                MysqlUtils.dump("zjw.life", "3310", "root", "root", "--databases MedicalSystem",
-                        pathText, fileText,this);
+                if (isDump) {
+                    boolean b = MessageShows.ShowMessageAboutMakeSure(this, "确认备份？");
+                    if (!b) return;
+                    MysqlUtils.dump("zjw.life", "3310", "root", "root", "MedicalSystem",
+                            pathText, fileText, this);
+                } else {
+                    boolean b = MessageShows.ShowMessageAboutMakeSure(this, "确认恢复？");
+                    if (!b) return;
+                    MysqlUtils.backup("zjw.life", "3310", "root", "root", "MedicalSystem",
+                            pathText, this);
+                }
                 this.setVisible(false);
                 this.dispose();
             } catch (Exception ex) {
@@ -78,6 +88,6 @@ public class PathEditJFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        new PathEditJFrame().run();
+        new PathEditJFrame().run(true);
     }
 }

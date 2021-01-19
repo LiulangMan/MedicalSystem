@@ -25,21 +25,21 @@ public class MysqlUtils {
             return;
         }
         //拼接cmd命令
-        Process exec = Runtime.getRuntime().exec("cmd /c mysqldump -h" + host +
+        Process exec = Runtime.getRuntime().exec("cmd /c mysqldump --column-statistics=0 -h" + host +
                 " -P" + port + " -u" + username + " -p" + password + " " + dataBaseName + " > " + datafile);
 
         if (exec.waitFor() == 0) {
-            MessageShows.ShowMessageText(component, null, "数据库备份成功，备份路径为：" + datafile);
-        }else {
-            MessageShows.ShowMessageText(component,null,"备份失败");
+            MessageShows.ShowMessageText(component, null, "数据库备份成功，备份路径为：" + datafile.getPath());
+        } else {
+            MessageShows.ShowMessageText(component, null, "备份失败");
         }
     }
 
 
     //还原
-    public static void backup(String host, String port, String username, String password, String dataBaseName, String path, String sqlName, Component component)
+    public static void backup(String host, String port, String username, String password, String dataBaseName, String path, Component component)
             throws Exception {
-        File datafile = new File(path + File.separator + sqlName + ".sql");
+        File datafile = new File(path);
         if (!datafile.exists()) {
             MessageShows.ShowMessageText(component, null, "文件不已存在，请检查");
             return;

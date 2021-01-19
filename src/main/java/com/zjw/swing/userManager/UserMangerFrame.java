@@ -177,11 +177,12 @@ public class UserMangerFrame extends JPanel {
 
 
         dumpButton.addActionListener(e -> {
-            pathEditJFrame.run();
+            pathEditJFrame.run(true);
 
         });
 
         backupButton.addActionListener(e -> {
+            pathEditJFrame.run(false);
         });
     }
 

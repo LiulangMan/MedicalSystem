@@ -196,4 +196,22 @@ public class MessageShows {
 
         return result == 0;
     }
+
+    public static boolean ShowMessageAboutMakeSure(Component component,String text) {
+        /*
+         * 返回用户点击的选项, 值为下面三者之一:
+         *     是:   JOptionPane.YES_OPTION
+         *     否:   JOptionPane.NO_OPTION
+         *     取消: JOptionPane.CANCEL_OPTION
+         *     关闭: JOptionPane.CLOSED_OPTION
+         */
+        int result = JOptionPane.showConfirmDialog(
+                component,
+                text,
+                "提示",
+                JOptionPane.YES_NO_CANCEL_OPTION
+        );
+
+        return result == 0;
+    }
 }

@@ -50,7 +50,6 @@ public class PathListFrame extends JFrame {
         this.add(comp);
 
 
-
         //路径显示
         path = new JTextField();
         path.setEditable(false);
@@ -103,7 +102,8 @@ public class PathListFrame extends JFrame {
         });
 
         okButton.addActionListener(e -> {
-            pathEditJFrame.path.setText(path.getText());
+            String result = path.getText() + (list.getSelectedValue() == null ? "" : File.separator + list.getSelectedValue().file.getName());
+            pathEditJFrame.path.setText(result);
             this.setVisible(false);
             this.dispose();
         });
@@ -126,7 +126,7 @@ public class PathListFrame extends JFrame {
         Vector<PathJButton> vector = new Vector<>();
 
         for (File file : files) {
-            if (file.isDirectory()) {
+            if (file.isDirectory() || file.getName().endsWith(".sql")) {
                 PathJButton button = new PathJButton(file.getName());
                 button.file = file;
                 button.parentButton = pathJButton;
