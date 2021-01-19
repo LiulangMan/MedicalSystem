@@ -12,10 +12,8 @@ import java.io.File;
  */
 public class MysqlUtils {
 
-    public static Component component = null;
-
     //备份
-    public static void dump(String host, String port, String username, String password, String dataBaseName, String path, String sqlName)
+    public static void dump(String host, String port, String username, String password, String dataBaseName, String path, String sqlName, Component component)
             throws Exception {
         File file = new File(path);
         if (!file.exists()) {
@@ -29,14 +27,17 @@ public class MysqlUtils {
         //拼接cmd命令
         Process exec = Runtime.getRuntime().exec("cmd /c mysqldump -h" + host +
                 " -P" + port + " -u" + username + " -p" + password + " " + dataBaseName + " > " + datafile);
+
         if (exec.waitFor() == 0) {
             MessageShows.ShowMessageText(component, null, "数据库备份成功，备份路径为：" + datafile);
+        }else {
+            MessageShows.ShowMessageText(component,null,"备份失败");
         }
     }
 
 
     //还原
-    public static void backup(String host, String port, String username, String password, String dataBaseName, String path, String sqlName)
+    public static void backup(String host, String port, String username, String password, String dataBaseName, String path, String sqlName, Component component)
             throws Exception {
         File datafile = new File(path + File.separator + sqlName + ".sql");
         if (!datafile.exists()) {

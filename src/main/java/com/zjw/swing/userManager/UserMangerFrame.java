@@ -44,6 +44,9 @@ public class UserMangerFrame extends JPanel {
     @Autowired
     private RegisterFrame registerFrame;
 
+    @Autowired
+    private PathEditJFrame pathEditJFrame;
+
     private DefaultJTable userTable;
 
 
@@ -174,14 +177,11 @@ public class UserMangerFrame extends JPanel {
 
 
         dumpButton.addActionListener(e -> {
-
-            MysqlUtils.component = this;
-            
+            pathEditJFrame.run();
 
         });
 
         backupButton.addActionListener(e -> {
-            MysqlUtils.component = this;
         });
     }
 
@@ -199,10 +199,10 @@ public class UserMangerFrame extends JPanel {
         Employ employ = employService.queryByLoginNameForOne(username);
         Customer customer = customerService.queryByLoginNameForOne(username);
 
-        List<Object> list = new ArrayList<Object>(){
+        List<Object> list = new ArrayList<Object>() {
             @Override
             public boolean add(Object o) {
-                if (o == null){
+                if (o == null) {
                     //null不添入
                     return false;
                 }
