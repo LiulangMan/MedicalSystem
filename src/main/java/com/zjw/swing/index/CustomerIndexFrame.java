@@ -3,7 +3,7 @@ package com.zjw.swing.index;
 import com.zjw.constant.IndexConstant;
 import com.zjw.domain.Customer;
 import com.zjw.service.LoginService;
-import com.zjw.swing.help.HelpOnline;
+import com.zjw.swing.helpCustomer.HelpOnline;
 import com.zjw.swing.home.HomeFrame;
 import com.zjw.swing.salesManager.SaleListPanel;
 import com.zjw.swing.salesManager.SaleRecordPanel;
@@ -99,7 +99,7 @@ public class CustomerIndexFrame extends JFrame {
         JButton button0 = new JButton("主页");
         JButton button1 = new JButton("药物浏览");
         JButton button2 = new JButton("购买记录");
-        JButton button3 = new JButton("在线咨询");
+        JButton button3 = new JButton("问题咨询");
         JButton button4 = new JButton("个人信息");
         JButton button5 = new JButton("个性设置");
 
@@ -120,7 +120,7 @@ public class CustomerIndexFrame extends JFrame {
         card.add(homeFrame, "主页");
         card.add(goodsFrame, "药物浏览");
         card.add(saleRecordPanel, "购买记录");
-        card.add(helpOnline, "在线咨询");
+        card.add(helpOnline, "问题咨询");
         card.add(selfInformationFrame, "个人信息");
         card.add(settingFrame, "个性设置");
 
@@ -177,7 +177,7 @@ public class CustomerIndexFrame extends JFrame {
         });
 
         button3.addActionListener(e -> {
-            cardLayout.show(card, "在线咨询");
+            cardLayout.show(card, "问题咨询");
         });
 
 

@@ -218,6 +218,7 @@ public class LoginFrame extends JFrame {
             } catch (Exception ex) {
                 ex.printStackTrace();
                 MessageShows.ShowMessageText(this, "failLogin", "登陆出现错误");
+                loginService.logout(usernameText, StaticConfiguration.getLoginType());
             }
         });
 

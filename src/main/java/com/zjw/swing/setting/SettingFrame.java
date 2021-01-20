@@ -1,5 +1,6 @@
 package com.zjw.swing.setting;
 
+import com.zjw.config.StaticConfiguration;
 import com.zjw.constant.IndexConstant;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +14,15 @@ import java.awt.*;
  */
 @Component
 public class SettingFrame extends JPanel {
+
+
+    public SettingFrame(){
+        super(null);
+    }
     public void init() {
-        this.setSize(IndexConstant.CARD_WIDTH, IndexConstant.CARD_HIGH);
-        this.setBackground(Color.WHITE);
+
+        //字体设置
+        //头像设置
+
     }
 }

@@ -84,7 +84,6 @@ public class PathEditJFrame extends JFrame {
                 ex.printStackTrace();
             }
         });
-
     }
 
     public static void main(String[] args) {

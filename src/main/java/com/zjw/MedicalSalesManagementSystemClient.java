@@ -1,5 +1,6 @@
 package com.zjw;
 
+import com.zjw.config.FontConfiguration;
 import com.zjw.controller.LoginController;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.WebApplicationType;

@@ -3,7 +3,7 @@ package com.zjw.swing.index;
 import com.zjw.constant.IndexConstant;
 import com.zjw.domain.Employ;
 import com.zjw.service.LoginService;
-import com.zjw.swing.chat.ChatFrame;
+import com.zjw.swing.helpEmployee.HelpEmployPlane;
 import com.zjw.swing.home.HomeFrame;
 import com.zjw.swing.log.LogFrame;
 import com.zjw.swing.stockManager.StockManagerFrame;
@@ -33,7 +33,7 @@ public class EmployIndexFrame extends JFrame {
     private LoginService loginService;
 
     @Autowired
-    private ChatFrame chatFrame;
+    private HelpEmployPlane helpEmployPlane;
 
     @Autowired
     private StockManagerFrame procurementManagerFrame;
@@ -65,7 +65,7 @@ public class EmployIndexFrame extends JFrame {
 
     private void initField() {
         homeFrame.init();
-        chatFrame.init();
+        helpEmployPlane.init();
         procurementManagerFrame.init();
         salesMangerFrame.init();
         selfInformationFrame.init();
@@ -87,7 +87,6 @@ public class EmployIndexFrame extends JFrame {
                 loginService.logout(employ.getLoginName(), employ.getType());
             }
         });
-
     }
 
 
@@ -113,7 +112,7 @@ public class EmployIndexFrame extends JFrame {
         JButton button1 = new JButton("销售管理");
         JButton button2 = new JButton("采购管理");
         JButton button3 = new JButton("用户管理");
-        JButton button4 = new JButton("群组在线");
+        JButton button4 = new JButton("问题答疑");
         JButton button5 = new JButton("登陆日志");
         JButton button6 = new JButton("个人信息");
         JButton button7 = new JButton("个性设置");
@@ -135,7 +134,7 @@ public class EmployIndexFrame extends JFrame {
         card.add(homeFrame, "主页");
         card.add(salesMangerFrame, "销售管理");
         card.add(procurementManagerFrame, "采购管理");
-        card.add(chatFrame, "群组在线");
+        card.add(helpEmployPlane, "问题答疑");
         card.add(selfInformationFrame, "个人信息");
         card.add(settingFrame, "个性设置");
 
@@ -229,7 +228,7 @@ public class EmployIndexFrame extends JFrame {
         });
 
         button4.addActionListener(e -> {
-            cardLayout.show(card, "群组在线");
+            cardLayout.show(card, "问题答疑");
             button4.setBackground(Color.GREEN);
             if (lastButton != button4) {
                 lastButton.setBackground(null);
@@ -265,10 +264,10 @@ public class EmployIndexFrame extends JFrame {
         });
     }
 
-
     public void refreshInformation() {
         name.setText("姓名：" + StaticConfiguration.getEmploy().getName());
         address.setText("地区：" + StaticConfiguration.getEmploy().getAddress());
         role.setText("角色：" + (StaticConfiguration.getEmploy().getType() == IndexConstant.LOGIN_TYPE_ADMIN ? "超级管理员" : "员工"));
     }
+
 }

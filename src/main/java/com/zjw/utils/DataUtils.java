@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -224,6 +225,20 @@ public class DataUtils {
                 objects[i][5] = customer.getPhone();
                 objects[i][6] = IndexConstant.LOGIN_TYPE_CUSTOMER;
             }
+        }
+        return objects;
+    }
+
+    public static Object[][] QuestionToArray(List<Question> questions) {
+        Object[][] objects = new Object[questions.size()][6];
+        for (int i = 0; i < questions.size(); i++) {
+            objects[i][0] = questions.get(i).getId();
+            objects[i][1] = questions.get(i).getQuestion();
+            objects[i][2] = defaultDataFormat.format(questions.get(i).getQuestionTime());
+            objects[i][3] = questions.get(i).getAnswer();
+            Date answerTime = questions.get(i).getAnswerTime();
+            objects[i][4] = answerTime != null ? defaultDataFormat.format(answerTime) : "";
+            objects[i][5] = questions.get(i).getStatus();
         }
         return objects;
     }

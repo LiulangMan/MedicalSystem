@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjw.mapper.QuestionMapper">
+    <resultMap id="BaseResultMap" type="com.zjw.domain.Question">
+        <!--@mbg.generated-->
+        <!--@Table sys_question-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="question" jdbcType="VARCHAR" property="question"/>
+        <result column="answer" jdbcType="LONGVARCHAR" property="answer"/>
+        <result column="question_time" jdbcType="TIMESTAMP" property="questionTime"/>
+        <result column="answer_time" jdbcType="TIMESTAMP" property="answerTime"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="question_username" jdbcType="VARCHAR" property="questionUsername"/>
+        <result column="response_username" jdbcType="VARCHAR" property="responseUsername"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, question, answer, question_time, answer_time, `status`, question_username, response_username
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from sys_question
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from sys_question
+    </select>
+
+    <select id="selectAllByQuestion" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from sys_question
+        where question like #{question,jdbcType=VARCHAR}
+    </select>
+
+     <select id="selectAllByQuestionUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from sys_question
+        where question_username = #{loginName,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from sys_question
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.zjw.domain.Question" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sys_question (question, answer, question_time,
+                                  answer_time, `status`, question_username,
+                                  response_username)
+        values (#{question,jdbcType=VARCHAR}, #{answer,jdbcType=LONGVARCHAR}, #{questionTime,jdbcType=TIMESTAMP},
+                #{answerTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{questionUsername,jdbcType=VARCHAR},
+                #{responseUsername,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.zjw.domain.Question"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sys_question
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="question != null">
+                question,
+            </if>
+            <if test="answer != null">
+                answer,
+            </if>
+            <if test="questionTime != null">
+                question_time,
+            </if>
+            <if test="answerTime != null">
+                answer_time,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+            <if test="questionUsername != null">
+                question_username,
+            </if>
+            <if test="responseUsername != null">
+                response_username,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="question != null">
+                #{question,jdbcType=VARCHAR},
+            </if>
+            <if test="answer != null">
+                #{answer,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="questionTime != null">
+                #{questionTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="answerTime != null">
+                #{answerTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="questionUsername != null">
+                #{questionUsername,jdbcType=VARCHAR},
+            </if>
+            <if test="responseUsername != null">
+                #{responseUsername,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zjw.domain.Question">
+        <!--@mbg.generated-->
+        update sys_question
+        <set>
+            <if test="question != null">
+                question = #{question,jdbcType=VARCHAR},
+            </if>
+            <if test="answer != null">
+                answer = #{answer,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="questionTime != null">
+                question_time = #{questionTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="answerTime != null">
+                answer_time = #{answerTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="questionUsername != null">
+                question_username = #{questionUsername,jdbcType=VARCHAR},
+            </if>
+            <if test="responseUsername != null">
+                response_username = #{responseUsername,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zjw.domain.Question">
+        <!--@mbg.generated-->
+        update sys_question
+        set question          = #{question,jdbcType=VARCHAR},
+            answer            = #{answer,jdbcType=LONGVARCHAR},
+            question_time     = #{questionTime,jdbcType=TIMESTAMP},
+            answer_time       = #{answerTime,jdbcType=TIMESTAMP},
+            `status`          = #{status,jdbcType=INTEGER},
+            question_username = #{questionUsername,jdbcType=VARCHAR},
+            response_username = #{responseUsername,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -11,12 +11,17 @@ import com.zjw.swing.utils.DefaultJTable;
 import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.config.StaticConfiguration;
 import com.zjw.utils.DataUtils;
+import com.zjw.utils.PrintUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -65,10 +70,10 @@ public class SaleRecordPanel extends ImageJPanel {
         fullButton.setLocation(950, 650);
         this.add(fullButton);
 
-        JButton downLoadButton = new JButton("打印订单");
-        downLoadButton.setSize(100, 30);
-        downLoadButton.setLocation(950, 700);
-        this.add(downLoadButton);
+        JButton printButton = new JButton("打印订单");
+        printButton.setSize(100, 30);
+        printButton.setLocation(950, 700);
+        this.add(printButton);
 
         /*监听*/
         fullButton.addActionListener(e -> {
@@ -94,8 +99,37 @@ public class SaleRecordPanel extends ImageJPanel {
             MessageShowByTable.show(colName, objects);
         });
 
-        downLoadButton.addActionListener(e -> {
+        printButton.addActionListener(e -> {
             MessageShows.ShowMessageText(this, "打印", "打印成功");
+
+            int row = recordTable.getSelectedRow();
+            String orderId = (String) recordTable.getValueAt(row, 0);
+            Order order = StaticConfiguration.getOrderInCache(orderId);
+
+            //构建打印订单字符串
+            StringBuilder builder = new StringBuilder();
+            builder.append("医疗销售订单\n")
+                    .append("-订单号:").append(order.getOrderId()).append("\n")
+                    .append("-时间:").append(DataUtils.defaultDataFormat.format(order.getOrderTime())).append("\n")
+                    .append("-销售列表:").append("\n");
+            for (GoodsIdAndGoodsCntForOrder o : order.getGoodsIdMap()) {
+                Goods goods = StaticConfiguration.getGoodsInCache(o.getGoodsId());
+                builder.append("---").append(goods.getGoodName())
+                        .append(" -数量:").append(o.getGoodsCnt())
+                        .append(" -金额:").append(goods.getGoodMoney() * o.getGoodsCnt()).append("元").append("\n");
+            }
+            builder.append("-总金额:").append(order.getOrderMoney());
+            System.out.println(builder);
+//            try {
+//                File file = new File("F://hello.txt");
+//                InputStream fis = new FileInputStream(file);
+//                fis.read(builder.toString().getBytes());
+//                //打印
+//                PrintUtils.Print(fis, null);
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+
         });
 
     }
