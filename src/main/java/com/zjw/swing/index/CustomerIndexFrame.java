@@ -54,6 +54,8 @@ public class CustomerIndexFrame extends JFrame {
     private JLabel address;
     private JLabel phone;
 
+    private JButton lastButton;
+
     private void initField() {
         homeFrame.init();
         selfInformationFrame.init();
@@ -163,30 +165,62 @@ public class CustomerIndexFrame extends JFrame {
 
         this.setVisible(true);
 
+        lastButton = button0;
+        button0.setBackground(Color.GREEN);
+
         /*菜单监听*/
         button0.addActionListener(e -> {
             cardLayout.show(card, "主页");
+            button0.setBackground(Color.GREEN);
+            if (lastButton != button0){
+                lastButton.setBackground(null);
+                lastButton = button0;
+            }
         });
 
         button1.addActionListener(e -> {
             cardLayout.show(card, "药物浏览");
+            button1.setBackground(Color.GREEN);
+            if (lastButton != button1){
+                lastButton.setBackground(null);
+                lastButton = button1;
+            }
         });
 
         button2.addActionListener(e -> {
             cardLayout.show(card, "购买记录");
+            button2.setBackground(Color.GREEN);
+            if (lastButton != button2){
+                lastButton.setBackground(null);
+                lastButton = button2;
+            }
         });
 
         button3.addActionListener(e -> {
             cardLayout.show(card, "问题咨询");
+            button3.setBackground(Color.GREEN);
+            if (lastButton != button3){
+                lastButton.setBackground(null);
+                lastButton = button3;
+            }
         });
-
 
         button4.addActionListener(e -> {
             cardLayout.show(card, "个人信息");
+            button4.setBackground(Color.GREEN);
+            if (lastButton != button4){
+                lastButton.setBackground(null);
+                lastButton = button4;
+            }
         });
 
         button5.addActionListener(e -> {
             cardLayout.show(card, "个性设置");
+            button5.setBackground(Color.GREEN);
+            if (lastButton != button5){
+                lastButton.setBackground(null);
+                lastButton = button5;
+            }
         });
     }
 

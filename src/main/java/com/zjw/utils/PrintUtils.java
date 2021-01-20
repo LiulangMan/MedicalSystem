@@ -2,8 +2,11 @@ package com.zjw.utils;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
+import lombok.extern.log4j.Log4j2;
 
 import javax.print.*;
 import javax.print.attribute.HashPrintRequestAttributeSet;
@@ -11,17 +14,31 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.Copies;
 import javax.print.attribute.standard.Sides;
 import java.awt.print.PrinterJob;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 /**
  * @program: medical_sales_management_system
  * @author: 一树
  * @data: 2021/1/20 14:32
  */
+@Log4j2
 public class PrintUtils {
+
+    private static Font font;
+
+    static {
+        try {
+            //jar包
+            BaseFont bfChinese = BaseFont.createFont("STSongStd-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+            font = new Font(bfChinese, 14, Font.BOLD);
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     // 传入文件和打印机名称
     public static void Print(InputStream fis, String printerName) throws PrintException {
@@ -42,6 +59,8 @@ public class PrintUtils {
 
             //获得本台电脑连接的所有打印机
             PrintService[] printServices = PrinterJob.lookupPrintServices();
+
+            log.info("本机打印机:" + Arrays.toString(printServices));
             if (printServices == null || printServices.length == 0) {
                 System.out.print("打印失败，未找到可用打印机，请检查。");
                 return;
@@ -77,14 +96,21 @@ public class PrintUtils {
         try {
             Document document = new Document();
 
-            PdfWriter.getInstance(document, new FileOutputStream("helloWorld.PDF"));
+            File file = new File(path);
+            if (file.exists()) {
+                file.delete();
+            }
 
+            file.createNewFile();
+            PdfWriter.getInstance(document, new FileOutputStream(file));
+
+            //打开文档
             document.open();
-
-            document.add(new Paragraph(text));
+            Paragraph element = new Paragraph(text, font);
+            document.add(element);
 
             document.close();
-        } catch (DocumentException | FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

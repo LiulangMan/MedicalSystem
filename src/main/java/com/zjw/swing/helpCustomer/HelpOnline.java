@@ -104,6 +104,9 @@ public class HelpOnline extends JPanel {
                     "输入你的问题:",
                     ""
             );
+
+            if (questionText.equals("")) return;
+
             Question question = new Question(0, questionText, null, new Date(), null, 0,
                     StaticConfiguration.getCustomer().getLoginName(), null);
 

@@ -12,12 +12,15 @@ import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.config.StaticConfiguration;
 import com.zjw.utils.DataUtils;
 import com.zjw.utils.PrintUtils;
+import com.zjw.utils.interfaceImpl.DefaultMouseListener;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,6 +35,7 @@ import java.util.List;
  * @data: 2021/1/7 0:14
  */
 @Component
+@Log4j2
 public class SaleRecordPanel extends ImageJPanel {
 
     @Autowired
@@ -99,8 +103,18 @@ public class SaleRecordPanel extends ImageJPanel {
             MessageShowByTable.show(colName, objects);
         });
 
+        recordTable.addMouseListener(new DefaultMouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    fullButton.doClick();
+                }
+            }
+        });
+
         printButton.addActionListener(e -> {
-            MessageShows.ShowMessageText(this, "打印", "打印成功");
+            boolean b = MessageShows.ShowMessageAboutMakeSure(this, "确认打印订单？");
+            if (!b) return;
 
             int row = recordTable.getSelectedRow();
             String orderId = (String) recordTable.getValueAt(row, 0);
@@ -109,27 +123,31 @@ public class SaleRecordPanel extends ImageJPanel {
             //构建打印订单字符串
             StringBuilder builder = new StringBuilder();
             builder.append("医疗销售订单\n")
-                    .append("-订单号:").append(order.getOrderId()).append("\n")
-                    .append("-时间:").append(DataUtils.defaultDataFormat.format(order.getOrderTime())).append("\n")
-                    .append("-销售列表:").append("\n");
+                    .append("- 订单号:").append(order.getOrderId()).append("\n")
+                    .append("- 时间:").append(DataUtils.defaultDataFormat.format(order.getOrderTime())).append("\n")
+                    .append("- 销售列表:").append("\n");
             for (GoodsIdAndGoodsCntForOrder o : order.getGoodsIdMap()) {
                 Goods goods = StaticConfiguration.getGoodsInCache(o.getGoodsId());
-                builder.append("---").append(goods.getGoodName())
-                        .append(" -数量:").append(o.getGoodsCnt())
-                        .append(" -金额:").append(goods.getGoodMoney() * o.getGoodsCnt()).append("元").append("\n");
+                builder.append("---- ").append(goods.getGoodName())
+                        .append(" - 数量:").append(o.getGoodsCnt())
+                        .append(" - 金额:").append(goods.getGoodMoney() * o.getGoodsCnt()).append("元").append("\n");
             }
-            builder.append("-总金额:").append(order.getOrderMoney());
-            System.out.println(builder);
-//            try {
-//                File file = new File("F://hello.txt");
-//                InputStream fis = new FileInputStream(file);
-//                fis.read(builder.toString().getBytes());
-//                //打印
-//                PrintUtils.Print(fis, null);
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//            }
-
+            builder.append("- 总金额:").append(order.getOrderMoney()).append("\n");
+            builder.append("- 顾客:").append(order.getCustomerName());
+            log.info(builder.toString());
+            try {
+                String path = "F://hello.pdf";
+                //先创建PDF文件
+                PrintUtils.creatPdf(builder.toString(), path);
+                //打印PDF文件
+                File file = new File(path);
+                InputStream fis = new FileInputStream(file);
+                fis.read(builder.toString().getBytes());
+                //打印
+                PrintUtils.Print(fis, null);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });
 
     }

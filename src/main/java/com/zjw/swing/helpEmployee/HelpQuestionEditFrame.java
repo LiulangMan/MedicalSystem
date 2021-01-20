@@ -68,7 +68,7 @@ public class HelpQuestionEditFrame extends JFrame {
         this.setVisible(true);
 
         okButton.addActionListener(e -> {
-            String text = question.getText();
+            String text = answer.getText();
             q.setAnswer(text);
             q.setAnswerTime(new Date());
             q.setResponseUsername(StaticConfiguration.getEmploy().getLoginName());

@@ -189,6 +189,7 @@ public class EmployIndexFrame extends JFrame {
 
         //颜色变化
         lastButton = button0;
+        button0.setBackground(Color.GREEN);
 
         /*菜单监听*/
         button0.addActionListener(e -> {

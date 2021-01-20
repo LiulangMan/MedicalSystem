@@ -101,6 +101,7 @@ public class HelpEmployPlane extends JPanel {
 
             questionService.deleteQuestionById((Integer) questionTable.getValueAt(questionTable.getSelectedRow(), 0));
             MessageShows.ShowMessageText(this, null, "删除成功");
+            this.refreshData();
         });
 
         searchButton.addActionListener(e -> {
