@@ -15,6 +15,7 @@ import java.awt.*;
  * @data: 2021/1/9 13:21
  */
 public class MessageShowByText {
+
     public static void show(String title, String text, Font font) {
 
         JFrame jf = new JFrame(title);
