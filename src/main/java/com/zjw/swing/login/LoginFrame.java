@@ -1,12 +1,8 @@
 package com.zjw.swing.login;
 
 import com.zjw.constant.IndexConstant;
-import com.zjw.domain.Customer;
-import com.zjw.domain.Employ;
-import com.zjw.domain.InfoLogin;
-import com.zjw.service.CustomerService;
-import com.zjw.service.EmployService;
-import com.zjw.service.LoginService;
+import com.zjw.domain.*;
+import com.zjw.service.*;
 import com.zjw.swing.index.CustomerIndexFrame;
 import com.zjw.swing.index.EmployIndexFrame;
 import com.zjw.swing.message.MessageShows;
@@ -24,6 +20,8 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @program: medical_sales_management_system
@@ -40,6 +38,15 @@ public class LoginFrame extends JFrame {
 
     @Autowired
     private EmployService employService;
+
+    @Autowired
+    private GoodService goodService;
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private StockOrderService stockOrderService;
 
     //注册账号
     @Autowired
@@ -157,7 +164,7 @@ public class LoginFrame extends JFrame {
 
 
         //监听
-
+        JFrame temp = this;
         /*登陆*/
         loginButton.addActionListener(e -> {
 
@@ -165,96 +172,100 @@ public class LoginFrame extends JFrame {
             SwingWorker<Integer, Object> worker = new SwingWorker<Integer, Object>() {
                 @Override
                 protected void done() {
-                    super.done();
+                    MySwingUtils.ProgressBar.closeProgressBar();
+                    try {
+                        Integer result = get();
+                        if (result == 0) {
+                            temp.setVisible(false);
+                            temp.dispose();
+
+                        } else if (result == 1) {
+                            MessageShows.ShowMessageText(temp,null,"用户名或者密码不能为空");
+                        } else if (result == 2) {
+                            MessageShows.ShowMessageText(temp,null,"用户名不存在或者密码错误");
+                        } else if (result == 3) {
+                            MessageShows.ShowMessageText(temp, null, "该账户已经登陆");
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
 
                 @Override
                 protected Integer doInBackground() throws Exception {
+
+                    String serviceIp = serviceAddress.getText();
+                    String usernameText = username.getText();
+                    char[] passwordText = password.getPassword();
+
+                    if (EmptyUtils.isEmptyOfUserNameOrPwd(usernameText, Arrays.toString(passwordText))) {
+                        //弹出用户名或者密码不能为空
+                        //MessageShows.EmptyUserOrPwd(this);
+                        return 1;
+                    }
+
+                    //密文
+                    String pwd = Md5Utils.Md5(String.valueOf(passwordText));
+                    try {
+                        if (employButton.isSelected()) {
+                            Employ employ = employService.queryByLoginNameForOne(usernameText);
+                            if (employ == null || !employ.getLoginPassword().equals(pwd)) {
+                                //抛出用户名不存在或者密码错误
+                                //MessageShows.ErrorUserOrPwd(this);
+                                return 2;
+                            }
+
+                            //记录登陆信息
+                            boolean isNotOnline = loginService.recordLogin(new InfoLogin(employ.getLoginName(), new Date(), employ.getType()));
+                            if (!isNotOnline) {
+                                //MessageShows.ShowMessageText(this, null, "该账户已经登陆");
+                                return 3;
+                            }
+
+                            //进入employ系统
+                            StaticConfiguration.setEmploy(employ);
+                            StaticConfiguration.setLoginType(employ.getType());
+                            StaticConfiguration.addThreadPoolTask(() -> employIndexFrame.run());
+                        } else {
+                            Customer customer = customerService.queryByLoginNameForOne(usernameText);
+                            if (customer == null || !customer.getLoginPassword().equals(pwd)) {
+                                //抛出用户名不存在或者密码错误
+                                //MessageShows.ErrorUserOrPwd(this);
+                                return 2;
+                            }
+
+                            //记录登陆信息
+                            boolean isNotOnline = loginService.recordLogin(new InfoLogin(customer.getLoginName(), new Date(), IndexConstant.LOGIN_TYPE_CUSTOMER));
+                            if (!isNotOnline) {
+                                //MessageShows.ShowMessageText(this, null, "该账户已经登陆");
+                                return 3;
+                            }
+
+                            //进入customer系统
+                            StaticConfiguration.setCustomer(customer);
+                            StaticConfiguration.setLoginType(IndexConstant.LOGIN_TYPE_CUSTOMER);
+                            StaticConfiguration.addThreadPoolTask(new Runnable() {
+                                @Override
+                                public void run() {
+                                    customerIndexFrame.run();
+                                }
+                            });
+                        }
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        MessageShows.ShowMessageText(temp, "failLogin", "登陆出现错误");
+                        loginService.logout(usernameText, StaticConfiguration.getLoginType());
+                    }
+
                     return null;
                 }
             };
 
-            String serviceIp = serviceAddress.getText();
-            String usernameText = username.getText();
-            char[] passwordText = password.getPassword();
+            //登陆逻辑
+            MySwingUtils.ProgressBar.showProgressBar("正在登陆");
+            worker.execute();
 
-            if (EmptyUtils.isEmptyOfUserNameOrPwd(usernameText, Arrays.toString(passwordText))) {
-                //弹出用户名或者密码不能为空
-                MessageShows.EmptyUserOrPwd(this);
-                return;
-            }
-
-            //密文
-            String pwd = Md5Utils.Md5(String.valueOf(passwordText));
-            try {
-                if (employButton.isSelected()) {
-                    Employ employ = employService.queryByLoginNameForOne(usernameText);
-                    if (employ == null || !employ.getLoginPassword().equals(pwd)) {
-                        //抛出用户名不存在或者密码错误
-                        MessageShows.ErrorUserOrPwd(this);
-                        return;
-                    }
-
-                    //记录登陆信息
-                    boolean isNotOnline = loginService.recordLogin(new InfoLogin(employ.getLoginName(), new Date(), employ.getType()));
-                    if (!isNotOnline) {
-                        MessageShows.ShowMessageText(this, null, "该账户已经登陆");
-                        return;
-                    }
-
-                    //进入employ系统
-                    StaticConfiguration.setEmploy(employ);
-                    StaticConfiguration.setLoginType(employ.getType());
-
-                    MySwingUtils.ProgressBar.showProgressBar("正在加载");
-
-                    StaticConfiguration.addThreadPoolTask(new Runnable() {
-                        @Override
-                        public void run() {
-                            employIndexFrame.run();
-                        }
-                    });
-
-                    this.setVisible(false);
-                    this.dispose();
-
-                } else {
-                    Customer customer = customerService.queryByLoginNameForOne(usernameText);
-                    if (customer == null || !customer.getLoginPassword().equals(pwd)) {
-                        //抛出用户名不存在或者密码错误
-                        MessageShows.ErrorUserOrPwd(this);
-                        return;
-                    }
-
-                    //记录登陆信息
-                    boolean isNotOnline = loginService.recordLogin(new InfoLogin(customer.getLoginName(), new Date(), IndexConstant.LOGIN_TYPE_CUSTOMER));
-                    if (!isNotOnline) {
-                        MessageShows.ShowMessageText(this, null, "该账户已经登陆");
-                        return;
-                    }
-
-                    //进入customer系统
-                    StaticConfiguration.setCustomer(customer);
-                    StaticConfiguration.setLoginType(IndexConstant.LOGIN_TYPE_CUSTOMER);
-
-                    MySwingUtils.ProgressBar.showProgressBar("正在加载");
-
-                    StaticConfiguration.addThreadPoolTask(new Runnable() {
-                        @Override
-                        public void run() {
-                            customerIndexFrame.run();
-                        }
-                    });
-
-                    this.setVisible(false);
-                    this.dispose();
-                }
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                MessageShows.ShowMessageText(this, "failLogin", "登陆出现错误");
-                loginService.logout(usernameText, StaticConfiguration.getLoginType());
-            }
         });
 
         /*注册*/

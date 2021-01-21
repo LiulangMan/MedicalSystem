@@ -37,6 +37,12 @@ public class SalesMangerFrame extends JPanel {
         saleStockPanel.init();
     }
 
+    public void refreshAllData() {
+        saleGoodsPanel.refreshData();
+        saleRecordPanel.refreshData();
+        saleStockPanel.refreshData();
+    }
+
     public void init() {
 
         initFiled();
@@ -98,4 +104,5 @@ public class SalesMangerFrame extends JPanel {
             }
         });
     }
+
 }

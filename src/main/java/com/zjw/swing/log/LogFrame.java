@@ -32,6 +32,8 @@ public class LogFrame extends JPanel {
     @Autowired
     private LoginService loginService;
 
+    private DefaultJTable recordTable;
+
 
     /*使用废弃的Data.setHour() setMinute setSecond方法*/
     @SuppressWarnings("deprecation")
@@ -39,7 +41,7 @@ public class LogFrame extends JPanel {
         this.setSize(IndexConstant.CARD_WIDTH, IndexConstant.CARD_HIGH);
 
         //登陆日志表
-        DefaultJTable recordTable = new DefaultJTable(new Object[]{"登陆账户", "登陆类型", "登陆时间"}, new DefaultTableModel());
+        recordTable = new DefaultJTable(new Object[]{"登陆账户", "登陆类型", "登陆时间"}, new DefaultTableModel());
         recordTable.getJScrollPane().setSize(1200, 600);
         recordTable.getJScrollPane().setLocation(0, 0);
         this.add(recordTable.getJScrollPane());
@@ -68,9 +70,6 @@ public class LogFrame extends JPanel {
         searchButton.setSize(100, 30);
         searchButton.setLocation(400, 600);
         this.add(searchButton);
-
-        List<InfoLogin> loginList = loginService.queryAll();
-        recordTable.refreshData(DataUtils.LoginInfoToArray(loginList));
 
         /*监听*/
         typeList.addItemListener(e -> {
@@ -121,5 +120,10 @@ public class LogFrame extends JPanel {
                 ex.printStackTrace();
             }
         });
+    }
+
+    public void refreshData(){
+        List<InfoLogin> loginList = loginService.queryAll();
+        recordTable.refreshData(DataUtils.LoginInfoToArray(loginList));
     }
 }

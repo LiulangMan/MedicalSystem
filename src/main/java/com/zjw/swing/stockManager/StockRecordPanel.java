@@ -43,13 +43,6 @@ public class StockRecordPanel extends JPanel {
         recordTable.getJScrollPane().setLocation(0, 0);
         this.add(recordTable.getJScrollPane());
 
-        //刷新数据
-        List<StockOrder> stockOrders = stockOrderService.queryAll();
-        recordTable.refreshData(DataUtils.StockGoodsOrderToArray(stockOrders));
-        //加载采购记录信息
-        StaticConfiguration.refreshStockGoodsOrderCache(stockOrders);
-
-
         //明细按钮
         JButton descriptionButton = new JButton("明细");
         descriptionButton.setSize(100, 30);
@@ -85,7 +78,13 @@ public class StockRecordPanel extends JPanel {
     }
 
 
-    public void refreshRecordTable() {
+    public void refreshData() {
+        //刷新数据
+        List<StockOrder> stockOrders = stockOrderService.queryAll();
+        recordTable.refreshData(DataUtils.StockGoodsOrderToArray(stockOrders));
+        //加载采购记录信息
+        StaticConfiguration.refreshStockGoodsOrderCache(stockOrders);
+
         Collection<StockOrder> values = StaticConfiguration.getStockGoodsOrderCache().values();
         ArrayList<StockOrder> list = new ArrayList<>(values);
         list.sort((o1, o2) -> o2.getStockTime().compareTo(o1.getStockTime()));

@@ -49,8 +49,6 @@ public class SaleStockPanel extends JPanel {
         table.getJScrollPane().setBounds(0, 0, 1100, 600);
         this.add(table.getJScrollPane());
 
-        refreshData();
-
         //弹出菜单
         JPopupMenu jPopupMenu = new JPopupMenu();
         JMenuItem editMenu = new JMenuItem("调整");

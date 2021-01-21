@@ -71,9 +71,43 @@ public class EmployIndexFrame extends JFrame {
         salesMangerFrame.init();
         selfInformationFrame.init();
         settingFrame.init();
+        if (StaticConfiguration.getEmploy().getType() == IndexConstant.LOGIN_TYPE_ADMIN) {
+            userMangerFrame.init();
+            logFrame.init();
+        }
+    }
+
+    private void refreshAllData() {
+
+        //后台刷新
+        SwingWorker<Object, Object> worker = new SwingWorker<Object, Object>() {
+            @Override
+            protected void done() {
+                MySwingUtils.ProgressBar.closeProgressBar();
+            }
+
+            @Override
+            protected Object doInBackground() throws Exception {
+                homeFrame.refreshAnnouncementPanel();
+                helpEmployPlane.refreshData();
+                salesMangerFrame.refreshAllData();
+                procurementManagerFrame.refreshAllData();
+
+                if (StaticConfiguration.getEmploy().getType() == IndexConstant.LOGIN_TYPE_ADMIN) {
+                    userMangerFrame.refreshData();
+                    logFrame.refreshData();
+                }
+                return null;
+            }
+        };
+
+        MySwingUtils.ProgressBar.showProgressBar("正在加载数据");
+        worker.execute();
     }
 
     private void init() {
+
+        initField();
         //初始化配置
         this.setSize(IndexConstant.CLIENT_WIDTH, IndexConstant.CLIENT_HIGH);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -93,8 +127,6 @@ public class EmployIndexFrame extends JFrame {
 
     public void run() {
 
-        //初始化
-        initField();
         init();
 
         //主板
@@ -141,9 +173,6 @@ public class EmployIndexFrame extends JFrame {
 
         //超级管理员模块
         if (StaticConfiguration.getEmploy().getType() == IndexConstant.LOGIN_TYPE_ADMIN) {
-            userMangerFrame.init();
-            logFrame.init();
-
             menu.add(button3);
             menu.add(button5);
             card.add(userMangerFrame, "用户管理");
@@ -187,11 +216,12 @@ public class EmployIndexFrame extends JFrame {
         information.add(role);
 
         MySwingUtils.ProgressBar.closeProgressBar();
-        this.setVisible(true);
 
         //颜色变化
         lastButton = button0;
         button0.setBackground(Color.GREEN);
+
+        this.setVisible(true);
 
         /*菜单监听*/
         button0.addActionListener(e -> {
@@ -263,6 +293,14 @@ public class EmployIndexFrame extends JFrame {
             if (lastButton != button7) {
                 lastButton.setBackground(null);
                 lastButton = button7;
+            }
+        });
+
+        //加载数据
+        StaticConfiguration.addThreadPoolTask(new Runnable() {
+            @Override
+            public void run() {
+                refreshAllData();
             }
         });
     }

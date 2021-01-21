@@ -47,9 +47,10 @@ public class StaticConfiguration {
     private static Font font = new Font(null, Font.PLAIN, 25);
 
     //初始化Config
-    public static void initConfigUtil(Employ employI, Customer customerI, List<Goods> goodsList, List<Order> orderList, List<Goods> stockGoodsList, List<StockOrder> stockOrderList) {
-        employ = employI;
-        customer = customerI;
+    public static void initConfigUtil(Employ employ, Customer customer, List<Goods> goodsList, List<Order> orderList,
+                                      List<Goods> stockGoodsList, List<StockOrder> stockOrderList) {
+        StaticConfiguration.employ = employ;
+        StaticConfiguration.customer = customer;
         refreshStockGoodsOrderCache(stockOrderList);
         refreshStockGoodsCache(stockGoodsList);
         refreshGoodsCache(goodsList);

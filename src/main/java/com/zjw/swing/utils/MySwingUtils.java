@@ -18,7 +18,12 @@ public class MySwingUtils {
 
 
         public static void showProgressBar(String title) {
-            creatUI(title);
+            StaticConfiguration.addThreadPoolTask(new Runnable() {
+                @Override
+                public void run() {
+                    creatUI(title);
+                }
+            });
         }
 
         private static void creatUI(String title) {

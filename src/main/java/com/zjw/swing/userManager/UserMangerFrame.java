@@ -65,8 +65,6 @@ public class UserMangerFrame extends JPanel {
         userTable.getJScrollPane().setBounds(0, 0, 1200, 600);
         this.add(userTable.getJScrollPane());
 
-        refreshData();
-
         JPopupMenu jPopupMenu = new JPopupMenu();
         JMenuItem recordButton = new JMenuItem("登陆记录");
         JMenuItem deleteButton = new JMenuItem("删除用户");
@@ -191,21 +189,11 @@ public class UserMangerFrame extends JPanel {
 
 
         dumpButton.addActionListener(e -> {
-            StaticConfiguration.addThreadPoolTask(new Runnable() {
-                @Override
-                public void run() {
-                    pathEditJFrame.run(true);
-                }
-            });
+            StaticConfiguration.addThreadPoolTask(() -> pathEditJFrame.run(true));
         });
 
         backupButton.addActionListener(e -> {
-            StaticConfiguration.addThreadPoolTask(new Runnable() {
-                @Override
-                public void run() {
-                    pathEditJFrame.run(false);
-                }
-            });
+            StaticConfiguration.addThreadPoolTask(() -> pathEditJFrame.run(false));
         });
     }
 

@@ -86,9 +86,6 @@ public class HomeFrame extends ImageJPanel {
             popupMenu.add(addMenu);
         }
 
-        //获取公告
-        refreshAnnouncementPanel();
-
         /*监听*/
         announcementPanel.addMouseListener(new DefaultMouseListener() {
             @Override
@@ -162,7 +159,7 @@ public class HomeFrame extends ImageJPanel {
         });
     }
 
-    void refreshAnnouncementPanel() {
+    public void refreshAnnouncementPanel() {
         //先隐藏
         announcementPanel.setVisible(false);
 

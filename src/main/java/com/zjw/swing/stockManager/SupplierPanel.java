@@ -42,9 +42,6 @@ public class SupplierPanel extends JPanel {
         supplierTable.getJScrollPane().setBounds(0, 0, 1100, 600);
         this.add(supplierTable.getJScrollPane());
 
-        //刷新表格数据
-        refreshData();
-
         //弹出菜单
         JPopupMenu jPopupMenu = new JPopupMenu();
         JMenuItem editButton = new JMenuItem("编辑");

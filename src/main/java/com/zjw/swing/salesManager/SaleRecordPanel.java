@@ -62,13 +62,6 @@ public class SaleRecordPanel extends ImageJPanel {
         recordTable.getJScrollPane().getViewport().setOpaque(false);
         this.add(recordTable.getJScrollPane());
 
-        //加载信息
-        List<Order> orders = StaticConfiguration.getEmploy() != null ? orderService.queryAll() :
-                orderService.queryAllOnlyCustomerId(StaticConfiguration.getCustomer().getLoginName());
-
-        StaticConfiguration.refreshOrderCache(orders);
-        recordTable.refreshData(DataUtils.OrderSimpleInformationToArray(orders));
-
         JButton fullButton = new JButton("药品明细");
         fullButton.setSize(100, 30);
         fullButton.setLocation(950, 650);
@@ -152,7 +145,11 @@ public class SaleRecordPanel extends ImageJPanel {
 
     }
 
-    void refreshRecordTable() {
+    public void refreshData() {
+        List<Order> orders = StaticConfiguration.getEmploy() != null ? orderService.queryAll() :
+                orderService.queryAllOnlyCustomerId(StaticConfiguration.getCustomer().getLoginName());
+        StaticConfiguration.refreshOrderCache(orders);
+
         Collection<Order> values = StaticConfiguration.getOrderCache().values();
         ArrayList<Order> list = new ArrayList<>(values);
         list.sort((o1, o2) -> o2.getOrderTime().compareTo(o1.getOrderTime()));

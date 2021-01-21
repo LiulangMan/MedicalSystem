@@ -66,6 +66,29 @@ public class CustomerIndexFrame extends JFrame {
         helpOnline.init();
     }
 
+    private void refreshAllData() {
+        //后台刷新
+        SwingWorker<Object, Object> worker = new SwingWorker<Object, Object>() {
+            @Override
+            protected void done() {
+                MySwingUtils.ProgressBar.closeProgressBar();
+            }
+
+            @Override
+            protected Object doInBackground() throws Exception {
+                homeFrame.refreshAnnouncementPanel();
+                goodsFrame.refreshData();
+                saleRecordPanel.refreshData();
+                helpOnline.refreshData();
+
+                return null;
+            }
+        };
+
+        MySwingUtils.ProgressBar.showProgressBar("正在加载数据");
+        worker.execute();
+    }
+
     private void init() {
         //初始化
         initField();
@@ -84,6 +107,7 @@ public class CustomerIndexFrame extends JFrame {
         });
 
     }
+
 
     public void run() {
 
@@ -165,8 +189,7 @@ public class CustomerIndexFrame extends JFrame {
         phone = new JLabel("电话：" + StaticConfiguration.getCustomer().getPhone());
         information.add(phone);
 
-        //关闭进度条
-        MySwingUtils.ProgressBar.closeProgressBar();
+
         this.setVisible(true);
 
         lastButton = button0;
@@ -226,6 +249,9 @@ public class CustomerIndexFrame extends JFrame {
                 lastButton = button5;
             }
         });
+
+        //加载数据
+        this.refreshAllData();
     }
 
     public void refreshInformation() {

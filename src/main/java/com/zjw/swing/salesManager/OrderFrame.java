@@ -209,7 +209,7 @@ public class OrderFrame extends JFrame {
                 //重新刷新
                 saleGoodsPanel.refreshData();
                 StaticConfiguration.addOrderInCache(order);
-                saleRecordPanel.refreshRecordTable();
+                saleRecordPanel.refreshData();
                 saleStockPanel.refreshData();
                 //释放资源
                 this.setVisible(false);

@@ -162,7 +162,7 @@ public class StockOrderFrame extends JFrame {
                 //重新刷新
                 saleListPanel.refreshData();
                 StaticConfiguration.addStockGoodsOrderCache(order);
-                stockRecordPanel.refreshRecordTable();
+                stockRecordPanel.refreshData();
                 saleStockPanel.refreshData();
                 stockListPanel.refreshData();
 

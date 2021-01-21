@@ -58,11 +58,9 @@ public class StockListPanel extends JPanel {
         stockTable.getJScrollPane().setLocation(0, 0);
         stockTable.getJScrollPane().setSize(1100, 600);
         this.add(stockTable.getJScrollPane());
-        refreshData();
 
         //搜索栏
         String[] type = {"药品ID", "药名", "描述", "供应商ID"};
-
         JComboBox<String> typeList = new JComboBox<>(type);
         typeList.setSize(80, 30);
         typeList.setLocation(10, 600);

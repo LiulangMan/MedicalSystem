@@ -43,7 +43,6 @@ public class HelpEmployPlane extends JPanel {
         questionTable = new DefaultJTable(new Object[]{"ID", "问题", "提问时间", "回答", "回答时间", "状态"}, new DefaultTableModel());
         questionTable.getJScrollPane().setBounds(0, 0, 1200, 600);
         this.add(questionTable.getJScrollPane());
-        refreshData();
 
         //弹出菜单
         JPopupMenu jPopupMenu = new JPopupMenu();

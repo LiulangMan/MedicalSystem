@@ -16,6 +16,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -67,8 +70,6 @@ public class SaleListPanel extends JPanel {
         table.getJScrollPane().setLocation(0, 0);
         dataPanel.add(table.getJScrollPane());
 
-        //刷新数据
-        refreshData();
 
         //刷新按钮
         JButton refreshButton = new JButton("刷新");
@@ -132,6 +133,11 @@ public class SaleListPanel extends JPanel {
         cancelButton.setLocation(620, 750);
         this.add(cancelButton);
 
+
+        // 数据加载
+//        ArrayList<Goods> list = new ArrayList<>(StaticConfiguration.getGoodsCache().values());
+//        list.sort(Comparator.comparingInt(Goods::getGoodId));
+//        table.refreshData(DataUtils.GoodsListToObjectArray(list));
 
         /*监听*/
 

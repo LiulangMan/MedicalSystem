@@ -37,6 +37,12 @@ public class StockManagerFrame extends JPanel {
         supplierPanel.init();
     }
 
+    public void refreshAllData() {
+        stockListPanel.refreshData();
+        stockRecordPanel.refreshData();
+        supplierPanel.refreshData();
+    }
+
     public void init() {
 
         //初始化域
@@ -99,6 +105,4 @@ public class StockManagerFrame extends JPanel {
             }
         });
     }
-
-
 }

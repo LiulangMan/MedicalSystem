@@ -48,12 +48,12 @@
         where good_text like #{description,jdbcType=VARCHAR}
     </select>
 
-
     <select id="selectAll" resultMap="BaseResultMap">
         <!--@mbg.generated-->
         select
         <include refid="Base_Column_List"/>
         from bus_goods
+        
     </select>
 
     <select id="selectByLeftPrice" parameterType="java.lang.Double" resultMap="BaseResultMap">
@@ -181,11 +181,13 @@
         select
         <include refid="Base_Column_List"/>
         from bus_stock_goods
+        
     </select>
 
     <select id="selectMaxStockGoodsId" resultType="java.lang.Integer">
         select max(good_id)
         from bus_stock_goods
+        
     </select>
 
     <delete id="deleteStockGoodsById" parameterType="_integer">
