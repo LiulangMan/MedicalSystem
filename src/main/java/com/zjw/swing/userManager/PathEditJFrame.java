@@ -1,6 +1,8 @@
 package com.zjw.swing.userManager;
 
+import com.zjw.config.StaticConfiguration;
 import com.zjw.swing.message.MessageShows;
+import com.zjw.swing.utils.MySwingUtils;
 import com.zjw.utils.MysqlUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,6 +19,9 @@ public class PathEditJFrame extends JFrame {
 
     @Autowired
     private PathListFrame pathListFrame;
+
+    @Autowired
+    private UserMangerFrame userMangerFrame;
 
     //JList传入
     JTextField path;
@@ -59,8 +64,14 @@ public class PathEditJFrame extends JFrame {
 
         /*监听*/
         pathButton.addActionListener(e -> {
-            pathListFrame.run();
+            StaticConfiguration.addThreadPoolTask(new Runnable() {
+                @Override
+                public void run() {
+                    pathListFrame.run();
+                }
+            });
         });
+
 
         okButton.addActionListener(e -> {
             String pathText = path.getText();
@@ -70,13 +81,56 @@ public class PathEditJFrame extends JFrame {
                 if (isDump) {
                     boolean b = MessageShows.ShowMessageAboutMakeSure(this, "确认备份？");
                     if (!b) return;
-                    MysqlUtils.dump("zjw.life", "3310", "root", "root", "MedicalSystem",
-                            pathText, fileText, this);
+
+                    //创建后台任务
+                    SwingWorker<Object, Object> backTask = new SwingWorker<Object, Object>() {
+                        @Override
+                        protected void done() {
+                            //关闭进度条
+                            MySwingUtils.ProgressBar.closeProgressBar();
+                        }
+
+                        @Override
+                        protected Object doInBackground() throws Exception {
+                            try {
+                                MysqlUtils.dump("zjw.life", "3310", "root", "root", "MedicalSystem",
+                                        pathText, fileText, panel);
+
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                            return null;
+                        }
+                    };
+                    MySwingUtils.ProgressBar.showProgressBar("正在备份数据库");
+                    //执行任务
+                    backTask.execute();
+
                 } else {
                     boolean b = MessageShows.ShowMessageAboutMakeSure(this, "确认恢复？");
                     if (!b) return;
-                    MysqlUtils.backup("zjw.life", "3310", "root", "root", "MedicalSystem",
-                            pathText, this);
+
+                    //创建后台任务
+                    SwingWorker<Object, Object> backTask = new SwingWorker<Object, Object>() {
+                        @Override
+                        protected void done() {
+                            MySwingUtils.ProgressBar.closeProgressBar();
+                        }
+
+                        @Override
+                        protected Object doInBackground() throws Exception {
+                            try {
+                                MysqlUtils.backup("zjw.life", "3310", "root", "root", "MedicalSystem",
+                                        pathText, panel);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                            return null;
+                        }
+                    };
+                    MySwingUtils.ProgressBar.showProgressBar("正在恢复数据库");
+                    //执行任务
+                    backTask.execute();
                 }
                 this.setVisible(false);
                 this.dispose();
@@ -86,7 +140,4 @@ public class PathEditJFrame extends JFrame {
         });
     }
 
-    public static void main(String[] args) {
-        new PathEditJFrame().run(true);
-    }
 }

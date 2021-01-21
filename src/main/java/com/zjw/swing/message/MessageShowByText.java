@@ -1,5 +1,7 @@
 package com.zjw.swing.message;
 
+import com.zjw.config.FontConfiguration;
+import com.zjw.config.StaticConfiguration;
 import com.zjw.swing.utils.DefaultJTable;
 import com.zjw.swing.utils.ImageJPanel;
 
@@ -21,7 +23,7 @@ public class MessageShowByText {
         jf.setLocationRelativeTo(null);
         jf.setResizable(false);
 
-        JPanel show = new ImageJPanel(null,"/images/login/t4.jpg");
+        JPanel show = new ImageJPanel(null, "/images/login/t4.jpg");
         jf.setContentPane(show);
 
         JTextPane label = new JTextPane();
@@ -32,6 +34,7 @@ public class MessageShowByText {
         label.setBackground(null);
         label.setOpaque(false);
         label.setEditable(false);
+        label.setFont(FontConfiguration.getFont("宋体", 25));
         show.add(label);
 
         jf.setVisible(true);

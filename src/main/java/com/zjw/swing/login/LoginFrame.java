@@ -12,6 +12,7 @@ import com.zjw.swing.index.EmployIndexFrame;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.config.StaticConfiguration;
+import com.zjw.swing.utils.MySwingUtils;
 import com.zjw.utils.EmptyUtils;
 import com.zjw.utils.Md5Utils;
 import com.zjw.utils.interfaceImpl.DefaultMouseListener;
@@ -50,7 +51,7 @@ public class LoginFrame extends JFrame {
 
     //主页
     @Autowired
-    private EmployIndexFrame employIndex;
+    private EmployIndexFrame employIndexFrame;
 
     @Autowired
     private CustomerIndexFrame customerIndexFrame;
@@ -160,6 +161,19 @@ public class LoginFrame extends JFrame {
         /*登陆*/
         loginButton.addActionListener(e -> {
 
+            //加载数据
+            SwingWorker<Integer, Object> worker = new SwingWorker<Integer, Object>() {
+                @Override
+                protected void done() {
+                    super.done();
+                }
+
+                @Override
+                protected Integer doInBackground() throws Exception {
+                    return null;
+                }
+            };
+
             String serviceIp = serviceAddress.getText();
             String usernameText = username.getText();
             char[] passwordText = password.getPassword();
@@ -187,12 +201,23 @@ public class LoginFrame extends JFrame {
                         MessageShows.ShowMessageText(this, null, "该账户已经登陆");
                         return;
                     }
+
                     //进入employ系统
                     StaticConfiguration.setEmploy(employ);
                     StaticConfiguration.setLoginType(employ.getType());
+
+                    MySwingUtils.ProgressBar.showProgressBar("正在加载");
+
+                    StaticConfiguration.addThreadPoolTask(new Runnable() {
+                        @Override
+                        public void run() {
+                            employIndexFrame.run();
+                        }
+                    });
+
                     this.setVisible(false);
-                    employIndex.run();
                     this.dispose();
+
                 } else {
                     Customer customer = customerService.queryByLoginNameForOne(usernameText);
                     if (customer == null || !customer.getLoginPassword().equals(pwd)) {
@@ -211,10 +236,20 @@ public class LoginFrame extends JFrame {
                     //进入customer系统
                     StaticConfiguration.setCustomer(customer);
                     StaticConfiguration.setLoginType(IndexConstant.LOGIN_TYPE_CUSTOMER);
+
+                    MySwingUtils.ProgressBar.showProgressBar("正在加载");
+
+                    StaticConfiguration.addThreadPoolTask(new Runnable() {
+                        @Override
+                        public void run() {
+                            customerIndexFrame.run();
+                        }
+                    });
+
                     this.setVisible(false);
-                    customerIndexFrame.run();
                     this.dispose();
                 }
+
             } catch (Exception ex) {
                 ex.printStackTrace();
                 MessageShows.ShowMessageText(this, "failLogin", "登陆出现错误");

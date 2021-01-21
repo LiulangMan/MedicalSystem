@@ -12,6 +12,7 @@ import com.zjw.swing.login.RegisterFrame;
 import com.zjw.swing.message.MessageShowByTable;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.utils.DefaultJTable;
+import com.zjw.swing.utils.ProgressBarJPanel;
 import com.zjw.utils.DataUtils;
 import com.zjw.utils.MysqlUtils;
 import com.zjw.utils.interfaceImpl.DefaultMouseListener;
@@ -48,6 +49,9 @@ public class UserMangerFrame extends JPanel {
     private PathEditJFrame pathEditJFrame;
 
     private DefaultJTable userTable;
+
+    // 创建一个进度条
+    final ProgressBarJPanel progressBar = new ProgressBarJPanel();
 
 
     public UserMangerFrame() {
@@ -100,6 +104,11 @@ public class UserMangerFrame extends JPanel {
         backupButton.setLocation(1000, 650);
         this.add(backupButton);
 
+        //进度条--设置不确定模式
+        progressBar.setLocation(400, 300);
+        progressBar.setVisible(false);
+        this.add(progressBar);
+
         /*监听*/
         userTable.addMouseListener(new DefaultMouseListener() {
             @Override
@@ -116,7 +125,12 @@ public class UserMangerFrame extends JPanel {
             String userName = (String) userTable.getValueAt(row, 1);
             Integer type = (Integer) userTable.getValueAt(row, 6);
             List<InfoLogin> infoLogins = loginService.queryAllByUsernameAndType(userName, type);
-            MessageShowByTable.show(new Object[]{"登陆账户", "登陆类型", "登陆时间"}, DataUtils.LoginInfoToArray(infoLogins));
+            StaticConfiguration.addThreadPoolTask(new Runnable() {
+                @Override
+                public void run() {
+                    MessageShowByTable.show(new Object[]{"登陆账户", "登陆类型", "登陆时间"}, DataUtils.LoginInfoToArray(infoLogins));
+                }
+            });
         });
 
         //删除用户
@@ -177,12 +191,21 @@ public class UserMangerFrame extends JPanel {
 
 
         dumpButton.addActionListener(e -> {
-            pathEditJFrame.run(true);
-
+            StaticConfiguration.addThreadPoolTask(new Runnable() {
+                @Override
+                public void run() {
+                    pathEditJFrame.run(true);
+                }
+            });
         });
 
         backupButton.addActionListener(e -> {
-            pathEditJFrame.run(false);
+            StaticConfiguration.addThreadPoolTask(new Runnable() {
+                @Override
+                public void run() {
+                    pathEditJFrame.run(false);
+                }
+            });
         });
     }
 

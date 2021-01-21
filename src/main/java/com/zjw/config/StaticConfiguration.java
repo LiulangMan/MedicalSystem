@@ -3,6 +3,7 @@ package com.zjw.config;
 import com.zjw.domain.*;
 import lombok.Data;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -130,7 +131,9 @@ public class StaticConfiguration {
     }
 
     public static void addThreadPoolTask(Runnable task) {
-        pool.submit(task);
+        //pool.submit(task);
+        //调用事件调度线程创建UI
+        SwingUtilities.invokeLater(task);
     }
 
 

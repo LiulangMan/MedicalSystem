@@ -13,6 +13,7 @@ import com.zjw.swing.setting.SettingFrame;
 import com.zjw.swing.userManager.UserMangerFrame;
 import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.config.StaticConfiguration;
+import com.zjw.swing.utils.MySwingUtils;
 import com.zjw.utils.interfaceImpl.DefaultWindowsListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -185,6 +186,7 @@ public class EmployIndexFrame extends JFrame {
         role = new JLabel("角色：" + (StaticConfiguration.getEmploy().getType() == IndexConstant.LOGIN_TYPE_ADMIN ? "超级管理员" : "员工"));
         information.add(role);
 
+        MySwingUtils.ProgressBar.closeProgressBar();
         this.setVisible(true);
 
         //颜色变化

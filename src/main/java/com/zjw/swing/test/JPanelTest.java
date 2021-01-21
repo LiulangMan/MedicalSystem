@@ -9,15 +9,18 @@ import javax.swing.*;
  */
 public class JPanelTest {
 
+    private static JFrame jf = new JFrame("测试");
 
-    public static void test(JPanel panel){
-        JFrame jf = new JFrame("测试");
-        jf.setSize(1200,800);
+    public static void test(JPanel panel) {
         jf.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         jf.setLocationRelativeTo(null);
         jf.setResizable(false);
         jf.setContentPane(panel);
 
         jf.setVisible(true);
+    }
+
+    public static void setSize(int width, int high) {
+        jf.setSize(width, high);
     }
 }

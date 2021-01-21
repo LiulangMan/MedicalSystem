@@ -11,6 +11,7 @@ import com.zjw.swing.selfInformation.SelfInformationFrame;
 import com.zjw.swing.setting.SettingFrame;
 import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.config.StaticConfiguration;
+import com.zjw.swing.utils.MySwingUtils;
 import com.zjw.utils.interfaceImpl.DefaultWindowsListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -85,6 +86,8 @@ public class CustomerIndexFrame extends JFrame {
     }
 
     public void run() {
+
+
         init();
         //主板
         JPanel mainPanel = new ImageJPanel(null, "/images/index/t5.jpg");
@@ -162,7 +165,8 @@ public class CustomerIndexFrame extends JFrame {
         phone = new JLabel("电话：" + StaticConfiguration.getCustomer().getPhone());
         information.add(phone);
 
-
+        //关闭进度条
+        MySwingUtils.ProgressBar.closeProgressBar();
         this.setVisible(true);
 
         lastButton = button0;
@@ -172,7 +176,7 @@ public class CustomerIndexFrame extends JFrame {
         button0.addActionListener(e -> {
             cardLayout.show(card, "主页");
             button0.setBackground(Color.GREEN);
-            if (lastButton != button0){
+            if (lastButton != button0) {
                 lastButton.setBackground(null);
                 lastButton = button0;
             }
@@ -181,7 +185,7 @@ public class CustomerIndexFrame extends JFrame {
         button1.addActionListener(e -> {
             cardLayout.show(card, "药物浏览");
             button1.setBackground(Color.GREEN);
-            if (lastButton != button1){
+            if (lastButton != button1) {
                 lastButton.setBackground(null);
                 lastButton = button1;
             }
@@ -190,7 +194,7 @@ public class CustomerIndexFrame extends JFrame {
         button2.addActionListener(e -> {
             cardLayout.show(card, "购买记录");
             button2.setBackground(Color.GREEN);
-            if (lastButton != button2){
+            if (lastButton != button2) {
                 lastButton.setBackground(null);
                 lastButton = button2;
             }
@@ -199,7 +203,7 @@ public class CustomerIndexFrame extends JFrame {
         button3.addActionListener(e -> {
             cardLayout.show(card, "问题咨询");
             button3.setBackground(Color.GREEN);
-            if (lastButton != button3){
+            if (lastButton != button3) {
                 lastButton.setBackground(null);
                 lastButton = button3;
             }
@@ -208,7 +212,7 @@ public class CustomerIndexFrame extends JFrame {
         button4.addActionListener(e -> {
             cardLayout.show(card, "个人信息");
             button4.setBackground(Color.GREEN);
-            if (lastButton != button4){
+            if (lastButton != button4) {
                 lastButton.setBackground(null);
                 lastButton = button4;
             }
@@ -217,7 +221,7 @@ public class CustomerIndexFrame extends JFrame {
         button5.addActionListener(e -> {
             cardLayout.show(card, "个性设置");
             button5.setBackground(Color.GREEN);
-            if (lastButton != button5){
+            if (lastButton != button5) {
                 lastButton.setBackground(null);
                 lastButton = button5;
             }
