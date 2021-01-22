@@ -85,25 +85,30 @@ public class StockOrderFrame extends JFrame {
         JButton moreButton = new JButton("+");
         moreButton.setFont(new Font(null, Font.PLAIN, 25));
         moreButton.setSize(100, 30);
-        moreButton.setLocation(1300, 810);
+        moreButton.setLocation(1100, 810);
         orderPanel.add(moreButton);
 
         JButton lessButton = new JButton("-");
         lessButton.setFont(new Font(null, Font.PLAIN, 25));
         lessButton.setSize(100, 30);
-        lessButton.setLocation(1300, 860);
+        lessButton.setLocation(1100, 860);
         orderPanel.add(lessButton);
+
+        JButton numberButton = new JButton("填入");
+        numberButton.setSize(100, 30);
+        numberButton.setLocation(1100, 910);
+        orderPanel.add(numberButton);
 
         JButton okButton = new JButton("提交");
         okButton.setSize(100, 30);
-        okButton.setLocation(1300, 910);
+        okButton.setLocation(1300, 810);
         orderPanel.add(okButton);
 
         //总额
         JLabel totalMoney = new JLabel("总额: 0 元");
         totalMoney.setFont(new Font(null, Font.PLAIN, 25));
-        totalMoney.setSize(200, 30);
-        totalMoney.setLocation(1100, 810);
+        totalMoney.setSize(300, 30);
+        totalMoney.setLocation(800, 810);
         orderPanel.add(totalMoney);
 
         //刷新总额
@@ -197,6 +202,40 @@ public class StockOrderFrame extends JFrame {
 
             MySwingUtils.ProgressBar.showProgressBar("正在处理");
             worker.execute();
+
+        });
+
+        numberButton.addActionListener(e -> {
+            String num = JOptionPane.showInputDialog(
+                    this,
+                    "请输入销售数量",
+                    ""
+            );
+
+            if (num == null || num.equals("")) {
+                return;
+            }
+            try {
+                int result = Integer.parseInt(num);
+                if (result < 0) {
+                    MessageShows.ShowMessageText(this, null, "参数错误");
+                    return;
+                }
+                int[] rows = orderTable.getSelectedRows();
+                for (int row : rows) {
+                    Integer varId = (Integer) orderTable.getValueAt(row, 0);
+                    Goods varGood = StaticConfiguration.getStockGoodsInCache(varId);
+                    int varCnt = Math.min(Integer.MAX_VALUE, result);
+                    orderTable.setValueAt(varCnt, row, 4);
+                    orderTable.setValueAt(varCnt * varGood.getGoodMoney(), row, 5);
+                }
+
+                this.refreshTotalMoney(totalMoney, orderTable);
+
+            } catch (NumberFormatException ex) {
+                MessageShows.ShowMessageText(this, null, "参数错误");
+                ex.printStackTrace();
+            }
 
         });
     }

@@ -2,6 +2,7 @@ package com.zjw.swing.home;
 
 import com.zjw.config.FontConfiguration;
 import com.zjw.config.StaticConfiguration;
+import com.zjw.constant.IndexConstant;
 import com.zjw.domain.Announcement;
 import com.zjw.service.AnnouncementService;
 import com.zjw.swing.message.MessageShowByTable;
@@ -50,9 +51,13 @@ public class HomeListFrame {
             JMenuItem deleteButton = new JMenuItem("删除");
             JMenuItem addListButton = new JMenuItem("添加");
             jPopupMenu.add(refreshListButton);
-            jPopupMenu.add(editListButton);
-            jPopupMenu.add(deleteButton);
-            jPopupMenu.add(addListButton);
+
+            //超级管理员权限
+            if (StaticConfiguration.getLoginType() == IndexConstant.LOGIN_TYPE_ADMIN) {
+                jPopupMenu.add(editListButton);
+                jPopupMenu.add(deleteButton);
+                jPopupMenu.add(addListButton);
+            }
 
             //表格
             show = MessageShowByTable.show(new Object[]{"题目", "时间"}, null);

@@ -125,7 +125,7 @@ public class SaleRecordPanel extends ImageJPanel {
                         .append(" - 数量:").append(o.getGoodsCnt())
                         .append(" - 金额:").append(goods.getGoodMoney() * o.getGoodsCnt()).append("元").append("\n");
             }
-            builder.append("- 总金额:").append(order.getOrderMoney()).append("\n");
+            builder.append("- 总金额:").append(order.getOrderMoney()).append("元").append("\n");
             builder.append("- 顾客:").append(order.getCustomerName());
             log.info(builder.toString());
             try {
@@ -149,10 +149,6 @@ public class SaleRecordPanel extends ImageJPanel {
         List<Order> orders = StaticConfiguration.getEmploy() != null ? orderService.queryAll() :
                 orderService.queryAllOnlyCustomerId(StaticConfiguration.getCustomer().getLoginName());
         StaticConfiguration.refreshOrderCache(orders);
-
-        Collection<Order> values = StaticConfiguration.getOrderCache().values();
-        ArrayList<Order> list = new ArrayList<>(values);
-        list.sort((o1, o2) -> o2.getOrderTime().compareTo(o1.getOrderTime()));
-        recordTable.refreshData(DataUtils.OrderSimpleInformationToArray(list));
+        recordTable.refreshData(DataUtils.OrderSimpleInformationToArray(orders));
     }
 }

@@ -11,29 +11,6 @@ import java.awt.*;
  * @data: 2021/1/5 13:59
  */
 public class MessageShows {
-    public static void ErrorUserOrPwd(Component component) {
-        JOptionPane.showMessageDialog(component,
-                "用户名或密码错误",
-                "登陆失败",
-                JOptionPane.INFORMATION_MESSAGE
-        );
-    }
-
-    public static void EmptyUserOrPwd(Component component) {
-        JOptionPane.showMessageDialog(component,
-                "用户名或密码不能为空",
-                "登陆失败",
-                JOptionPane.INFORMATION_MESSAGE
-        );
-    }
-
-    public static void SuccessLogin(Component component) {
-        JOptionPane.showMessageDialog(component,
-                "登陆成功",
-                "success",
-                JOptionPane.INFORMATION_MESSAGE
-        );
-    }
 
     public static void SuccessRegister(Component component) {
         JOptionPane.showMessageDialog(component,
@@ -75,13 +52,7 @@ public class MessageShows {
         );
     }
 
-    public static void SuccessChangePassword(Component component) {
-        JOptionPane.showMessageDialog(component,
-                "密码修改成功",
-                "fail",
-                JOptionPane.INFORMATION_MESSAGE
-        );
-    }
+
 
     public static void ErrorInputText(Component component) {
         JOptionPane.showMessageDialog(component,

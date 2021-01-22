@@ -1,5 +1,6 @@
 package com.zjw.swing.salesManager;
 
+import com.zjw.config.FontConfiguration;
 import com.zjw.domain.Goods;
 import com.zjw.service.GoodService;
 import com.zjw.swing.message.MessageShows;
@@ -60,7 +61,7 @@ public class SaleStockEditFrame extends JFrame {
         panel.add(stockF);
 
         //数量按钮
-        Font font = new Font(null, Font.PLAIN, 25);
+        Font font = FontConfiguration.getFont(null, 25);
         JButton moreButton = new JButton("+");
         moreButton.setFont(font);
         moreButton.setBounds(500, 100, 50, 30);
@@ -71,9 +72,13 @@ public class SaleStockEditFrame extends JFrame {
         lessButton.setBounds(550, 100, 50, 30);
         panel.add(lessButton);
 
+        JButton numButton = new JButton("填入");
+        numButton.setBounds(600, 100, 100, 30);
+        panel.add(numButton);
+
         //确认按钮
         JButton okButton = new JButton("确认");
-        okButton.setBounds(600, 100, 100, 30);
+        okButton.setBounds(700, 100, 100, 30);
         panel.add(okButton);
 
         //数据
@@ -103,6 +108,22 @@ public class SaleStockEditFrame extends JFrame {
             stock.setText(String.valueOf(newStock));
             goods.setGoodStock(newSale);
             stockGoods.setGoodStock(newStock);
+        });
+
+        numButton.addActionListener(e -> {
+            String result = JOptionPane.showInputDialog(this, "输入调整到销售的数量", "");
+            if (result == null || result.equals("")) {
+                return;
+            }
+            try {
+                int newSale = Math.min(Integer.parseInt(result), stockGoods.getGoodStock());
+                sale.setText(String.valueOf(newSale));
+                stock.setText(String.valueOf(total - newSale));
+                goods.setGoodStock(newSale);
+                stockGoods.setGoodStock(total - newSale);
+            } catch (NumberFormatException ex) {
+                MessageShows.ShowMessageText(this, null, "参数错误");
+            }
         });
 
         okButton.addActionListener(e -> {
