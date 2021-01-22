@@ -2,18 +2,24 @@ package com.zjw.swing.stockManager;
 
 import com.zjw.constant.IndexConstant;
 import com.zjw.domain.Goods;
+import com.zjw.domain.Order;
 import com.zjw.domain.StockOrder;
 import com.zjw.domain.util.GoodsIdAndGoodsCntForOrder;
 import com.zjw.service.StockOrderService;
 import com.zjw.swing.message.MessageShowByTable;
+import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.utils.DefaultJTable;
 import com.zjw.config.StaticConfiguration;
 import com.zjw.utils.DataUtils;
+import com.zjw.utils.PrintUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -44,10 +50,15 @@ public class StockRecordPanel extends JPanel {
         this.add(recordTable.getJScrollPane());
 
         //明细按钮
-        JButton descriptionButton = new JButton("明细");
+        JButton descriptionButton = new JButton("药品明细");
         descriptionButton.setSize(100, 30);
-        descriptionButton.setLocation(1000, 700);
+        descriptionButton.setLocation(950, 650);
         this.add(descriptionButton);
+
+        JButton printButton = new JButton("打印订单");
+        printButton.setSize(100, 30);
+        printButton.setLocation(950, 700);
+        this.add(printButton);
 
         this.setVisible(true);
 
@@ -75,19 +86,52 @@ public class StockRecordPanel extends JPanel {
             //展示商品信息
             MessageShowByTable.show(colName, objects);
         });
+
+        printButton.addActionListener(e -> {
+
+            boolean b = MessageShows.ShowMessageAboutMakeSure(this, "确认打印订单？");
+            if (!b) return;
+
+            int row = recordTable.getSelectedRow();
+            String orderId = (String) recordTable.getValueAt(row, 0);
+            StockOrder order = StaticConfiguration.getStockGoodsOrderInCache(orderId);
+
+            //构建打印订单字符串
+            StringBuilder builder = new StringBuilder();
+            builder.append("医疗采购订单\n")
+                    .append("- 订单号:").append(order.getStockId()).append("\n")
+                    .append("- 时间:").append(DataUtils.defaultDataFormat.format(order.getStockTime())).append("\n")
+                    .append("- 销售列表:").append("\n");
+            for (GoodsIdAndGoodsCntForOrder o : order.getGoodsIdMap()) {
+                Goods goods = StaticConfiguration.getStockGoodsInCache(o.getGoodsId());
+                builder.append("---- ").append(goods.getGoodName())
+                        .append(" - 数量:").append(o.getGoodsCnt())
+                        .append(" - 金额:").append(goods.getGoodMoney() * o.getGoodsCnt()).append("元").append("\n");
+            }
+            builder.append("- 总金额:").append(order.getStockMoney()).append("元").append("\n");
+            builder.append("- 采购人:").append(order.getStockEmploy());
+            try {
+                String path = "F://hello.pdf";
+                //先创建PDF文件
+                PrintUtils.creatPdf(builder.toString(), path);
+                //打印PDF文件
+                File file = new File(path);
+                InputStream fis = new FileInputStream(file);
+                fis.read(builder.toString().getBytes());
+                //打印
+                PrintUtils.Print(fis, null);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
 
     public void refreshData() {
         //刷新数据
         List<StockOrder> stockOrders = stockOrderService.queryAll();
-        recordTable.refreshData(DataUtils.StockGoodsOrderToArray(stockOrders));
         //加载采购记录信息
         StaticConfiguration.refreshStockGoodsOrderCache(stockOrders);
-
-        Collection<StockOrder> values = StaticConfiguration.getStockGoodsOrderCache().values();
-        ArrayList<StockOrder> list = new ArrayList<>(values);
-        list.sort((o1, o2) -> o2.getStockTime().compareTo(o1.getStockTime()));
-        recordTable.refreshData(DataUtils.StockGoodsOrderToArray(list));
+        recordTable.refreshData(DataUtils.StockGoodsOrderToArray(stockOrders));
     }
 }

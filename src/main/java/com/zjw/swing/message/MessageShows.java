@@ -1,7 +1,5 @@
 package com.zjw.swing.message;
 
-import com.zjw.swing.stockManager.SupplierPanel;
-
 import javax.swing.*;
 import java.awt.*;
 

@@ -44,6 +44,7 @@ public class SaleStockEditFrame extends JFrame {
 
         JTextField sale = new JTextField();
         sale.setBounds(100, 100, 200, 30);
+        sale.setEditable(false);
         panel.add(sale);
 
         JLabel saleF = new JLabel("销售量");
@@ -52,6 +53,7 @@ public class SaleStockEditFrame extends JFrame {
         panel.add(saleF);
 
         JTextField stock = new JTextField();
+        stock.setEditable(false);
         stock.setBounds(300, 100, 200, 30);
         panel.add(stock);
 

@@ -95,7 +95,7 @@ public class EmployIndexFrame extends JFrame {
 
                 if (StaticConfiguration.getEmploy().getType() == IndexConstant.LOGIN_TYPE_ADMIN) {
                     userMangerFrame.refreshData();
-                    logFrame.refreshData();
+                    logFrame.refreshAllData();
                 }
                 return null;
             }
