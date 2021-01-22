@@ -7,6 +7,7 @@ import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.utils.DefaultJTable;
 import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.config.StaticConfiguration;
+import com.zjw.swing.utils.MySwingUtils;
 import com.zjw.utils.DataUtils;
 import com.zjw.utils.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @program: medical_sales_management_system
@@ -178,46 +180,73 @@ public class OrderFrame extends JFrame {
         });
 
         okButton.addActionListener(e -> {
-            //提取信息
-            String customerLoginIdText = customerId.getText();
-            String customerNameText = customerName.getText();
-            String customerPhoneText = customerPhone.getText();
-            java.util.List<GoodsIdAndGoodsCntForOrder> list = new ArrayList<>();
-            for (int i = 0; i < orderTable.getRowCount(); i++) {
-                int id = Integer.parseInt(String.valueOf(orderTable.getValueAt(i, 0)));
-                int cnt = Integer.parseInt(String.valueOf(orderTable.getValueAt(i, 4)));
-                list.add(new GoodsIdAndGoodsCntForOrder(id, cnt));
-            }
 
-            //创建订单
-            Order order = new Order();
-            order.setOrderId(RandomUtils.randomIdentity());
-            order.setCustomerId(customerLoginIdText);
-            order.setCustomerName(customerNameText);
-            order.setCustomerPhone(customerPhoneText);
-            order.setGoodsIdMap(list);
-            if (StaticConfiguration.getEmploy() != null) {
-                order.setSaleEmployName(StaticConfiguration.getEmploy().getName());
-            }
-            order.setOrderMoney(total);
-            order.setOrderTime(new Date());
+            JFrame temp = this;
+            SwingWorker<Integer, Object> worker = new SwingWorker<Integer, Object>() {
+                @Override
+                protected void done() {
+                    //关闭进度条
+                    MySwingUtils.ProgressBar.closeProgressBar();
+                    try {
+                        if (get() == 0) {
+                            MessageShows.ShowMessageText(temp, null, "提交成功");
+                            //释放资源
+                            temp.setVisible(false);
+                            temp.dispose();
+                        } else {
+                            MessageShows.ShowMessageText(temp, null, "提交失败");
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
 
-            //提交订单
-            try {
-                orderService.insert(order);
-                MessageShows.SuccessMessage(this, "成功");
-                //重新刷新
-                saleGoodsPanel.refreshData();
-                StaticConfiguration.addOrderInCache(order);
-                saleRecordPanel.refreshData();
-                saleStockPanel.refreshData();
-                //释放资源
-                this.setVisible(false);
-                this.dispose();
+                @Override
+                protected Integer doInBackground() throws Exception {
+                    //提取信息
+                    String customerLoginIdText = customerId.getText();
+                    String customerNameText = customerName.getText();
+                    String customerPhoneText = customerPhone.getText();
+                    java.util.List<GoodsIdAndGoodsCntForOrder> list = new ArrayList<>();
+                    for (int i = 0; i < orderTable.getRowCount(); i++) {
+                        int id = Integer.parseInt(String.valueOf(orderTable.getValueAt(i, 0)));
+                        int cnt = Integer.parseInt(String.valueOf(orderTable.getValueAt(i, 4)));
+                        list.add(new GoodsIdAndGoodsCntForOrder(id, cnt));
+                    }
 
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+                    //创建订单
+                    Order order = new Order();
+                    order.setOrderId(RandomUtils.randomIdentity());
+                    order.setCustomerId(customerLoginIdText);
+                    order.setCustomerName(customerNameText);
+                    order.setCustomerPhone(customerPhoneText);
+                    order.setGoodsIdMap(list);
+                    if (StaticConfiguration.getEmploy() != null) {
+                        order.setSaleEmployName(StaticConfiguration.getEmploy().getName());
+                    }
+                    order.setOrderMoney(total);
+                    order.setOrderTime(new Date());
+
+                    //提交订单
+                    try {
+                        orderService.insert(order);
+                        //重新刷新
+                        saleGoodsPanel.refreshData();
+                        StaticConfiguration.addOrderInCache(order);
+                        saleRecordPanel.refreshData();
+                        saleStockPanel.refreshData();
+                        return 0;
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        return 1;
+                    }
+                }
+            };
+
+            MySwingUtils.ProgressBar.showProgressBar("正在处理");
+            worker.execute();
+
         });
     }
 

@@ -11,6 +11,7 @@ import com.zjw.swing.salesManager.SaleStockPanel;
 import com.zjw.swing.utils.DefaultJTable;
 import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.config.StaticConfiguration;
+import com.zjw.swing.utils.MySwingUtils;
 import com.zjw.utils.DataUtils;
 import com.zjw.utils.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,42 +138,66 @@ public class StockOrderFrame extends JFrame {
         });
 
         okButton.addActionListener(e -> {
-            //提取信息
-            java.util.List<GoodsIdAndGoodsCntForOrder> list = new ArrayList<>();
-            for (int i = 0; i < orderTable.getRowCount(); i++) {
-                int id = Integer.parseInt(String.valueOf(orderTable.getValueAt(i, 0)));
-                int cnt = Integer.parseInt(String.valueOf(orderTable.getValueAt(i, 4)));
-                list.add(new GoodsIdAndGoodsCntForOrder(id, cnt));
 
-                StaticConfiguration.getStockOrderGoods().get(id).setGoodStock(cnt);
-            }
+            JFrame temp = this;
+            SwingWorker<Integer, Object> worker = new SwingWorker<Integer, Object>() {
+                @Override
+                protected void done() {
 
-            //创建采购订单
-            StockOrder order = new StockOrder();
-            order.setStockId(RandomUtils.randomIdentity());
-            order.setStockMoney(total);
-            order.setGoodsIdMap(list);
-            order.setStockEmploy(StaticConfiguration.getEmploy().getName());
-            order.setStockTime(new Date());
+                    MySwingUtils.ProgressBar.closeProgressBar();
+                    try {
+                        if (get() == 0) {
+                            MessageShows.ShowMessageText(temp, null, "提交成功");
+                            //释放资源
+                            temp.setVisible(false);
+                            temp.dispose();
+                        } else {
+                            MessageShows.ShowMessageText(temp, null, "提交失败");
+                        }
+                    } catch (Exception e1) {
+                        MessageShows.ShowMessageText(temp, null, "提交失败");
+                    }
+                }
 
-            //提交订单
-            try {
-                orderService.insert(order);
-                MessageShows.SuccessMessage(this, "成功");
-                //重新刷新
-                saleListPanel.refreshData();
-                StaticConfiguration.addStockGoodsOrderCache(order);
-                stockRecordPanel.refreshData();
-                saleStockPanel.refreshData();
-                stockListPanel.refreshData();
+                @Override
+                protected Integer doInBackground() throws Exception {
+                    //提取信息
+                    java.util.List<GoodsIdAndGoodsCntForOrder> list = new ArrayList<>();
+                    for (int i = 0; i < orderTable.getRowCount(); i++) {
+                        int id = Integer.parseInt(String.valueOf(orderTable.getValueAt(i, 0)));
+                        int cnt = Integer.parseInt(String.valueOf(orderTable.getValueAt(i, 4)));
+                        list.add(new GoodsIdAndGoodsCntForOrder(id, cnt));
 
-                //释放资源
-                this.setVisible(false);
-                this.dispose();
+                        StaticConfiguration.getStockOrderGoods().get(id).setGoodStock(cnt);
+                    }
 
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+                    //创建采购订单
+                    StockOrder order = new StockOrder();
+                    order.setStockId(RandomUtils.randomIdentity());
+                    order.setStockMoney(total);
+                    order.setGoodsIdMap(list);
+                    order.setStockEmploy(StaticConfiguration.getEmploy().getName());
+                    order.setStockTime(new Date());
+
+                    //提交订单
+                    try {
+                        orderService.insert(order);
+                        //重新刷新
+                        saleListPanel.refreshData();
+                        stockRecordPanel.refreshData();
+                        saleStockPanel.refreshData();
+                        stockListPanel.refreshData();
+                        StaticConfiguration.addStockGoodsOrderCache(order);
+                        return 0;
+                    } catch (Exception ex) {
+                        return 1;
+                    }
+                }
+            };
+
+            MySwingUtils.ProgressBar.showProgressBar("正在处理");
+            worker.execute();
+
         });
     }
 
