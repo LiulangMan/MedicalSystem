@@ -3,9 +3,11 @@ package com.zjw.service.impl;
 import com.zjw.domain.Announcement;
 import com.zjw.mapper.AnnouncementMapper;
 import com.zjw.service.AnnouncementService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,5 +49,10 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     public List<Announcement> queryAll() {
         return mapper.selectAll();
+    }
+
+    @Override
+    public Announcement queryOneByTitleAndTime(String title, Date data) {
+        return mapper.selectOneByTitleAndTime(title, data);
     }
 }

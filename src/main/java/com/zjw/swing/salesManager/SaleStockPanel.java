@@ -71,12 +71,7 @@ public class SaleStockPanel extends JPanel {
             Goods goods = StaticConfiguration.getGoodsInCache(id);
             Goods stock = StaticConfiguration.getStockGoodsInCache(id);
             if (goods != null && stock != null) {
-                StaticConfiguration.addThreadPoolTask(new Runnable() {
-                    @Override
-                    public void run() {
-                        saleStockEditFrame.run(goods, stock);
-                    }
-                });
+                StaticConfiguration.addThreadPoolTask(() -> saleStockEditFrame.run(goods, stock));
             } else if (goods == null) {
                 boolean b = MessageShows.ShowMessageAboutOfferSale(this);
                 if (!b) return;

@@ -2,6 +2,7 @@ package com.zjw.service;
 
 import com.zjw.domain.Announcement;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,4 +22,7 @@ public interface AnnouncementService {
     void deleteAnnouncement(Announcement announcement);
 
     List<Announcement> queryAll();
+
+    Announcement queryOneByTitleAndTime(String title, Date data);
+
 }

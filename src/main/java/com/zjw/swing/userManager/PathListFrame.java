@@ -9,6 +9,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.io.File;
+import java.util.Objects;
 import java.util.Vector;
 
 /**
@@ -24,6 +25,8 @@ public class PathListFrame extends JFrame {
     private JTextField path;
 
     private PathJButton currentPath;
+
+    private JComboBox<String> listType;
 
     @Autowired
     private PathEditJFrame pathEditJFrame;
@@ -66,6 +69,11 @@ public class PathListFrame extends JFrame {
         JButton lastPathButton = new JButton("上一级");
         lastPathButton.setBounds(440, 70, 80, 30);
         this.add(lastPathButton);
+
+        //文件选择
+        listType = new JComboBox<>(new String[]{"Directory", ".*", ".sql", ".xml", ".doc"});
+        listType.setBounds(440, 350, 80, 30);
+        this.add(listType);
 
         //确认
         JButton okButton = new JButton("确认");
@@ -125,8 +133,14 @@ public class PathListFrame extends JFrame {
 
         Vector<PathJButton> vector = new Vector<>();
 
+        String fileType = (String) listType.getSelectedItem();
+        Objects.requireNonNull(fileType);
+        if (fileType.equals(".*")) {
+            fileType = "";
+        }
+
         for (File file : files) {
-            if (file.isDirectory() || file.getName().endsWith(".sql")) {
+            if (file.isDirectory() || file.getName().endsWith(fileType)) {
                 PathJButton button = new PathJButton(file.getName());
                 button.file = file;
                 button.parentButton = pathJButton;

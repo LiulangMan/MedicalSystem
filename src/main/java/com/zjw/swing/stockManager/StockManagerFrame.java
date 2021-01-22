@@ -77,6 +77,8 @@ public class StockManagerFrame extends JPanel {
 
 
         lastButton = button0;
+        button0.setBackground(Color.GREEN);
+
         /*监听*/
         button0.addActionListener(e -> {
             cardLayout.show(card, "采购列表");

@@ -9,6 +9,8 @@ import com.zjw.service.StockOrderService;
 import com.zjw.config.StaticConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -29,6 +31,7 @@ public class StockOrderServiceImpl implements StockOrderService {
     private GoodService goodService;
 
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void insert(StockOrder order) {
 
         //插入采购订单

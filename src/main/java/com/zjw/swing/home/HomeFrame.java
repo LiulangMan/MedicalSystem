@@ -1,16 +1,14 @@
 package com.zjw.swing.home;
 
+import com.zjw.config.FontConfiguration;
 import com.zjw.config.StaticConfiguration;
 import com.zjw.constant.IndexConstant;
 import com.zjw.domain.Announcement;
 import com.zjw.service.AnnouncementService;
-import com.zjw.swing.message.MessageShowByTable;
 import com.zjw.swing.message.MessageShowByText;
 import com.zjw.swing.message.MessageShows;
-import com.zjw.swing.utils.DefaultJTable;
 import com.zjw.swing.utils.FontJLabel;
 import com.zjw.swing.utils.ImageJPanel;
-import com.zjw.utils.DataUtils;
 import com.zjw.utils.interfaceImpl.DefaultMouseListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,14 +32,17 @@ public class HomeFrame extends ImageJPanel {
     private AnnouncementService announcementService;
 
     @Autowired
-    private EditFrame editFrame;
+    private HomeEditFrame homeEditFrame;
+
+    @Autowired
+    private HomeListFrame homeListFrame;
 
     //弹出菜单
     private JPopupMenu popupMenu;
 
     private JPanel announcementPanel;
 
-    private Font font = new Font("宋体", Font.BOLD | Font.ITALIC, 20);
+    private Font font = FontConfiguration.getFont("宋体", 20);
 
     public HomeFrame() {
         super(null, "/images/login/login2.jpg");
@@ -50,7 +51,7 @@ public class HomeFrame extends ImageJPanel {
     public void init() {
         this.setSize(IndexConstant.CARD_WIDTH, IndexConstant.CARD_HIGH);
 
-        //公告按钮
+        //公告列表
         JButton listButton = new JButton("公告列表");
         listButton.setSize(100, 30);
         listButton.setLocation(1100, 770);
@@ -100,16 +101,13 @@ public class HomeFrame extends ImageJPanel {
             refreshAnnouncementPanel();
         });
         editMenu.addActionListener(e -> {
+
+            //首页展示
             Point point = announcementPanel.getMousePosition();
             java.awt.Component component = announcementPanel.getComponentAt(point.x, point.y - 30);
             if (component instanceof FontJLabel) {
                 FontJLabel jLabel = (FontJLabel) component;
-                StaticConfiguration.addThreadPoolTask(new Runnable() {
-                    @Override
-                    public void run() {
-                        editFrame.run(jLabel.getAnnouncement());
-                    }
-                });
+                StaticConfiguration.addThreadPoolTask(() -> homeEditFrame.run(jLabel.getAnnouncement()));
             }
         });
 
@@ -127,35 +125,13 @@ public class HomeFrame extends ImageJPanel {
 
         addMenu.addActionListener(e -> {
             StaticConfiguration.addThreadPoolTask(() -> {
-                editFrame.run(null);
+                homeEditFrame.run(null);
             });
 
         });
 
         listButton.addActionListener(e -> {
-            Object[] colName = new Object[]{"题目", "时间"};
-            List<Announcement> announcementList = announcementService.queryAll();
-            //如果考虑并发安全，可以使用Time+Title作为Key
-            Map<String, Announcement> announcementHashMap = new HashMap<>();
-            for (Announcement announcement : announcementList) {
-                announcementHashMap.put(DataUtils.defaultDataFormat.format(announcement.getWriteTime()), announcement);
-            }
-            DefaultJTable show = MessageShowByTable.show(colName, DataUtils.AnnouncementToArray(announcementList));
-            show.addMouseListener(new DefaultMouseListener() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if (e.getClickCount() == 2) {
-                        int row = show.getSelectedRow();
-                        String var1 = (String) show.getValueAt(row, 1);
-                        Announcement announcement = announcementHashMap.get(var1);
-                        MessageShowByText.show(
-                                announcement.getTitle(),
-                                announcement.getText(),
-                                font
-                        );
-                    }
-                }
-            });
+            StaticConfiguration.addThreadPoolTask(() -> homeListFrame.run());
         });
     }
 

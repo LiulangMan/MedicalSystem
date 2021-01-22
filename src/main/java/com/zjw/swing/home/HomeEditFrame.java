@@ -19,7 +19,7 @@ import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
  * @data: 2021/1/15 20:06
  */
 @Component
-public class EditFrame extends JFrame {
+public class HomeEditFrame extends JFrame {
 
     @Autowired
     private AnnouncementService announcementService;

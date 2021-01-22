@@ -3,6 +3,7 @@ package com.zjw.mapper;
 import com.zjw.domain.Announcement;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface AnnouncementMapper {
@@ -20,4 +21,6 @@ public interface AnnouncementMapper {
     void deleteAnnouncement(Announcement announcement);
 
     List<Announcement> selectAll();
+
+    Announcement selectOneByTitleAndTime(@Param("title") String title,@Param("data") Date data);
 }

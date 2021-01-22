@@ -9,6 +9,8 @@ import com.zjw.service.OrderService;
 import com.zjw.config.StaticConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class OrderServiceImpl implements OrderService {
     private GoodService goodService;
 
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void insert(Order order) {
         //提交
         mapper.insert(order);

@@ -146,7 +146,7 @@ public class EmployIndexFrame extends JFrame {
         JButton button2 = new JButton("采购管理");
         JButton button3 = new JButton("用户管理");
         JButton button4 = new JButton("问题答疑");
-        JButton button5 = new JButton("登陆日志");
+        JButton button5 = new JButton("日志记录");
         JButton button6 = new JButton("个人信息");
         JButton button7 = new JButton("个性设置");
 
@@ -176,7 +176,7 @@ public class EmployIndexFrame extends JFrame {
             menu.add(button3);
             menu.add(button5);
             card.add(userMangerFrame, "用户管理");
-            card.add(logFrame, "登陆日志");
+            card.add(logFrame, "日志记录");
         }
 
         //顶部信息面板
@@ -270,7 +270,7 @@ public class EmployIndexFrame extends JFrame {
         });
 
         button5.addActionListener(e -> {
-            cardLayout.show(card, "登陆日志");
+            cardLayout.show(card, "日志记录");
             button5.setBackground(Color.GREEN);
             if (lastButton != button5) {
                 lastButton.setBackground(null);

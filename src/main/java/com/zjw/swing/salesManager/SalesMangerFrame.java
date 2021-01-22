@@ -75,6 +75,7 @@ public class SalesMangerFrame extends JPanel {
         this.add(card);
 
         lastButton = button0;
+        button0.setBackground(Color.GREEN);
 
         /*监听*/
         button0.addActionListener(e -> {

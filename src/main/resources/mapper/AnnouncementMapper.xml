@@ -67,6 +67,14 @@
         order by write_time desc
     </select>
 
+    <select id="selectOneByTitleAndTime" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_announcement
+        where title = #{title,jdbcType=VARCHAR}
+          and write_time = #{data,jdbcType=TIMESTAMP}
+    </select>
+
     <update id="updateAnnouncement" parameterType="com.zjw.domain.Announcement">
         update sys_announcement
         set title = #{title,jdbcType=VARCHAR},

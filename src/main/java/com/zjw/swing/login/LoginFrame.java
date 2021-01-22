@@ -180,9 +180,9 @@ public class LoginFrame extends JFrame {
                             temp.dispose();
 
                         } else if (result == 1) {
-                            MessageShows.ShowMessageText(temp,null,"用户名或者密码不能为空");
+                            MessageShows.ShowMessageText(temp, null, "用户名或者密码不能为空");
                         } else if (result == 2) {
-                            MessageShows.ShowMessageText(temp,null,"用户名不存在或者密码错误");
+                            MessageShows.ShowMessageText(temp, null, "用户名不存在或者密码错误");
                         } else if (result == 3) {
                             MessageShows.ShowMessageText(temp, null, "该账户已经登陆");
                         }
@@ -251,6 +251,8 @@ public class LoginFrame extends JFrame {
                                 }
                             });
                         }
+                        //登陆成功
+                        return 0;
 
                     } catch (Exception ex) {
                         ex.printStackTrace();
