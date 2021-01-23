@@ -23,4 +23,6 @@ public interface LoginService {
     void logout(String loginName, Integer type);
 
     List<InfoLogin> queryAllOnline();
+
+    int deleteAllBefore(Date time);
 }

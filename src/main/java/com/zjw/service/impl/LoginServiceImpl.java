@@ -69,4 +69,9 @@ public class LoginServiceImpl implements LoginService {
     public List<InfoLogin> queryAllOnline() {
         return mapper.selectAllOnline();
     }
+
+    @Override
+    public int deleteAllBefore(Date time) {
+        return mapper.deleteAllBefore(time);
+    }
 }

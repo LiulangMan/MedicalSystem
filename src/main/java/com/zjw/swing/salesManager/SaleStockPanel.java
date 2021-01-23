@@ -2,7 +2,9 @@ package com.zjw.swing.salesManager;
 
 import com.zjw.config.StaticConfiguration;
 import com.zjw.domain.Goods;
+import com.zjw.domain.Option;
 import com.zjw.service.GoodService;
+import com.zjw.service.OptionService;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.stockManager.StockListPanel;
 import com.zjw.swing.utils.DefaultJTable;
@@ -35,6 +37,9 @@ public class SaleStockPanel extends JPanel {
 
     @Autowired
     private SaleStockEditFrame saleStockEditFrame;
+
+    @Autowired
+    private OptionService optionService;
 
     private DefaultJTable table;
 

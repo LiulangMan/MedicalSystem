@@ -2,7 +2,10 @@ package com.zjw.swing.salesManager;
 
 import com.zjw.config.StaticConfiguration;
 import com.zjw.domain.Goods;
+import com.zjw.domain.Option;
 import com.zjw.service.GoodService;
+import com.zjw.service.OptionService;
+import com.zjw.swing.log.OptionLogPanel;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.stockManager.StockListPanel;
 import com.zjw.swing.utils.ImageJPanel;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Date;
 
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
 
@@ -25,6 +29,9 @@ public class SaleGoodsEditFrame extends JFrame {
     private GoodService goodService;
 
     @Autowired
+    private OptionService optionService;
+
+    @Autowired
     private SaleListPanel saleListPanel;
 
     @Autowired
@@ -35,6 +42,9 @@ public class SaleGoodsEditFrame extends JFrame {
 
     @Autowired
     private SaleStockEditFrame saleStockEditFrame;
+
+    @Autowired
+    private OptionLogPanel optionLogPanel;
 
     public void run(Goods goods) {
 
@@ -171,15 +181,22 @@ public class SaleGoodsEditFrame extends JFrame {
             boolean b = MessageShows.ShowMessageAboutDeleteGoods(this);
             if (!b) return;
             goodService.deleteByGoodsId(goods.getGoodId());
+            Option option = new Option(0, StaticConfiguration.getEmploy().getName(),
+                    "下架ID" + goods.getGoodId() + "-" + goods.getGoodName(),
+                    new Date()
+            );
             //更新库存
             Goods stockGoods = StaticConfiguration.getStockGoodsInCache(goods.getGoodId());
             stockGoods.setGoodStock(stockGoods.getGoodStock() + goods.getGoodStock());
             goodService.updateStockGoodsById(stockGoods);
+            optionService.insertOption(option);
             MessageShows.ShowMessageText(this, null, "下架成功");
             //更新列表
             saleListPanel.refreshData();
             stockListPanel.refreshData();
             saleStockPanel.refreshData();
+            optionLogPanel.refreshData();
+
             this.setVisible(false);
             this.dispose();
         });

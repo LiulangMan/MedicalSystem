@@ -1,16 +1,22 @@
 package com.zjw.swing.salesManager;
 
 import com.zjw.config.FontConfiguration;
+import com.zjw.config.StaticConfiguration;
 import com.zjw.domain.Goods;
+import com.zjw.domain.Option;
 import com.zjw.service.GoodService;
+import com.zjw.service.OptionService;
+import com.zjw.swing.log.OptionLogPanel;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.stockManager.StockListPanel;
 import com.zjw.swing.utils.ImageJPanel;
+import com.zjw.swing.utils.MySwingUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Date;
 
 /**
  * @program: medical_sales_management_system
@@ -31,6 +37,12 @@ public class SaleStockEditFrame extends JFrame {
 
     @Autowired
     private SaleStockPanel saleStockPanel;
+
+    @Autowired
+    private OptionLogPanel optionLogPanel;
+
+    @Autowired
+    private OptionService optionService;
 
     public void run(Goods goods, Goods stockGoods) {
         this.setSize(800, 200);
@@ -118,7 +130,7 @@ public class SaleStockEditFrame extends JFrame {
                 return;
             }
             try {
-                int newSale = Math.min(Integer.parseInt(result), stockGoods.getGoodStock());
+                int newSale = Math.min(Integer.parseInt(result), total);
                 sale.setText(String.valueOf(newSale));
                 stock.setText(String.valueOf(total - newSale));
                 goods.setGoodStock(newSale);
@@ -129,16 +141,43 @@ public class SaleStockEditFrame extends JFrame {
         });
 
         okButton.addActionListener(e -> {
-            goodService.updateByGoodsId(goods);
-            goodService.updateStockGoodsById(stockGoods);
 
-            MessageShows.ShowMessageText(this, null, "调整成功");
+            JFrame temp = this;
+            SwingWorker<Integer, Object> worker = new SwingWorker<Integer, Object>() {
+                @Override
+                protected void done() {
+                    MySwingUtils.ProgressBar.closeProgressBar();
+                    MessageShows.ShowMessageText(temp, null, "调整成功");
+                    temp.setVisible(false);
+                    temp.dispose();
+                }
 
-            saleListPanel.refreshData();
-            stockListPanel.refreshData();
-            saleStockPanel.refreshData();
-            this.setVisible(false);
-            this.dispose();
+                @Override
+                protected Integer doInBackground() throws Exception {
+
+                    try {
+                        //记录操作
+                        Option option = new Option(0, StaticConfiguration.getEmploy().getName(),
+                                "药品 id:" + goods.getGoodId() + "-" + goods.getGoodName() + " 更新销售量为" + goods.getGoodStock(),
+                                new Date());
+                        goodService.updateByGoodsId(goods);
+                        goodService.updateStockGoodsById(stockGoods);
+                        optionService.insertOption(option);
+
+                        saleListPanel.refreshData();
+                        stockListPanel.refreshData();
+                        saleStockPanel.refreshData();
+                        optionLogPanel.refreshData();
+                        return 0;
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        return 1;
+                    }
+                }
+            };
+
+            MySwingUtils.ProgressBar.showProgressBar("正在调整");
+            worker.execute();
         });
     }
 }

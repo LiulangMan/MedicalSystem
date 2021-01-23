@@ -50,10 +50,6 @@ public class UserMangerFrame extends JPanel {
 
     private DefaultJTable userTable;
 
-    // 创建一个进度条
-    final ProgressBarJPanel progressBar = new ProgressBarJPanel();
-
-
     public UserMangerFrame() {
         super(null);
     }
@@ -101,11 +97,6 @@ public class UserMangerFrame extends JPanel {
         backupButton.setSize(100, 30);
         backupButton.setLocation(1000, 650);
         this.add(backupButton);
-
-        //进度条--设置不确定模式
-        progressBar.setLocation(400, 300);
-        progressBar.setVisible(false);
-        this.add(progressBar);
 
         /*监听*/
         userTable.addMouseListener(new DefaultMouseListener() {

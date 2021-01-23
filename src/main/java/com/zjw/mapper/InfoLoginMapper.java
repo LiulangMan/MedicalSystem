@@ -30,4 +30,6 @@ public interface InfoLoginMapper {
     List<InfoLogin> selectAllByUsernameAndType(@Param("username") String username,@Param("type") Integer type);
 
     List<InfoLogin> selectAllOnline();
+
+    int deleteAllBefore(Date time);
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -70,6 +71,19 @@ public class LoginLogPanel extends JPanel {
         searchButton.setLocation(400, 600);
         this.add(searchButton);
 
+        //清空日志
+        String[] clear = {"一周以上", "一个月以上", "三个月以上", "一年以上"};
+
+        JComboBox<String> clearList = new JComboBox<>(clear);
+        clearList.setSize(100, 30);
+        clearList.setLocation(900, 600);
+        this.add(clearList);
+
+        JButton clearButton = new JButton("清除");
+        clearButton.setSize(100, 30);
+        clearButton.setLocation(1000, 600);
+        this.add(clearButton);
+
         /*监听*/
         typeList.addItemListener(e -> {
             int index = typeList.getSelectedIndex();
@@ -119,9 +133,29 @@ public class LoginLogPanel extends JPanel {
                 ex.printStackTrace();
             }
         });
+
+        clearButton.addActionListener(e -> {
+            boolean b = MessageShows.ShowMessageAboutMakeSure(this, "确定清除" + clearList.getSelectedItem() + "日志?");
+            if (!b) return;
+
+            int index = clearList.getSelectedIndex();
+            Calendar cal = Calendar.getInstance();
+            if (index == 0) {
+                cal.add(Calendar.DATE, -7);
+            } else if (index == 1) {
+                cal.add(Calendar.MONTH, -1);
+            } else if (index == 2) {
+                cal.add(Calendar.MONTH, -3);
+            } else if (index == 3) {
+                cal.add(Calendar.YEAR, -1);
+            }
+            loginService.deleteAllBefore(cal.getTime());
+            MessageShows.ShowMessageText(this, null, "清除成功");
+            this.refreshData();
+        });
     }
 
-    public void refreshData(){
+    public void refreshData() {
         List<InfoLogin> loginList = loginService.queryAll();
         recordTable.refreshData(DataUtils.LoginInfoToArray(loginList));
     }

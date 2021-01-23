@@ -243,6 +243,19 @@ public class DataUtils {
         return objects;
     }
 
+    public static Object[][] OptionToArray(List<Option> list) {
+        Object[][] objects = new Object[list.size()][4];
+
+        for (int i = 0; i < list.size(); i++) {
+            objects[i][0] = list.get(i).getId();
+            objects[i][1] = list.get(i).getOptionName();
+            objects[i][2] = list.get(i).getOptionDescription();
+            objects[i][3] = defaultDataFormat.format(list.get(i).getOptionTime());
+        }
+
+        return objects;
+    }
+
     @Data
     @AllArgsConstructor
     @NoArgsConstructor

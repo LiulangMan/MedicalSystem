@@ -23,10 +23,6 @@ public class LogFrame extends JPanel {
     @Autowired
     private OptionLogPanel optionLogPanel;
 
-    @Autowired
-    private RegisterLogPanel registerLogPanel;
-
-
     public LogFrame(){
         super(null);
     }
@@ -34,13 +30,11 @@ public class LogFrame extends JPanel {
     private void initFiled(){
        loginLogPanel.init();
        optionLogPanel.init();
-       registerLogPanel.init();
     }
 
     public void refreshAllData() {
         loginLogPanel.refreshData();
         optionLogPanel.refreshData();
-        registerLogPanel.refreshData();
     }
 
     public void init() {
@@ -58,11 +52,9 @@ public class LogFrame extends JPanel {
 
         JButton button0 = new JButton("登陆日志");
         JButton button1 = new JButton("操作日志");
-        JButton button2 = new JButton("注册日志");
 
         menu.add(button0);
         menu.add(button1);
-        menu.add(button2);
 
         //三个子菜单的卡片面板
         CardLayout cardLayout = new CardLayout();
@@ -71,7 +63,6 @@ public class LogFrame extends JPanel {
         card.setLocation(menu.getWidth(),0);
         card.add(loginLogPanel,"登陆日志");
         card.add(optionLogPanel,"操作日志");
-        card.add(registerLogPanel,"注册日志");
         this.add(card);
 
         lastButton = button0;
@@ -96,14 +87,6 @@ public class LogFrame extends JPanel {
             }
         });
 
-        button2.addActionListener(e -> {
-            cardLayout.show(card,"注册日志");
-            button2.setBackground(Color.GREEN);
-            if (lastButton != button2) {
-                lastButton.setBackground(null);
-                lastButton = button2;
-            }
-        });
     }
 
 }

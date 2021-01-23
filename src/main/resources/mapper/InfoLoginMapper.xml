@@ -109,4 +109,10 @@
         select username, type
         from sys_login_online
     </select>
+
+    <delete id="deleteAllBefore" parameterType="java.util.Date">
+        delete
+        from sys_info_login
+        where login_time &lt; #{time,jdbcType=TIMESTAMP}
+    </delete>
 </mapper>
