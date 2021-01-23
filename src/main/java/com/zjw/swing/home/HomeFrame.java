@@ -112,7 +112,7 @@ public class HomeFrame extends ImageJPanel {
         });
 
         deleteMenu.addActionListener(e -> {
-            boolean b = MessageShows.ShowMessageAboutDeleteAnnouncement(this);
+            boolean b = MessageShows.ShowMessageAboutMakeSure(this,"确认删除该公告吗？");
             if (!b) return;
             Point point = announcementPanel.getMousePosition();
             java.awt.Component component = announcementPanel.getComponentAt(point.x, point.y - 60);

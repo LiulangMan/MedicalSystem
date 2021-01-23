@@ -178,25 +178,21 @@ public class SaleGoodsEditFrame extends JFrame {
         });
 
         deleteButton.addActionListener(e -> {
-            boolean b = MessageShows.ShowMessageAboutDeleteGoods(this);
+            boolean b = MessageShows.ShowMessageAboutMakeSure(this, "确认下架该药品？");
             if (!b) return;
-            goodService.deleteByGoodsId(goods.getGoodId());
+            goodService.offShelfGoods(goods);
             Option option = new Option(0, StaticConfiguration.getEmploy().getName(),
-                    "下架ID" + goods.getGoodId() + "-" + goods.getGoodName(),
+                    "下架id:" + goods.getGoodId() + "-" + goods.getGoodName(),
                     new Date()
             );
-            //更新库存
-            Goods stockGoods = StaticConfiguration.getStockGoodsInCache(goods.getGoodId());
-            stockGoods.setGoodStock(stockGoods.getGoodStock() + goods.getGoodStock());
-            goodService.updateStockGoodsById(stockGoods);
-            optionService.insertOption(option);
-            MessageShows.ShowMessageText(this, null, "下架成功");
             //更新列表
+            optionService.insertOption(option);
             saleListPanel.refreshData();
             stockListPanel.refreshData();
             saleStockPanel.refreshData();
             optionLogPanel.refreshData();
 
+            MessageShows.ShowMessageText(this, null, "下架成功");
             this.setVisible(false);
             this.dispose();
         });

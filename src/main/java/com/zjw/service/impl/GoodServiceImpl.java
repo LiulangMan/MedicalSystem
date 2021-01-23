@@ -1,12 +1,15 @@
 package com.zjw.service.impl;
 
+import com.zjw.config.StaticConfiguration;
 import com.zjw.domain.Goods;
+import com.zjw.domain.Option;
 import com.zjw.mapper.GoodsMapper;
 import com.zjw.mapper.SupplierMapper;
 import com.zjw.service.GoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -94,5 +97,24 @@ public class GoodServiceImpl implements GoodService {
     @Override
     public Goods queryStockGoodsById(Integer id) {
         return goodsMapper.selectStockOneById(id);
+    }
+
+    @Override
+    public int offShelfGoods(Goods goods) {
+        this.deleteByGoodsId(goods.getGoodId());
+
+        //更新库存
+        Goods stockGoods = StaticConfiguration.getStockGoodsInCache(goods.getGoodId());
+        stockGoods.setGoodStock(stockGoods.getGoodStock() + goods.getGoodStock());
+        this.updateStockGoodsById(stockGoods);
+        return 0;
+    }
+
+    @Override
+    public int putShelfGoods(Goods stock) {
+        Goods temp = new Goods(stock);
+        temp.setGoodStock(0);
+        this.insert(temp);
+        return 0;
     }
 }

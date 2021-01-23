@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
+import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
+
 /**
  * @program: medical_sales_management_system
  * @author: 一树
@@ -27,15 +29,15 @@ public class MessageShowByText {
         JPanel show = new ImageJPanel(null, "/images/login/t4.jpg");
         jf.setContentPane(show);
 
-        JTextPane label = new JTextPane();
-        label.setText(text);
-        label.setFont(font);
+        JTextPane labelF = new JTextPane();
+        labelF.setText(text);
+        labelF.setEditable(false);
+        labelF.setFont(FontConfiguration.getFont("宋体", 25));
+
+        JScrollPane label = new JScrollPane(labelF);
         label.setSize(1000, 800);
         label.setLocation(0, 0);
-        label.setBackground(null);
-        label.setOpaque(false);
-        label.setEditable(false);
-        label.setFont(FontConfiguration.getFont("宋体", 25));
+        label.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
         show.add(label);
 
         jf.setVisible(true);

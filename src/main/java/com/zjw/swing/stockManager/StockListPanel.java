@@ -163,7 +163,7 @@ public class StockListPanel extends JPanel {
                 MessageShows.ShowMessageText(this, null, "药品正在销售，无法移除");
                 return;
             }
-            boolean b = MessageShows.ShowMessageAboutDeleteGoods(this);
+            boolean b = MessageShows.ShowMessageAboutMakeSure(this,"确认下架该药品？");
             if (!b) return;
             goodService.deleteByStockGoodsId(id);
             MessageShows.ShowMessageText(this, null, "删除成功");
@@ -237,7 +237,7 @@ public class StockListPanel extends JPanel {
                     refreshDataForId(id);
                     return;
                 } catch (NumberFormatException ex) {
-                    MessageShows.ErrorInputText(this);
+                    MessageShows.ShowMessageText(this,null,"参数错误");
                 }
             }
 
@@ -256,7 +256,7 @@ public class StockListPanel extends JPanel {
                     int id = Integer.parseInt(text);
                     refreshDataForSupplierId(id);
                 } catch (NumberFormatException ex) {
-                    MessageShows.ErrorInputText(this);
+                    MessageShows.ShowMessageText(this,null,"参数错误");
                 }
             }
         });

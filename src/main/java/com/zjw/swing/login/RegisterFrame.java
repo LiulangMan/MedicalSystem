@@ -214,7 +214,7 @@ public class RegisterFrame extends JFrame {
 
             //判断两次密码是否一样
             if (!Arrays.equals(password, password2Text)) {
-                MessageShows.InconsistentPwd(this);
+                MessageShows.ShowMessageText(this,null,"两次密码不一致");
                 password1.setText("");
                 password2.setText("");
                 return;
@@ -225,14 +225,14 @@ public class RegisterFrame extends JFrame {
                     Employ select = employService.queryByLoginNameForOne(usernameText);
                     if (select != null) {
                         //用户名已经存在
-                        MessageShows.ExistUsername(this);
+                        MessageShows.ShowMessageText(this,null,"用户名已存在");
                         return;
                     }
 
                     //检验注册码
                     String registerIdText = registerId.getText();
                     if (!registerService.checkRegisterId(registerIdText, addressText)) {
-                        MessageShows.ErrorRegisterId(this);
+                        MessageShows.ShowMessageText(this,null,"注册码错误");
                         return;
                     }
 
@@ -248,7 +248,7 @@ public class RegisterFrame extends JFrame {
                     Customer select = customerService.queryByLoginNameForOne(usernameText);
                     if (select != null) {
                         //用户名已经存在
-                        MessageShows.ExistUsername(this);
+                        MessageShows.ShowMessageText(this,null,"用户名已存在");
                         return;
                     }
 
@@ -260,7 +260,7 @@ public class RegisterFrame extends JFrame {
                     customerService.insert(customer);
                 }
 
-                MessageShows.SuccessRegister(this);
+                MessageShows.ShowMessageText(this,null,"注册成功");
                 //关闭窗口
                 this.setVisible(false);
                 this.dispose();

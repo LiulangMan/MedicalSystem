@@ -129,7 +129,7 @@ public class LoginLogPanel extends JPanel {
                     recordTable.refreshData(DataUtils.LoginInfoToArray(loginService.queryAllByTime(fromTime, toTime)));
                 }
             } catch (Exception ex) {
-                MessageShows.ErrorInputText(this);
+                MessageShows.ShowMessageText(this,null,"参数错误");
                 ex.printStackTrace();
             }
         });

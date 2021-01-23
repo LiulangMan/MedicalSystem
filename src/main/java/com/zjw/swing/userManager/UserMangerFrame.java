@@ -124,7 +124,7 @@ public class UserMangerFrame extends JPanel {
 
         //删除用户
         deleteButton.addActionListener(e -> {
-            boolean b = MessageShows.ShowMessageAboutDeleteLogName(this);
+            boolean b = MessageShows.ShowMessageAboutMakeSure(this,"确认删除该账户吗");
             if (!b) return;
 
             int row = userTable.getSelectedRow();

@@ -77,7 +77,7 @@ public class SupplierPanel extends JPanel {
         });
 
         deleteButton.addActionListener(e -> {
-            boolean b = MessageShows.ShowMessageAboutDeleteSupplier(this);
+            boolean b = MessageShows.ShowMessageAboutMakeSure(this,"确认删除该供应商？");
             if (!b) return;
             int row = supplierTable.getSelectedRow();
             Integer id = (Integer) supplierTable.getValueAt(row, 0);

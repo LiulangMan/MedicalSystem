@@ -198,7 +198,7 @@ public class SelfInformationFrame extends ImageJPanel {
 
         //注销账户
         deleteButton.addActionListener(e -> {
-            if (MessageShows.ShowMessageAboutDeleteLogName(this)) {
+            if (MessageShows.ShowMessageAboutMakeSure(this,"确认删除该账户吗")) {
                 if (isEmploy) {
                     employService.deleteById(employ.getId());
                 } else {

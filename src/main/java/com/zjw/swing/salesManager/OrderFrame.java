@@ -239,11 +239,11 @@ public class OrderFrame extends JFrame {
                         orderService.insert(order);
                         //重新刷新
                         saleGoodsPanel.refreshData();
-                        StaticConfiguration.addOrderInCache(order);
                         saleRecordPanel.refreshData();
-                        saleStockPanel.refreshData();
+                        if (StaticConfiguration.getEmploy() != null) {
+                            saleStockPanel.refreshData();
+                        }
                         return 0;
-
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         return 1;
@@ -263,7 +263,7 @@ public class OrderFrame extends JFrame {
                     ""
             );
 
-            if (num == null || num.equals("")){
+            if (num == null || num.equals("")) {
                 return;
             }
             try {
@@ -281,7 +281,7 @@ public class OrderFrame extends JFrame {
                     orderTable.setValueAt(varCnt * varGood.getGoodMoney(), row, 5);
                 }
 
-                this.refreshTotalMoney(totalMoney,orderTable);
+                this.refreshTotalMoney(totalMoney, orderTable);
 
             } catch (NumberFormatException ex) {
                 MessageShows.ShowMessageText(this, null, "参数错误");

@@ -80,13 +80,13 @@ public class HomeEditFrame extends JFrame {
                     //发布新内容
                     Announcement newAnnouncement = new Announcement(titleText, textText, new Date());
                     announcementService.insert(newAnnouncement);
-                    MessageShows.SuccessMessage(this, "发布成功");
+                    MessageShows.ShowMessageText(this, null, "发布成功");
                 } else {
                     //编辑内容
                     announcement.setText(textText);
                     announcement.setTitle(titleText);
                     announcementService.updateAnnouncement(announcement);
-                    MessageShows.SuccessMessage(this, "编辑成功");
+                    MessageShows.ShowMessageText(this, null, "发布成功");
                 }
 
                 homeFrame.refreshAnnouncementPanel();

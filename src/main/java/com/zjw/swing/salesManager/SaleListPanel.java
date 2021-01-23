@@ -215,7 +215,7 @@ public class SaleListPanel extends JPanel {
                     refreshDataForId(id);
                     return;
                 } catch (NumberFormatException ex) {
-                    MessageShows.ErrorInputText(this);
+                    MessageShows.ShowMessageText(this,null,"参数错误");
                 }
             }
 
@@ -234,7 +234,7 @@ public class SaleListPanel extends JPanel {
                     double price = Double.parseDouble(text);
                     refreshDataForPrice(price);
                 } catch (NumberFormatException ex) {
-                    MessageShows.ErrorInputText(this);
+                    MessageShows.ShowMessageText(this,null,"参数错误");
                 }
             }
         });

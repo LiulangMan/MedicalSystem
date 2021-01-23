@@ -37,4 +37,10 @@ public interface GoodService {
     int updateStockGoodsById(Goods goods);
 
     Goods queryStockGoodsById(Integer id);
+
+    /*下架*/
+    int offShelfGoods(Goods goods);
+
+    /*上架*/
+    int putShelfGoods(Goods stock);
 }

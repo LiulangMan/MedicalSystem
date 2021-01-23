@@ -97,7 +97,7 @@ public class ChangePasswordFrame {
             okButton.addActionListener(e -> {
                 String check = checkId.getText();
                 System.out.println("核对验证码:" + check);
-                MessageShows.ErrorCheckId(this);
+                MessageShows.ShowMessageText(this,null,"验证码错误");
             });
         }
     }
