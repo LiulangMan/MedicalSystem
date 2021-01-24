@@ -42,7 +42,7 @@ public class LoginLogPanel extends JPanel {
 
         //登陆日志表
         recordTable = new DefaultJTable(new Object[]{"登陆账户", "登陆类型", "登陆时间"}, new DefaultTableModel());
-        recordTable.getJScrollPane().setSize(1200, 600);
+        recordTable.getJScrollPane().setSize(1100, 600);
         recordTable.getJScrollPane().setLocation(0, 0);
         this.add(recordTable.getJScrollPane());
 

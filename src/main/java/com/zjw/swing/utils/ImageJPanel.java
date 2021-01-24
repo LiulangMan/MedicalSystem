@@ -13,16 +13,23 @@ public class ImageJPanel extends JPanel {
 
     private Image image;
 
+    private String imagePath;
+
     public ImageJPanel(LayoutManager layout, String imagePath) {
         super(layout);
         URL url = getClass().getResource(imagePath);
         ImageIcon icon = new ImageIcon(url);
         image = icon.getImage();
+        this.imagePath = imagePath;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 }

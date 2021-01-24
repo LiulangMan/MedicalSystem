@@ -14,12 +14,14 @@ import com.zjw.swing.userManager.UserMangerFrame;
 import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.config.StaticConfiguration;
 import com.zjw.swing.utils.MySwingUtils;
+import com.zjw.utils.interfaceImpl.DefaultMouseListener;
 import com.zjw.utils.interfaceImpl.DefaultWindowsListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 
 /**
@@ -215,8 +217,6 @@ public class EmployIndexFrame extends JFrame {
         role = new JLabel("角色：" + (StaticConfiguration.getEmploy().getType() == IndexConstant.LOGIN_TYPE_ADMIN ? "超级管理员" : "员工"));
         information.add(role);
 
-        MySwingUtils.ProgressBar.closeProgressBar();
-
         //颜色变化
         lastButton = button0;
         button0.setBackground(Color.GREEN);
@@ -296,13 +296,16 @@ public class EmployIndexFrame extends JFrame {
             }
         });
 
-        //加载数据
-        StaticConfiguration.addThreadPoolTask(new Runnable() {
+        head.addMouseListener(new DefaultMouseListener() {
             @Override
-            public void run() {
-                refreshAllData();
+            public void mouseClicked(MouseEvent e) {
+                //更换头像
             }
         });
+
+
+        //加载数据
+        StaticConfiguration.addThreadPoolTask(this::refreshAllData);
     }
 
     public void refreshInformation() {
