@@ -57,6 +57,8 @@ public class CustomerIndexFrame extends JFrame {
 
     private JButton lastButton;
 
+    private ImageJPanel head;
+
     private void initField() {
         homeFrame.init();
         selfInformationFrame.init();
@@ -111,10 +113,11 @@ public class CustomerIndexFrame extends JFrame {
 
     public void run() {
 
-
         init();
         //主板
-        JPanel mainPanel = new ImageJPanel(null, "/images/index/t5.jpg");
+        JPanel mainPanel = new ImageJPanel(null,
+                StaticConfiguration.getCustomer().getImagesPath() == null ? "/images/index/t5.jpg" :
+                        StaticConfiguration.getCustomer().getImagesPath());
         this.setContentPane(mainPanel);
 
         //菜单面板
@@ -162,7 +165,7 @@ public class CustomerIndexFrame extends JFrame {
         mainPanel.add(top);
 
         //头像
-        JPanel head = new ImageJPanel(null, "/images/login/t1.jpg");
+        head = new ImageJPanel(null, "/images/login/t1.jpg");
         head.setSize(80, 80);
         head.setLocation(100, 5);
         top.add(head);
@@ -258,5 +261,9 @@ public class CustomerIndexFrame extends JFrame {
         name.setText("姓名：" + StaticConfiguration.getCustomer().getName());
         address.setText("地区：" + StaticConfiguration.getCustomer().getAddress());
         phone.setText("电话：" + StaticConfiguration.getCustomer().getPhone());
+    }
+
+    public void changeImages(String imagesPath) {
+        head.changeImages(imagesPath);
     }
 }

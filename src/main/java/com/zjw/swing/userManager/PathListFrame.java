@@ -1,5 +1,8 @@
 package com.zjw.swing.userManager;
 
+import com.zjw.constant.IndexConstant;
+import com.zjw.swing.index.HeadEditFrame;
+import com.zjw.swing.index.HeadPathEditFrame;
 import com.zjw.swing.utils.PathJButton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,6 +34,9 @@ public class PathListFrame extends JFrame {
     @Autowired
     private PathEditJFrame pathEditJFrame;
 
+    @Autowired
+    private HeadPathEditFrame headPathEditFrame;
+
     private void init() {
         this.setSize(550, 500);
         this.setLocationRelativeTo(null);
@@ -38,7 +44,7 @@ public class PathListFrame extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
 
-    public void run() {
+    public void run(int mode) {
 
         init();
 
@@ -71,7 +77,7 @@ public class PathListFrame extends JFrame {
         this.add(lastPathButton);
 
         //文件选择
-        listType = new JComboBox<>(new String[]{"Directory", ".*", ".sql", ".xml", ".doc"});
+        listType = new JComboBox<>(new String[]{"Directory", ".*", ".sql", ".xml", ".doc", ".jpg", ".png", ".gif"});
         listType.setBounds(440, 350, 80, 30);
         this.add(listType);
 
@@ -87,12 +93,9 @@ public class PathListFrame extends JFrame {
         this.setVisible(true);
 
         /*监听*/
-        list.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                PathJButton value = list.getSelectedValue();
-                refreshList(value);
-            }
+        list.addListSelectionListener(e -> {
+            PathJButton value = list.getSelectedValue();
+            refreshList(value);
         });
 
         rootPathButton.addActionListener(e -> {
@@ -110,8 +113,12 @@ public class PathListFrame extends JFrame {
         });
 
         okButton.addActionListener(e -> {
-            String result = path.getText() + (list.getSelectedValue() == null ? "" : File.separator + list.getSelectedValue().file.getName());
-            pathEditJFrame.path.setText(result);
+            String result = path.getText() + (list.getSelectedValue() == null ? "" :
+                    File.separator + list.getSelectedValue().file.getName());
+
+            if (mode == IndexConstant.PATH_MODE_DUMP) pathEditJFrame.path.setText(result);
+            else if (mode == IndexConstant.PATH_MODE_IMAGE) headPathEditFrame.path.setText(result);
+
             this.setVisible(false);
             this.dispose();
         });
@@ -168,9 +175,5 @@ public class PathListFrame extends JFrame {
 
         list.setListData(roots);
         path.setText("");
-    }
-
-    public static void main(String[] args) {
-        new PathListFrame().run();
     }
 }

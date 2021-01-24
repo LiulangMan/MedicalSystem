@@ -12,10 +12,11 @@
         <result column="sex" jdbcType="INTEGER" property="sex"/>
         <result column="address" jdbcType="VARCHAR" property="address"/>
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="images" jdbcType="VARCHAR" property="imagesPath"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, customer_id, login_name, login_password, `name`, sex, address, phone
+        id, customer_id, login_name, login_password, `name`, sex, address, phone,images
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -72,10 +73,10 @@
         <!--@mbg.generated-->
         insert into sys_customer (customer_id, login_name, login_password,
                                   `name`, sex, address,
-                                  phone)
+                                  phone, images)
         values (#{customerId,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, #{loginPassword,jdbcType=VARCHAR},
                 #{name,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR},
-                #{phone,jdbcType=VARCHAR})
+                #{phone,jdbcType=VARCHAR}, #{imagesPath,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.zjw.domain.Customer"
             useGeneratedKeys="true">
@@ -103,6 +104,9 @@
             <if test="phone != null">
                 phone,
             </if>
+            <if test="imagesPath != null">
+                images,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="customerId != null">
@@ -125,6 +129,9 @@
             </if>
             <if test="phone != null">
                 #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="imagesPath != null">
+                #{imagesPath,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -153,6 +160,9 @@
             <if test="phone != null">
                 phone = #{phone,jdbcType=VARCHAR},
             </if>
+            <if test="imagesPath != null">
+                phone = #{imagesPath,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -165,7 +175,8 @@
             `name`         = #{name,jdbcType=VARCHAR},
             sex            = #{sex,jdbcType=INTEGER},
             address        = #{address,jdbcType=VARCHAR},
-            phone          = #{phone,jdbcType=VARCHAR}
+            phone          = #{phone,jdbcType=VARCHAR},
+            images         = #{imagesPath,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -178,7 +189,8 @@
             `name`         = #{name,jdbcType=VARCHAR},
             sex            = #{sex,jdbcType=INTEGER},
             address        = #{address,jdbcType=VARCHAR},
-            phone          = #{phone,jdbcType=VARCHAR}
+            phone          = #{phone,jdbcType=VARCHAR},
+            images         = #{imagesPath,jdbcType=VARCHAR}
         where login_name = #{loginName,jdbcType=VARCHAR}
     </update>
 </mapper>

@@ -32,4 +32,8 @@ public interface IndexConstant {
     public static final int LOGIN_TYPE_EMPLOY = 1;
 
     public static final int LOGIN_TYPE_ADMIN = 0;
+
+    public static final int PATH_MODE_DUMP = 0;
+
+    public static final int PATH_MODE_IMAGE = 1;
 }

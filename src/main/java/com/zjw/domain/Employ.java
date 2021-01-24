@@ -26,4 +26,18 @@ public class Employ {
     private String phone;
 
     private Integer type;
+
+    private String imagesPath;
+
+    public Employ(Integer id, String employId, String loginName, String loginPassword, String name, Integer sex, String address, String phone, Integer type) {
+        this.id = id;
+        this.employId = employId;
+        this.loginName = loginName;
+        this.loginPassword = loginPassword;
+        this.name = name;
+        this.sex = sex;
+        this.address = address;
+        this.phone = phone;
+        this.type = type;
+    }
 }

@@ -10,11 +10,11 @@ import java.util.List;
  * @data: 2021/1/4 21:59
  */
 public interface CustomerService {
-    void insert(Customer employ);
+    void insert(Customer customer);
 
     void delete(Integer id);
 
-    void update(Customer employ);
+    void update(Customer customer);
 
     Customer selectByIdForOne(Integer id);
 

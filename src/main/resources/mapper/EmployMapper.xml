@@ -1,192 +1,206 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zjw.mapper.EmployMapper">
-  <resultMap id="BaseResultMap" type="com.zjw.domain.Employ">
-    <!--@mbg.generated-->
-    <!--@Table sys_employ-->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="employ_id" jdbcType="VARCHAR" property="employId" />
-    <result column="login_name" jdbcType="VARCHAR" property="loginName" />
-    <result column="login_password" jdbcType="VARCHAR" property="loginPassword" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="sex" jdbcType="INTEGER" property="sex" />
-    <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="phone" jdbcType="VARCHAR" property="phone" />
-    <result column="type" jdbcType="INTEGER" property="type" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, employ_id, login_name, login_password, `name`, sex, address, phone, `type`
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select 
-    <include refid="Base_Column_List" />
-    from sys_employ
-    where id = #{id,jdbcType=INTEGER}
-  </select>
+    <resultMap id="BaseResultMap" type="com.zjw.domain.Employ">
+        <!--@mbg.generated-->
+        <!--@Table sys_employ-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="employ_id" jdbcType="VARCHAR" property="employId"/>
+        <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
+        <result column="login_password" jdbcType="VARCHAR" property="loginPassword"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="sex" jdbcType="INTEGER" property="sex"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="images" jdbcType="VARCHAR" property="imagesPath"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, employ_id, login_name, login_password, `name`, sex, address, phone, `type`,images
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from sys_employ
+        where id = #{id,jdbcType=INTEGER}
+    </select>
 
-   <select id="selectByUserNameForOne" parameterType="java.lang.String" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select
-    <include refid="Base_Column_List" />
-    from sys_employ
-    where login_name = #{username,jdbcType=VARCHAR}
-  </select>
+    <select id="selectByUserNameForOne" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from sys_employ
+        where login_name = #{username,jdbcType=VARCHAR}
+    </select>
 
-  <select id="selectAllByName" parameterType="java.lang.String" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select
-    <include refid="Base_Column_List" />
-    from sys_employ
-    where name like #{name,jdbcType=VARCHAR}
-  </select>
+    <select id="selectAllByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from sys_employ
+        where name like #{name,jdbcType=VARCHAR}
+    </select>
 
-   <select id="selectAll" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select
-    <include refid="Base_Column_List" />
-    from sys_employ
-  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from sys_employ
+    </select>
 
-<select id="selectAllByAddress" parameterType="java.lang.String" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select
-    <include refid="Base_Column_List" />
-    from sys_employ
-    where address like #{address,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from sys_employ
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByUserName" parameterType="java.lang.String">
-    <!--@mbg.generated-->
-    delete from sys_employ
-    where login_name = #{userName,jdbcType=VARCHAR}
-  </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.zjw.domain.Employ" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into sys_employ (employ_id, login_name, login_password, 
-      `name`, sex, address, 
-      phone, `type`)
-    values (#{employId,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, #{loginPassword,jdbcType=VARCHAR},
-      #{name,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
-      #{phone,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER})
-  </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.zjw.domain.Employ" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into sys_employ
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="employId != null">
-        employ_id,
-      </if>
-      <if test="loginName != null">
-        login_name,
-      </if>
-      <if test="loginPassword != null">
-        login_password,
-      </if>
-      <if test="name != null">
-        `name`,
-      </if>
-      <if test="sex != null">
-        sex,
-      </if>
-      <if test="address != null">
-        address,
-      </if>
-      <if test="phone != null">
-        phone,
-      </if>
-      <if test="type != null">
-        `type`,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="employId != null">
-        #{employId,jdbcType=VARCHAR},
-      </if>
-      <if test="loginName != null">
-        #{loginName,jdbcType=VARCHAR},
-      </if>
-      <if test="loginPassword != null">
-        #{loginPassword,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="sex != null">
-        #{sex,jdbcType=INTEGER},
-      </if>
-      <if test="address != null">
-        #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="phone != null">
-        #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null">
-        #{type,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zjw.domain.Employ">
-    <!--@mbg.generated-->
-    update sys_employ
-    <set>
-      <if test="employId != null">
-        employ_id = #{employId,jdbcType=VARCHAR},
-      </if>
-      <if test="loginName != null">
-        login_name = #{loginName,jdbcType=VARCHAR},
-      </if>
-      <if test="loginPassword != null">
-        login_password = #{loginPassword,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null">
-        `name` = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="sex != null">
-        sex = #{sex,jdbcType=INTEGER},
-      </if>
-      <if test="address != null">
-        address = #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="phone != null">
-        phone = #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null">
-        `type` = #{type,jdbcType=INTEGER},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zjw.domain.Employ">
-    <!--@mbg.generated-->
-    update sys_employ
-    set employ_id = #{employId,jdbcType=VARCHAR},
-      login_name = #{loginName,jdbcType=VARCHAR},
-      login_password = #{loginPassword,jdbcType=VARCHAR},
-      `name` = #{name,jdbcType=VARCHAR},
-      sex = #{sex,jdbcType=INTEGER},
-      address = #{address,jdbcType=VARCHAR},
-      phone = #{phone,jdbcType=VARCHAR},
-      `type` = #{type,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+    <select id="selectAllByAddress" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from sys_employ
+        where address like #{address,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from sys_employ
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByUserName" parameterType="java.lang.String">
+        <!--@mbg.generated-->
+        delete
+        from sys_employ
+        where login_name = #{userName,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.zjw.domain.Employ" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sys_employ (employ_id, login_name, login_password,
+                                `name`, sex, address,
+                                phone, `type`, images)
+        values (#{employId,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, #{loginPassword,jdbcType=VARCHAR},
+                #{name,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR},
+                #{phone,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{imagesPath,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.zjw.domain.Employ"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sys_employ
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="employId != null">
+                employ_id,
+            </if>
+            <if test="loginName != null">
+                login_name,
+            </if>
+            <if test="loginPassword != null">
+                login_password,
+            </if>
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="type != null">
+                `type`,
+            </if>
+            <if test="imagesPath != null">
+                images,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="employId != null">
+                #{employId,jdbcType=VARCHAR},
+            </if>
+            <if test="loginName != null">
+                #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="loginPassword != null">
+                #{loginPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="imagesPath != null">
+                #{imagesPath,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zjw.domain.Employ">
+        <!--@mbg.generated-->
+        update sys_employ
+        <set>
+            <if test="employId != null">
+                employ_id = #{employId,jdbcType=VARCHAR},
+            </if>
+            <if test="loginName != null">
+                login_name = #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="loginPassword != null">
+                login_password = #{loginPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                sex = #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                `type` = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="imagesPath != null">
+                images = #{type,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zjw.domain.Employ">
+        <!--@mbg.generated-->
+        update sys_employ
+        set employ_id      = #{employId,jdbcType=VARCHAR},
+            login_name     = #{loginName,jdbcType=VARCHAR},
+            login_password = #{loginPassword,jdbcType=VARCHAR},
+            `name`         = #{name,jdbcType=VARCHAR},
+            sex            = #{sex,jdbcType=INTEGER},
+            address        = #{address,jdbcType=VARCHAR},
+            phone          = #{phone,jdbcType=VARCHAR},
+            `type`         = #{type,jdbcType=INTEGER},
+            images         = #{imagesPath,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 
     <update id="updateByUsername" parameterType="com.zjw.domain.Employ">
-    <!--@mbg.generated-->
-    update sys_employ
-    set employ_id = #{employId,jdbcType=VARCHAR},
-      login_password = #{loginPassword,jdbcType=VARCHAR},
-      `name` = #{name,jdbcType=VARCHAR},
-      sex = #{sex,jdbcType=INTEGER},
-      address = #{address,jdbcType=VARCHAR},
-      phone = #{phone,jdbcType=VARCHAR},
-      `type` = #{type,jdbcType=INTEGER}
-    where login_name = #{loginName,jdbcType=VARCHAR}
-  </update>
-
+        <!--@mbg.generated-->
+        update sys_employ
+        set employ_id      = #{employId,jdbcType=VARCHAR},
+            login_password = #{loginPassword,jdbcType=VARCHAR},
+            `name`         = #{name,jdbcType=VARCHAR},
+            sex            = #{sex,jdbcType=INTEGER},
+            address        = #{address,jdbcType=VARCHAR},
+            phone          = #{phone,jdbcType=VARCHAR},
+            `type`         = #{type,jdbcType=INTEGER},
+            images         = #{imagesPath,jdbcType=VARCHAR}
+        where login_name = #{loginName,jdbcType=VARCHAR}
+    </update>
 </mapper>

@@ -59,7 +59,12 @@ public class EmployIndexFrame extends JFrame {
     @Autowired
     private LogFrame logFrame;
 
+    @Autowired
+    private HeadEditFrame headEditFrame;
+
     private JButton lastButton;
+
+    private ImageJPanel head;
 
     //展示信息
     private JLabel name;
@@ -197,7 +202,9 @@ public class EmployIndexFrame extends JFrame {
         top.add(title);
 
         //头像
-        JPanel head = new ImageJPanel(null, "/images/login/t1.jpg");
+        head = new ImageJPanel(null,
+                StaticConfiguration.getEmploy().getImagesPath() == null ? "/images/index/t5.jpg" :
+                        StaticConfiguration.getEmploy().getImagesPath());
         head.setSize(80, 80);
         head.setLocation(100, 5);
         top.add(head);
@@ -300,6 +307,7 @@ public class EmployIndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 //更换头像
+                StaticConfiguration.addThreadPoolTask(() -> headEditFrame.run());
             }
         });
 
@@ -312,6 +320,12 @@ public class EmployIndexFrame extends JFrame {
         name.setText("姓名：" + StaticConfiguration.getEmploy().getName());
         address.setText("地区：" + StaticConfiguration.getEmploy().getAddress());
         role.setText("角色：" + (StaticConfiguration.getEmploy().getType() == IndexConstant.LOGIN_TYPE_ADMIN ? "超级管理员" : "员工"));
+    }
+
+    void changeImages(String imagesPath) {
+        head.setVisible(false);
+        head.changeImages(imagesPath);
+        head.setVisible(true);
     }
 
 }

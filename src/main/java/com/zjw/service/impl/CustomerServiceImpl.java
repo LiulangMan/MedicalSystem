@@ -22,8 +22,8 @@ public class CustomerServiceImpl implements CustomerService {
     CustomerMapper mapper;
 
     @Override
-    public void insert(Customer employ) {
-        mapper.insert(employ);
+    public void insert(Customer customer) {
+        mapper.insert(customer);
     }
 
     @Override
@@ -32,8 +32,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void update(Customer employ) {
-        mapper.updateByPrimaryKey(employ);
+    public void update(Customer customer) {
+        mapper.updateByPrimaryKey(customer);
     }
 
     @Override

@@ -1,11 +1,23 @@
 package com.zjw.swing.index;
 
+import com.zjw.config.StaticConfiguration;
+import com.zjw.domain.Customer;
+import com.zjw.domain.Employ;
+import com.zjw.service.CustomerService;
+import com.zjw.service.EmployService;
 import com.zjw.swing.utils.ImageJPanel;
+import com.zjw.utils.interfaceImpl.DefaultMouseListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.jws.Oneway;
 import javax.swing.*;
-import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * @program: medical_sales_management_system
@@ -15,11 +27,26 @@ import java.util.ArrayList;
 @Component
 public class HeadEditFrame extends JFrame {
 
+    @Autowired
+    private EmployService employService;
+
+    @Autowired
+    private CustomerService customerService;
+
+    @Autowired
+    private EmployIndexFrame employIndexFrame;
+
+    @Autowired
+    private CustomerIndexFrame customerIndexFrame;
+
+    @Autowired
+    private HeadPathEditFrame headPathEditFrame;
+
     private JPanel panel;
 
     private int current = 0;
 
-    private int total = 10;
+    private int total;
 
     private java.util.List<java.awt.Component> componentList = new ArrayList<java.awt.Component>();
 
@@ -29,6 +56,8 @@ public class HeadEditFrame extends JFrame {
         this.setSize(600, 700);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+
+        total = Objects.requireNonNull(new File(".\\src\\main\\resources\\images\\head").listFiles()).length;
     }
 
     public void run() {
@@ -68,7 +97,7 @@ public class HeadEditFrame extends JFrame {
         });
 
         diyButton.addActionListener(e -> {
-
+            StaticConfiguration.addThreadPoolTask(() -> headPathEditFrame.run());
         });
 
     }
@@ -91,6 +120,28 @@ public class HeadEditFrame extends JFrame {
             m.setBounds(x * 200, y * 200, 200, 200);
             panel.add(m);
             componentList.add(m);
+
+            JFrame temp = this;
+            /*监听*/
+            m.addMouseListener(new DefaultMouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    String imagePath = m.getImagePath();
+                    if (StaticConfiguration.getEmploy() != null) {
+                        employIndexFrame.changeImages(imagePath);
+                        Employ employ = StaticConfiguration.getEmploy();
+                        employ.setImagesPath(imagePath);
+                        employService.update(employ);
+                    } else {
+                        customerIndexFrame.changeImages(imagePath);
+                        Customer customer = StaticConfiguration.getCustomer();
+                        customer.setImagesPath(imagePath);
+                        customerService.update(customer);
+                    }
+                    temp.setVisible(false);
+                    temp.dispose();
+                }
+            });
         }
 
         panel.setVisible(true);

@@ -23,4 +23,17 @@ public class Customer {
     private String address;
 
     private String phone;
+
+    private String imagesPath;
+
+    public Customer(Integer id, String customerId, String loginName, String loginPassword, String name, Integer sex, String address, String phone) {
+        this.id = id;
+        this.customerId = customerId;
+        this.loginName = loginName;
+        this.loginPassword = loginPassword;
+        this.name = name;
+        this.sex = sex;
+        this.address = address;
+        this.phone = phone;
+    }
 }

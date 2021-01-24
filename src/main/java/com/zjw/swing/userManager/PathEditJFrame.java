@@ -1,6 +1,7 @@
 package com.zjw.swing.userManager;
 
 import com.zjw.config.StaticConfiguration;
+import com.zjw.constant.IndexConstant;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.utils.MySwingUtils;
 import com.zjw.utils.MysqlUtils;
@@ -67,7 +68,7 @@ public class PathEditJFrame extends JFrame {
             StaticConfiguration.addThreadPoolTask(new Runnable() {
                 @Override
                 public void run() {
-                    pathListFrame.run();
+                    pathListFrame.run(IndexConstant.PATH_MODE_DUMP);
                 }
             });
         });
