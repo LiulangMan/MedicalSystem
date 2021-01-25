@@ -12,12 +12,14 @@ import com.zjw.swing.setting.SettingFrame;
 import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.config.StaticConfiguration;
 import com.zjw.swing.utils.MySwingUtils;
+import com.zjw.utils.interfaceImpl.DefaultMouseListener;
 import com.zjw.utils.interfaceImpl.DefaultWindowsListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
 
@@ -50,6 +52,9 @@ public class CustomerIndexFrame extends JFrame {
 
     @Autowired
     private LoginService loginService;
+
+    @Autowired
+    private HeadEditFrame headEditFrame;
 
     //个人信息
     private JLabel name;
@@ -116,9 +121,7 @@ public class CustomerIndexFrame extends JFrame {
 
         init();
         //主板
-        JPanel mainPanel = new ImageJPanel(null,
-                StaticConfiguration.getCustomer().getImagesPath() == null ? "/images/index/t5.jpg" :
-                        StaticConfiguration.getCustomer().getImagesPath());
+        JPanel mainPanel = new ImageJPanel(null, "/images/index/t5.jpg");
         this.setContentPane(mainPanel);
 
         //菜单面板
@@ -264,8 +267,17 @@ public class CustomerIndexFrame extends JFrame {
             }
         });
 
+        head.addMouseListener(new DefaultMouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                //更换头像
+                StaticConfiguration.addThreadPoolTask(() -> headEditFrame.run());
+            }
+        });
+
+
         //加载数据
-        this.refreshAllData();
+        StaticConfiguration.addThreadPoolTask(this::refreshAllData);
     }
 
     public void refreshInformation() {
@@ -275,14 +287,14 @@ public class CustomerIndexFrame extends JFrame {
     }
 
     void changeImages(String imagesPath) {
-        this.setVisible(false);
+        head.setVisible(false);
         head.changeImages(imagesPath);
-        this.setVisible(true);
+        head.setVisible(true);
     }
 
     void changeImages(File file) {
-        this.setVisible(false);
+        head.setVisible(false);
         head.changeImages(file);
-        this.setVisible(true);
+        head.setVisible(true);
     }
 }
