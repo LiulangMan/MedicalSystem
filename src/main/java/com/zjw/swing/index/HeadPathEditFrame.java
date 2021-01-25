@@ -2,6 +2,8 @@ package com.zjw.swing.index;
 
 import com.zjw.config.StaticConfiguration;
 import com.zjw.constant.IndexConstant;
+import com.zjw.service.CustomerService;
+import com.zjw.service.EmployService;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.userManager.PathEditJFrame;
 import com.zjw.swing.userManager.PathListFrame;
@@ -29,6 +31,18 @@ public class HeadPathEditFrame extends JFrame {
 
     @Autowired
     private HeadEditFrame headEditFrame;
+
+    @Autowired
+    private EmployIndexFrame employIndexFrame;
+
+    @Autowired
+    private CustomerIndexFrame customerIndexFrame;
+
+    @Autowired
+    private EmployService employService;
+
+    @Autowired
+    private CustomerService customerService;
 
     public void init() {
         this.setTitle("头像选择");
@@ -64,22 +78,36 @@ public class HeadPathEditFrame extends JFrame {
         });
 
         okButton.addActionListener(e -> {
-            String pathname1 = ".\\src\\main\\resources\\images\\head";//开发路径
-            File file = new File(pathname1);
+            //diy路径
+            String baseUrl = "./images/head";
+            File file = new File(baseUrl);
             int index = Objects.requireNonNull(file.listFiles()).length;
             try {
+                //获得图片目录
                 InputStream fis = new FileInputStream(new File(path.getText()));
                 byte[] bytes = new byte[fis.available()];
+                //读取data到bytes
                 fis.read(bytes);
-                File f1 = new File(pathname1 + "\\t" + index + ".jpg");
+                String url = baseUrl + "/t" + index + ".jpg";
+                File f1 = new File(url);
                 if (!f1.exists()) f1.createNewFile();
                 OutputStream fos1 = new FileOutputStream(f1);
+                //创建文件
                 fos1.write(bytes);
+
+                //更新头像
+                if (StaticConfiguration.getEmploy() != null) {
+                    employIndexFrame.changeImages(f1);
+                    StaticConfiguration.getEmploy().setImagesPath(url);
+                    employService.update(StaticConfiguration.getEmploy());
+                } else {
+                    customerIndexFrame.changeImages(f1);
+                    StaticConfiguration.getCustomer().setImagesPath(url);
+                    customerService.update(StaticConfiguration.getCustomer());
+                }
 
                 fis.close();
                 fos1.close();
-                //刷新
-                headEditFrame.refreshData(9, 3, 0);
                 MessageShows.ShowMessageText(this, null, "上传成功");
                 this.setVisible(false);
                 this.dispose();

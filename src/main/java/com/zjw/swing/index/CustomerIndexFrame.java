@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 /**
  * @program: medical_sales_management_system
@@ -165,7 +166,17 @@ public class CustomerIndexFrame extends JFrame {
         mainPanel.add(top);
 
         //头像
-        head = new ImageJPanel(null, "/images/login/t1.jpg");
+        boolean isDiy = StaticConfiguration.getCustomer().getImagesPath() != null &&
+                StaticConfiguration.getCustomer().getImagesPath().startsWith("./");
+
+        if (isDiy) {
+            assert StaticConfiguration.getCustomer().getImagesPath() != null;
+            head = new ImageJPanel(null, new File(StaticConfiguration.getCustomer().getImagesPath()));
+        } else {
+            String defaultHead = StaticConfiguration.getCustomer().getImagesPath() != null ?
+                    StaticConfiguration.getCustomer().getImagesPath() : "/images/index/t5.jpg";
+            head = new ImageJPanel(null, defaultHead);
+        }
         head.setSize(80, 80);
         head.setLocation(100, 5);
         top.add(head);
@@ -263,7 +274,15 @@ public class CustomerIndexFrame extends JFrame {
         phone.setText("电话：" + StaticConfiguration.getCustomer().getPhone());
     }
 
-    public void changeImages(String imagesPath) {
+    void changeImages(String imagesPath) {
+        this.setVisible(false);
         head.changeImages(imagesPath);
+        this.setVisible(true);
+    }
+
+    void changeImages(File file) {
+        this.setVisible(false);
+        head.changeImages(file);
+        this.setVisible(true);
     }
 }

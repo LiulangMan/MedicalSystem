@@ -57,7 +57,7 @@ public class HeadEditFrame extends JFrame {
         this.setLocationRelativeTo(null);
         this.setResizable(false);
 
-        total = Objects.requireNonNull(new File(".\\src\\main\\resources\\images\\head").listFiles()).length;
+        total = Objects.requireNonNull(new File("src/main/resources/images/head").listFiles()).length;
     }
 
     public void run() {

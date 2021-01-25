@@ -23,6 +23,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 /**
  * @program: medical_sales_management_system
@@ -202,9 +203,17 @@ public class EmployIndexFrame extends JFrame {
         top.add(title);
 
         //头像
-        head = new ImageJPanel(null,
-                StaticConfiguration.getEmploy().getImagesPath() == null ? "/images/index/t5.jpg" :
-                        StaticConfiguration.getEmploy().getImagesPath());
+        boolean isDiy = StaticConfiguration.getEmploy().getImagesPath() != null &&
+                StaticConfiguration.getEmploy().getImagesPath().startsWith("./");
+
+        if (isDiy) {
+            assert StaticConfiguration.getEmploy().getImagesPath() != null;
+            head = new ImageJPanel(null, new File(StaticConfiguration.getEmploy().getImagesPath()));
+        } else {
+            String defaultHead = StaticConfiguration.getEmploy().getImagesPath() != null ?
+                    StaticConfiguration.getEmploy().getImagesPath() : "/images/index/t5.jpg";
+            head = new ImageJPanel(null, defaultHead);
+        }
         head.setSize(80, 80);
         head.setLocation(100, 5);
         top.add(head);
@@ -325,6 +334,12 @@ public class EmployIndexFrame extends JFrame {
     void changeImages(String imagesPath) {
         head.setVisible(false);
         head.changeImages(imagesPath);
+        head.setVisible(true);
+    }
+
+    void changeImages(File file) {
+        head.setVisible(false);
+        head.changeImages(file);
         head.setVisible(true);
     }
 
