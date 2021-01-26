@@ -8,6 +8,7 @@ import com.zjw.service.EmployService;
 import com.zjw.service.RegisterService;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.utils.ImageJPanel;
+import com.zjw.swing.utils.MySwingUtils;
 import com.zjw.utils.Md5Utils;
 import com.zjw.utils.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @program: medical_sales_management_system
@@ -42,8 +44,6 @@ public class RegisterFrame extends JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.setResizable(false);
-
-
     }
 
     public void run() {
@@ -203,71 +203,106 @@ public class RegisterFrame extends JFrame {
 
         //注册监听
         registerButton.addActionListener(e -> {
-            String usernameText = username.getText();
-            char[] password = password1.getPassword();
-            char[] password2Text = password2.getPassword();
-            String nameText = name.getText();
-            String addressText = address.getText();
-            String phoneText = phone.getText();
-            boolean isBoy = boy.isSelected();
-            boolean isEmploy = employButton.isSelected();
 
-            //判断两次密码是否一样
-            if (!Arrays.equals(password, password2Text)) {
-                MessageShows.ShowMessageText(this,null,"两次密码不一致");
-                password1.setText("");
-                password2.setText("");
-                return;
-            }
+            JFrame temp = this;
+            SwingWorker<Integer, Object> worker = new SwingWorker<Integer, Object>() {
+                @Override
+                protected void done() {
 
-            try {
-                if (isEmploy) {
-                    Employ select = employService.queryByLoginNameForOne(usernameText);
-                    if (select != null) {
-                        //用户名已经存在
-                        MessageShows.ShowMessageText(this,null,"用户名已存在");
-                        return;
+                    MySwingUtils.ProgressBar.closeProgressBar();
+                    try {
+                        Integer result = get();
+                        if (result == 0) {
+                            MessageShows.ShowMessageText(temp, null, "注册成功");
+                            //关闭窗口
+                            temp.setVisible(false);
+                            temp.dispose();
+                        } else if (result == 1) {
+                            MessageShows.ShowMessageText(temp, null, "两次密码不一致");
+
+                        } else if (result == 2) {
+                            MessageShows.ShowMessageText(temp, null, "用户名已存在");
+
+                        } else if (result == 3) {
+                            MessageShows.ShowMessageText(temp, null, "注册码错误");
+                        }
+                    } catch (Exception ex) {
+                        MessageShows.ShowMessageText(temp, null, "注册失败");
+                        ex.printStackTrace();
                     }
-
-                    //检验注册码
-                    String registerIdText = registerId.getText();
-                    if (!registerService.checkRegisterId(registerIdText, addressText)) {
-                        MessageShows.ShowMessageText(this,null,"注册码错误");
-                        return;
-                    }
-
-                    //加密
-                    String pwd = Md5Utils.Md5(String.valueOf(password));
-
-                    Employ employ = new Employ(0, RandomUtils.randomIdentity(), usernameText, pwd,
-                            nameText, isBoy ? IndexConstant.BOY_TYPE : IndexConstant.GIRL_TYPE, addressText, phoneText, IndexConstant.LOGIN_TYPE_EMPLOY);
-
-                    employService.insert(employ);
-                } else {
-                    //客户
-                    Customer select = customerService.queryByLoginNameForOne(usernameText);
-                    if (select != null) {
-                        //用户名已经存在
-                        MessageShows.ShowMessageText(this,null,"用户名已存在");
-                        return;
-                    }
-
-                    //加密
-                    String pwd = Md5Utils.Md5(String.valueOf(password));
-                    Customer customer = new Customer(0, RandomUtils.randomIdentity(), usernameText, pwd,
-                            nameText, isBoy ? IndexConstant.BOY_TYPE : IndexConstant.GIRL_TYPE, addressText, phoneText);
-
-                    customerService.insert(customer);
                 }
 
-                MessageShows.ShowMessageText(this,null,"注册成功");
-                //关闭窗口
-                this.setVisible(false);
-                this.dispose();
+                @Override
+                protected Integer doInBackground() throws Exception {
 
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+                    String usernameText = username.getText();
+                    char[] password = password1.getPassword();
+                    char[] password2Text = password2.getPassword();
+                    String nameText = name.getText();
+                    String addressText = address.getText();
+                    String phoneText = phone.getText();
+                    boolean isBoy = boy.isSelected();
+                    boolean isEmploy = employButton.isSelected();
+
+                    //判断两次密码是否一样
+                    if (!Arrays.equals(password, password2Text)) {
+                        //MessageShows.ShowMessageText(temp,null,"两次密码不一致");
+                        password1.setText("");
+                        password2.setText("");
+                        return 1;
+                    }
+
+                    try {
+                        if (isEmploy) {
+                            Employ select = employService.queryByLoginNameForOne(usernameText);
+                            if (select != null) {
+                                //用户名已经存在
+                                //MessageShows.ShowMessageText(temp,null,"用户名已存在");
+                                return 2;
+                            }
+
+                            //检验注册码
+                            String registerIdText = registerId.getText();
+                            if (!registerService.checkRegisterId(registerIdText, addressText)) {
+                                //MessageShows.ShowMessageText(temp,null,"注册码错误");
+                                return 3;
+                            }
+
+                            //加密
+                            String pwd = Md5Utils.Md5(String.valueOf(password));
+
+                            Employ employ = new Employ(0, RandomUtils.randomIdentity(), usernameText, pwd,
+                                    nameText, isBoy ? IndexConstant.BOY_TYPE : IndexConstant.GIRL_TYPE, addressText, phoneText, IndexConstant.LOGIN_TYPE_EMPLOY);
+
+                            employService.insert(employ);
+                        } else {
+                            //客户
+                            Customer select = customerService.queryByLoginNameForOne(usernameText);
+                            if (select != null) {
+                                //用户名已经存在
+                                //MessageShows.ShowMessageText(temp,null,"用户名已存在");
+                                return 2;
+                            }
+
+                            //加密
+                            String pwd = Md5Utils.Md5(String.valueOf(password));
+                            Customer customer = new Customer(0, RandomUtils.randomIdentity(), usernameText, pwd,
+                                    nameText, isBoy ? IndexConstant.BOY_TYPE : IndexConstant.GIRL_TYPE, addressText, phoneText);
+
+                            customerService.insert(customer);
+                        }
+                        return 0;
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        return null;
+                    }
+                }
+            };
+
+            MySwingUtils.ProgressBar.showProgressBar("正在注册");
+            worker.execute();
+
         });
     }
 }

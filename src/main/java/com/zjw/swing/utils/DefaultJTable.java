@@ -2,8 +2,8 @@ package com.zjw.swing.utils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
-import java.util.Arrays;
 
 /**
  * @program: medical_sales_management_system
@@ -21,6 +21,16 @@ public class DefaultJTable extends JTable {
     @Override
     public boolean isCellEditable(int row, int column) {
         return false;
+    }
+
+    @Override
+    public java.awt.Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+
+        java.awt.Component c = super.prepareRenderer(renderer, row, column);
+        if (c instanceof JComponent) {
+            ((JComponent) c).setOpaque(false);
+        }
+        return c;
     }
 
     public DefaultJTable(Object[] colName, DefaultTableModel tableModel) {
@@ -41,6 +51,11 @@ public class DefaultJTable extends JTable {
         this.getColumnModel().getColumn(0).setPreferredWidth(40);
 
         this.jScrollPane = new JScrollPane(this);
+
+        //透明化表格
+        this.setOpaque(false);
+        this.jScrollPane.setOpaque(false);
+        this.jScrollPane.getViewport().setOpaque(false);
 
     }
 

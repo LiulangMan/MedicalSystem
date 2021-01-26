@@ -5,6 +5,7 @@ import com.zjw.domain.Supplier;
 import com.zjw.service.SupplierService;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.utils.DefaultJTable;
+import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.utils.DataUtils;
 import com.zjw.utils.interfaceImpl.DefaultMouseListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
@@ -21,7 +23,7 @@ import java.awt.event.MouseEvent;
  * @data: 2021/1/10 12:27
  */
 @Component
-public class SupplierPanel extends JPanel {
+public class SupplierPanel extends ImageJPanel {
 
     private DefaultJTable supplierTable;
 
@@ -32,7 +34,7 @@ public class SupplierPanel extends JPanel {
     private SupplierEditFrame supplierEditFrame;
 
     public SupplierPanel() {
-        super(null);
+        super(null, "/images/index/t7.jpg");
     }
 
     public void init() {
@@ -77,7 +79,7 @@ public class SupplierPanel extends JPanel {
         });
 
         deleteButton.addActionListener(e -> {
-            boolean b = MessageShows.ShowMessageAboutMakeSure(this,"确认删除该供应商？");
+            boolean b = MessageShows.ShowMessageAboutMakeSure(this, "确认删除该供应商？");
             if (!b) return;
             int row = supplierTable.getSelectedRow();
             Integer id = (Integer) supplierTable.getValueAt(row, 0);

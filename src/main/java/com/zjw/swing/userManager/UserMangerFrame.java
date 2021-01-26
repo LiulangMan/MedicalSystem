@@ -12,6 +12,7 @@ import com.zjw.swing.login.RegisterFrame;
 import com.zjw.swing.message.MessageShowByTable;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.utils.DefaultJTable;
+import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.swing.utils.ProgressBarJPanel;
 import com.zjw.utils.DataUtils;
 import com.zjw.utils.MysqlUtils;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +33,7 @@ import java.util.List;
  * @data: 2021/1/5 21:05
  */
 @Component
-public class UserMangerFrame extends JPanel {
+public class UserMangerFrame extends ImageJPanel {
 
     @Autowired
     private EmployService employService;
@@ -48,10 +50,13 @@ public class UserMangerFrame extends JPanel {
     @Autowired
     private PathEditJFrame pathEditJFrame;
 
+    @Autowired
+    private UserEditFrame userEditFrame;
+
     private DefaultJTable userTable;
 
     public UserMangerFrame() {
-        super(null);
+        super(null,"/images/index/t7.jpg");
     }
 
     public void init() {
@@ -63,10 +68,12 @@ public class UserMangerFrame extends JPanel {
 
         JPopupMenu jPopupMenu = new JPopupMenu();
         JMenuItem recordButton = new JMenuItem("登陆记录");
+        JMenuItem editButton = new JMenuItem("编辑用户");
         JMenuItem deleteButton = new JMenuItem("删除用户");
         JMenuItem addButton = new JMenuItem("新增用户");
 
         jPopupMenu.add(recordButton);
+        jPopupMenu.add(editButton);
         jPopupMenu.add(addButton);
         jPopupMenu.add(deleteButton);
 
@@ -124,7 +131,7 @@ public class UserMangerFrame extends JPanel {
 
         //删除用户
         deleteButton.addActionListener(e -> {
-            boolean b = MessageShows.ShowMessageAboutMakeSure(this,"确认删除该账户吗");
+            boolean b = MessageShows.ShowMessageAboutMakeSure(this, "确认删除该账户吗");
             if (!b) return;
 
             int row = userTable.getSelectedRow();
@@ -154,6 +161,25 @@ public class UserMangerFrame extends JPanel {
                     registerFrame.run();
                 }
             });
+        });
+
+        //编辑用户
+        editButton.addActionListener(e -> {
+            int row = userTable.getSelectedRow();
+            Integer type = (Integer) userTable.getValueAt(row, 6);
+            String username = (String) userTable.getValueAt(row, 1);
+            Object object = null;
+            if (type.equals(IndexConstant.LOGIN_TYPE_ADMIN)) {
+                MessageShows.ShowMessageText(this, null, "不可编辑超级管理员");
+            } else if (type.equals(IndexConstant.LOGIN_TYPE_EMPLOY)) {
+                object = employService.queryByLoginNameForOne(username);
+            } else if (type.equals(IndexConstant.LOGIN_TYPE_CUSTOMER)) {
+                object = customerService.queryByLoginNameForOne(username);
+            }
+
+            Object finalObject = object;
+            StaticConfiguration.addThreadPoolTask(() -> userEditFrame.run(finalObject));
+
         });
 
         searchButton.addActionListener(e -> {

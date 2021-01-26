@@ -9,6 +9,10 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Date;
 
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
@@ -96,6 +100,18 @@ public class HomeEditFrame extends JFrame {
             }
             this.setVisible(false);
             this.dispose();
+        });
+
+        imageButton.addActionListener(e -> {
+            try {
+                FileInputStream fis = new FileInputStream(new File("./images/head/t0.jpg"));
+                byte[] bytes = new byte[fis.available()];
+                fis.read(bytes);
+                ImageIcon icon = new ImageIcon(bytes);
+                textTemp.insertIcon(icon);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });
     }
 }

@@ -13,7 +13,4 @@ public class Md5Utils {
         return new Md5Hash(source, "this is salt", 2).toString();
     }
 
-    public static void main(String[] args) {
-        System.out.println(Md5("111111"));
-    }
 }

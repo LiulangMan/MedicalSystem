@@ -244,7 +244,7 @@ public class DataUtils {
     }
 
     public static Object[][] OptionToArray(List<Option> list) {
-        Object[][] objects = new Object[list.size()][4];
+        Object[][] objects = new Object[list.size()][5];
 
         for (int i = 0; i < list.size(); i++) {
             objects[i][0] = list.get(i).getId();

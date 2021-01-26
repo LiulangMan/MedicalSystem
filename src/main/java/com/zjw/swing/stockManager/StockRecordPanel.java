@@ -10,13 +10,17 @@ import com.zjw.swing.message.MessageShowByTable;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.utils.DefaultJTable;
 import com.zjw.config.StaticConfiguration;
+import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.utils.DataUtils;
 import com.zjw.utils.PrintUtils;
+import com.zjw.utils.interfaceImpl.DefaultMouseListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -30,7 +34,7 @@ import java.util.List;
  * @data: 2021/1/10 12:26
  */
 @Component
-public class StockRecordPanel extends JPanel {
+public class StockRecordPanel extends ImageJPanel {
 
     @Autowired
     private StockOrderService stockOrderService;
@@ -38,7 +42,7 @@ public class StockRecordPanel extends JPanel {
     private DefaultJTable recordTable;
 
     public StockRecordPanel() {
-        super(null);
+        super(null,"/images/index/t7.jpg");
     }
 
     public void init() {
@@ -85,6 +89,15 @@ public class StockRecordPanel extends JPanel {
 
             //展示商品信息
             MessageShowByTable.show(colName, objects);
+        });
+
+        recordTable.addMouseListener(new DefaultMouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2){
+                    descriptionButton.doClick();
+                }
+            }
         });
 
         printButton.addActionListener(e -> {

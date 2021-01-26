@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -44,7 +45,7 @@ public class SaleRecordPanel extends ImageJPanel {
     private DefaultJTable recordTable;
 
     public SaleRecordPanel() {
-        super(null, "/images/login/t4.jpg");
+        super(null, "/images/index/t7.jpg");
     }
 
     public void init() {
@@ -57,9 +58,6 @@ public class SaleRecordPanel extends ImageJPanel {
                 new DefaultTableModel());
         recordTable.getJScrollPane().setSize(1100, 600);
         recordTable.getJScrollPane().setLocation(0, 0);
-        recordTable.setOpaque(false);
-        recordTable.getJScrollPane().setOpaque(false);
-        recordTable.getJScrollPane().getViewport().setOpaque(false);
         this.add(recordTable.getJScrollPane());
 
         JButton fullButton = new JButton("药品明细");

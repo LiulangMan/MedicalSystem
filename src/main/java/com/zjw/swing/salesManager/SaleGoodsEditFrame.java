@@ -9,6 +9,7 @@ import com.zjw.swing.log.OptionLogPanel;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.stockManager.StockListPanel;
 import com.zjw.swing.utils.ImageJPanel;
+import com.zjw.utils.OptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -166,6 +167,7 @@ public class SaleGoodsEditFrame extends JFrame {
                 goods.setGoodText(description);
 
                 goodService.updateByGoodsId(goods);
+                OptionUtils.recordCurrentOption("编辑了药品id: " + goods.getGoodId() + "-" + goods.getGoodName());
 
                 MessageShows.ShowMessageText(this, null, "修改成功");
                 saleListPanel.refreshData();
@@ -181,12 +183,9 @@ public class SaleGoodsEditFrame extends JFrame {
             boolean b = MessageShows.ShowMessageAboutMakeSure(this, "确认下架该药品？");
             if (!b) return;
             goodService.offShelfGoods(goods);
-            Option option = new Option(0, StaticConfiguration.getEmploy().getName(),
-                    "下架id:" + goods.getGoodId() + "-" + goods.getGoodName(),
-                    new Date()
-            );
+
             //更新列表
-            optionService.insertOption(option);
+            OptionUtils.recordCurrentOption("下架了药品id:" + goods.getGoodId() + "-" + goods.getGoodName());
             saleListPanel.refreshData();
             stockListPanel.refreshData();
             saleStockPanel.refreshData();

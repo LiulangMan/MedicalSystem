@@ -7,6 +7,7 @@ import com.zjw.service.GoodService;
 import com.zjw.swing.message.MessageShowByText;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.utils.DefaultJTable;
+import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.utils.DataUtils;
 import com.zjw.utils.interfaceImpl.DefaultMouseListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ import java.util.List;
  * @data: 2021/1/7 0:11
  */
 @Component
-public class SaleListPanel extends JPanel {
+public class SaleListPanel extends ImageJPanel {
 
     @Autowired
     private GoodService goodService;
@@ -44,18 +46,12 @@ public class SaleListPanel extends JPanel {
 
     //绝对布局
     public SaleListPanel() {
-        super(null);
+        super(null,"/images/index/t7.jpg");
     }
 
 
     public void init() {
 
-        //数据面板
-        JPanel dataPanel = new JPanel(null);
-        dataPanel.setSize(1100, 600);
-        dataPanel.setLocation(0, 0);
-        dataPanel.setBackground(Color.BLUE);
-        this.add(dataPanel);
 
         //弹出菜单
         JPopupMenu jPopupMenu = new JPopupMenu();
@@ -64,11 +60,10 @@ public class SaleListPanel extends JPanel {
 
 
         // 创建一个表格，指定 表头 和 所有行数据
-        String[] columnNames = {"ID", "药名", "描述", "库存", "单价", "类型"};
-        table = new DefaultJTable(columnNames, new DefaultTableModel());
-        table.getJScrollPane().setSize(dataPanel.getWidth(), dataPanel.getHeight());
+        table = new DefaultJTable(new String[]{"ID", "药名", "描述", "库存", "单价", "类型"}, new DefaultTableModel());
+        table.getJScrollPane().setSize(1100,600);
         table.getJScrollPane().setLocation(0, 0);
-        dataPanel.add(table.getJScrollPane());
+        this.add(table.getJScrollPane());
 
 
         //刷新按钮
@@ -267,12 +262,7 @@ public class SaleListPanel extends JPanel {
             Integer id = (Integer) table.getValueAt(this.table.getSelectedRow(), 0);
 
             Goods goods = StaticConfiguration.getGoodsInCache(id);
-            StaticConfiguration.addThreadPoolTask(new Runnable() {
-                @Override
-                public void run() {
-                    saleGoodsEditFrame.run(goods);
-                }
-            });
+            StaticConfiguration.addThreadPoolTask(() -> saleGoodsEditFrame.run(goods));
         });
     }
 

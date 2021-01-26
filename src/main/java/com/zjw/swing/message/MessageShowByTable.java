@@ -6,6 +6,8 @@ import com.zjw.swing.utils.ImageJPanel;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import java.awt.*;
 
 /**
  * @program: medical_sales_management_system
@@ -26,12 +28,6 @@ public class MessageShowByTable {
         DefaultJTable defaultJTable = new DefaultJTable(colName, new DefaultTableModel());
         defaultJTable.getJScrollPane().setSize(1000, 800);
         defaultJTable.getJScrollPane().setLocation(0, 0);
-
-        //透明化表格
-        defaultJTable.setOpaque(false);
-        defaultJTable.getJScrollPane().setOpaque(false);
-        defaultJTable.getJScrollPane().getViewport().setOpaque(false);
-        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 
         show.add(defaultJTable.getJScrollPane());
 

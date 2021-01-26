@@ -6,6 +6,7 @@ import com.zjw.service.GoodService;
 import com.zjw.service.SupplierService;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.utils.ImageJPanel;
+import com.zjw.utils.OptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -181,7 +182,7 @@ public class StockGoodsEditFrame extends JFrame {
                 if (goods == null) {
                     Goods stockGoods = new Goods(idText, nameText, 0, description, priceText, typeIndex, supplierId);
                     goodService.insertStockList(stockGoods);
-
+                    OptionUtils.recordCurrentOption("新增了采购药物:id " + idText + "-" + nameText);
                     MessageShows.ShowMessageText(this, null, "添加成功");
                 } else {
                     goods.setGoodName(nameText);
@@ -190,6 +191,7 @@ public class StockGoodsEditFrame extends JFrame {
                     goods.setGoodMoney(priceText);
                     goods.setSupplierId(supplierId);
                     goodService.updateStockGoodsById(goods);
+                    OptionUtils.recordCurrentOption("编辑了采购药物:id " + idText + "-" + nameText);
 
                     MessageShows.ShowMessageText(this, null, "编辑成功");
                 }

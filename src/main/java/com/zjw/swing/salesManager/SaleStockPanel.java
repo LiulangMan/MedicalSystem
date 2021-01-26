@@ -9,8 +9,10 @@ import com.zjw.swing.log.OptionLogPanel;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.stockManager.StockListPanel;
 import com.zjw.swing.utils.DefaultJTable;
+import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.swing.utils.MySwingUtils;
 import com.zjw.utils.DataUtils;
+import com.zjw.utils.OptionUtils;
 import com.zjw.utils.interfaceImpl.DefaultMouseListener;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.Date;
@@ -30,7 +33,7 @@ import java.util.List;
  */
 @Component
 @Log4j2
-public class SaleStockPanel extends JPanel {
+public class SaleStockPanel extends ImageJPanel {
 
     @Autowired
     private GoodService goodService;
@@ -42,9 +45,6 @@ public class SaleStockPanel extends JPanel {
     private SaleStockEditFrame saleStockEditFrame;
 
     @Autowired
-    private OptionService optionService;
-
-    @Autowired
     private OptionLogPanel optionLogPanel;
 
     @Autowired
@@ -53,7 +53,7 @@ public class SaleStockPanel extends JPanel {
     private DefaultJTable table;
 
     public SaleStockPanel() {
-        super(null);
+        super(null,"/images/index/t7.jpg");
     }
 
     public void init() {
@@ -61,6 +61,7 @@ public class SaleStockPanel extends JPanel {
         //表格
         table = new DefaultJTable(new Object[]{"ID", "药名", "在售数量", "仓库数量"}, new DefaultTableModel());
         table.getJScrollPane().setBounds(0, 0, 1100, 600);
+
         this.add(table.getJScrollPane());
 
         //弹出菜单
@@ -92,12 +93,9 @@ public class SaleStockPanel extends JPanel {
                 boolean b = MessageShows.ShowMessageAboutMakeSure(this, "该商品已下架，是否上架?");
                 if (!b) return;
                 //上架
-                goodService.offShelfGoods(stock);
-                Option option = new Option(0, StaticConfiguration.getEmploy().getName(),
-                        "上架 Id:" + stock.getGoodId() + "-" + stock.getGoodName()
-                        , new Date());
+                goodService.putShelfGoods(stock);
+                OptionUtils.recordCurrentOption("上架了 id:" + stock.getGoodId() + "-" + stock.getGoodName());
 
-                optionService.insertOption(option);
                 this.refreshData();
                 saleListPanel.refreshData();
                 optionLogPanel.refreshData();
@@ -129,7 +127,7 @@ public class SaleStockPanel extends JPanel {
 
                         sb.append("下架id:").append(goods.getGoodId()).append("-").append(goods.getGoodName()).append("\n");
                     }
-                    optionService.insertOption(new Option(0, StaticConfiguration.getEmploy().getName(), sb.toString(), new Date()));
+                    OptionUtils.recordCurrentOption(sb.toString());
                     saleListPanel.refreshData();
                     stockListPanel.refreshData();
                     optionLogPanel.refreshData();

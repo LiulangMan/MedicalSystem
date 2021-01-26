@@ -7,6 +7,7 @@ import com.zjw.service.QuestionService;
 import com.zjw.swing.message.MessageShowByText;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.utils.DefaultJTable;
+import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.utils.DataUtils;
 import com.zjw.utils.interfaceImpl.DefaultMouseListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
@@ -23,7 +25,7 @@ import java.util.List;
  * @data: 2021/1/5 21:09
  */
 @Component
-public class HelpEmployPlane extends JPanel {
+public class HelpEmployPlane extends ImageJPanel {
 
     private DefaultJTable questionTable;
 
@@ -34,7 +36,7 @@ public class HelpEmployPlane extends JPanel {
     private HelpQuestionEditFrame helpQuestionEditFrame;
 
     public HelpEmployPlane() {
-        super(null);
+        super(null, "/images/index/t7.jpg");
     }
 
     public void init() {
@@ -42,6 +44,7 @@ public class HelpEmployPlane extends JPanel {
         //问题表
         questionTable = new DefaultJTable(new Object[]{"ID", "问题", "提问时间", "回答", "回答时间", "状态"}, new DefaultTableModel());
         questionTable.getJScrollPane().setBounds(0, 0, 1200, 600);
+
         this.add(questionTable.getJScrollPane());
 
         //弹出菜单

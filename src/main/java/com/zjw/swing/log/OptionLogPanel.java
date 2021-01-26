@@ -7,6 +7,7 @@ import com.zjw.swing.message.MessageShowByText;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.test.JPanelTest;
 import com.zjw.swing.utils.DefaultJTable;
+import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.utils.DataUtils;
 import com.zjw.utils.interfaceImpl.DefaultMouseListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,7 +28,7 @@ import java.util.Date;
  * @data: 2021/1/22 18:06
  */
 @Component
-public class OptionLogPanel extends JPanel {
+public class OptionLogPanel extends ImageJPanel {
 
     private SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
 
@@ -36,7 +38,7 @@ public class OptionLogPanel extends JPanel {
     private OptionService optionService;
 
     public OptionLogPanel() {
-        super(null);
+        super(null,"/images/index/t7.jpg");
     }
 
 

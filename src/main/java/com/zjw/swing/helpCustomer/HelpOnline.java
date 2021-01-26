@@ -9,6 +9,7 @@ import com.zjw.swing.helpEmployee.HelpQuestionEditFrame;
 import com.zjw.swing.message.MessageShowByText;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.utils.DefaultJTable;
+import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.utils.DataUtils;
 import com.zjw.utils.interfaceImpl.DefaultMouseListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -28,14 +30,14 @@ import java.util.List;
  */
 
 @Component
-public class HelpOnline extends JPanel {
+public class HelpOnline extends ImageJPanel {
     private DefaultJTable questionTable;
 
     @Autowired
     private QuestionService questionService;
 
     public HelpOnline() {
-        super(null);
+        super(null,"/images/index/t7.jpg");
     }
 
     public void init() {
@@ -43,6 +45,7 @@ public class HelpOnline extends JPanel {
         //问题表
         questionTable = new DefaultJTable(new Object[]{"ID", "问题", "提问时间", "回答", "回答时间", "状态"}, new DefaultTableModel());
         questionTable.getJScrollPane().setBounds(0, 0, 1200, 600);
+
         this.add(questionTable.getJScrollPane());
         refreshData();
 

@@ -11,6 +11,7 @@ import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.stockManager.StockListPanel;
 import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.swing.utils.MySwingUtils;
+import com.zjw.utils.OptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -157,12 +158,9 @@ public class SaleStockEditFrame extends JFrame {
 
                     try {
                         //记录操作
-                        Option option = new Option(0, StaticConfiguration.getEmploy().getName(),
-                                "药品 id:" + goods.getGoodId() + "-" + goods.getGoodName() + " 更新销售量为" + goods.getGoodStock(),
-                                new Date());
+                        OptionUtils.recordCurrentOption("调整了药品 id:" + goods.getGoodId() + "-" + goods.getGoodName() + " 销售量为" + goods.getGoodStock());
                         goodService.updateByGoodsId(goods);
                         goodService.updateStockGoodsById(stockGoods);
-                        optionService.insertOption(option);
 
                         saleListPanel.refreshData();
                         stockListPanel.refreshData();

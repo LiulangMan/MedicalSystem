@@ -18,12 +18,7 @@ public class MySwingUtils {
 
 
         public static void showProgressBar(String title) {
-            StaticConfiguration.addThreadPoolTask(new Runnable() {
-                @Override
-                public void run() {
-                    creatUI(title);
-                }
-            });
+            StaticConfiguration.addThreadPoolTask(() -> creatUI(title));
         }
 
         private static void creatUI(String title) {
@@ -40,9 +35,5 @@ public class MySwingUtils {
             jf.setVisible(false);
             jf.dispose();
         }
-    }
-
-    public static void main(String[] args) {
-        MySwingUtils.ProgressBar.showProgressBar("正在加载数据");
     }
 }

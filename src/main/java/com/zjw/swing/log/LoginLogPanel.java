@@ -5,12 +5,14 @@ import com.zjw.domain.InfoLogin;
 import com.zjw.service.LoginService;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.utils.DefaultJTable;
+import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.utils.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,12 +24,12 @@ import java.util.List;
  * @data: 2021/1/5 21:20
  */
 @Component
-public class LoginLogPanel extends JPanel {
+public class LoginLogPanel extends ImageJPanel {
 
     private SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
 
     public LoginLogPanel() {
-        super(null);
+        super(null,"/images/index/t7.jpg");
     }
 
     @Autowired

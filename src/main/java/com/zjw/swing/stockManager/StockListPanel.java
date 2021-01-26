@@ -8,13 +8,16 @@ import com.zjw.swing.message.MessageShowByText;
 import com.zjw.swing.message.MessageShows;
 import com.zjw.swing.utils.DefaultJTable;
 import com.zjw.config.StaticConfiguration;
+import com.zjw.swing.utils.ImageJPanel;
 import com.zjw.utils.DataUtils;
+import com.zjw.utils.OptionUtils;
 import com.zjw.utils.interfaceImpl.DefaultMouseListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -25,7 +28,7 @@ import java.util.List;
  * @data: 2021/1/10 12:25
  */
 @Component
-public class StockListPanel extends JPanel {
+public class StockListPanel extends ImageJPanel {
 
 
     private DefaultJTable stockTable;
@@ -45,7 +48,7 @@ public class StockListPanel extends JPanel {
     private StockGoodsEditFrame stockGoodsEditFrame;
 
     public StockListPanel() {
-        super(null);
+        super(null, "/images/index/t7.jpg");
     }
 
     public void init() {
@@ -147,13 +150,7 @@ public class StockListPanel extends JPanel {
         editButton.addActionListener(e -> {
             int row = stockTable.getSelectedRow();
             Integer id = (Integer) stockTable.getValueAt(row, 0);
-//            stockGoodsEditFrame.run(StaticConfiguration.getStockGoodsInCache(id));
-            StaticConfiguration.addThreadPoolTask(new Runnable() {
-                @Override
-                public void run() {
-                    stockGoodsEditFrame.run(StaticConfiguration.getStockGoodsInCache(id));
-                }
-            });
+            StaticConfiguration.addThreadPoolTask(() -> stockGoodsEditFrame.run(StaticConfiguration.getStockGoodsInCache(id)));
         });
 
         deleteButton.addActionListener(e -> {
@@ -163,9 +160,10 @@ public class StockListPanel extends JPanel {
                 MessageShows.ShowMessageText(this, null, "药品正在销售，无法移除");
                 return;
             }
-            boolean b = MessageShows.ShowMessageAboutMakeSure(this,"确认下架该药品？");
+            boolean b = MessageShows.ShowMessageAboutMakeSure(this, "确认移除该药品？");
             if (!b) return;
             goodService.deleteByStockGoodsId(id);
+            OptionUtils.recordCurrentOption("移除了采购药物 id:" + id);
             MessageShows.ShowMessageText(this, null, "删除成功");
             refreshData();
         });
@@ -237,7 +235,7 @@ public class StockListPanel extends JPanel {
                     refreshDataForId(id);
                     return;
                 } catch (NumberFormatException ex) {
-                    MessageShows.ShowMessageText(this,null,"参数错误");
+                    MessageShows.ShowMessageText(this, null, "参数错误");
                 }
             }
 
@@ -256,7 +254,7 @@ public class StockListPanel extends JPanel {
                     int id = Integer.parseInt(text);
                     refreshDataForSupplierId(id);
                 } catch (NumberFormatException ex) {
-                    MessageShows.ShowMessageText(this,null,"参数错误");
+                    MessageShows.ShowMessageText(this, null, "参数错误");
                 }
             }
         });
