@@ -46,7 +46,7 @@ public class SaleListPanel extends ImageJPanel {
 
     //绝对布局
     public SaleListPanel() {
-        super(null,"/images/index/t7.jpg");
+        super(null, "/images/index/t7.jpg");
     }
 
 
@@ -56,12 +56,14 @@ public class SaleListPanel extends ImageJPanel {
         //弹出菜单
         JPopupMenu jPopupMenu = new JPopupMenu();
         JMenuItem editMenu = new JMenuItem("编辑");
+        JMenuItem descriptionMenu = new JMenuItem("明细");
         jPopupMenu.add(editMenu);
+        jPopupMenu.add(descriptionMenu);
 
 
         // 创建一个表格，指定 表头 和 所有行数据
         table = new DefaultJTable(new String[]{"ID", "药名", "描述", "库存", "单价", "类型"}, new DefaultTableModel());
-        table.getJScrollPane().setSize(1100,600);
+        table.getJScrollPane().setSize(1100, 600);
         table.getJScrollPane().setLocation(0, 0);
         this.add(table.getJScrollPane());
 
@@ -127,12 +129,6 @@ public class SaleListPanel extends ImageJPanel {
         cancelButton.setSize(100, 30);
         cancelButton.setLocation(620, 750);
         this.add(cancelButton);
-
-
-        // 数据加载
-//        ArrayList<Goods> list = new ArrayList<>(StaticConfiguration.getGoodsCache().values());
-//        list.sort(Comparator.comparingInt(Goods::getGoodId));
-//        table.refreshData(DataUtils.GoodsListToObjectArray(list));
 
         /*监听*/
 
@@ -210,7 +206,7 @@ public class SaleListPanel extends ImageJPanel {
                     refreshDataForId(id);
                     return;
                 } catch (NumberFormatException ex) {
-                    MessageShows.ShowMessageText(this,null,"参数错误");
+                    MessageShows.ShowMessageText(this, null, "参数错误");
                 }
             }
 
@@ -229,7 +225,7 @@ public class SaleListPanel extends ImageJPanel {
                     double price = Double.parseDouble(text);
                     refreshDataForPrice(price);
                 } catch (NumberFormatException ex) {
-                    MessageShows.ShowMessageText(this,null,"参数错误");
+                    MessageShows.ShowMessageText(this, null, "参数错误");
                 }
             }
         });
@@ -241,19 +237,18 @@ public class SaleListPanel extends ImageJPanel {
             );
         });
 
+        descriptionMenu.addActionListener(e -> {
+            descriptionButton.doClick();
+        });
+
         this.table.addMouseListener(new DefaultMouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    //明细
-                    MessageShowByText.show("药品描述",
-                            (String) SaleListPanel.this.table.getValueAt(SaleListPanel.this.table.getSelectedRow(), 2),
-                            new Font(null, Font.PLAIN, 20)
-                    );
-                }
                 if (e.isMetaDown() && StaticConfiguration.getLoginType() == IndexConstant.LOGIN_TYPE_ADMIN) {
                     //弹出菜单
                     jPopupMenu.show(table, e.getX(), e.getY());
+                } else if (e.getClickCount() == 2) {
+                    addButton.doClick();
                 }
             }
         });

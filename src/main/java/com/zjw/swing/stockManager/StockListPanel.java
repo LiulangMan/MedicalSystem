@@ -125,6 +125,8 @@ public class StockListPanel extends ImageJPanel {
         JMenuItem addStockButton = new JMenuItem("新增");
         JMenuItem editButton = new JMenuItem("编辑");
         JMenuItem deleteButton = new JMenuItem("移除");
+        JMenuItem fullButton = new JMenuItem("明细");
+        jPopupMenu.add(fullButton);
         jPopupMenu.add(editButton);
         jPopupMenu.add(deleteButton);
         jPopupMenu.add(addStockButton);
@@ -135,14 +137,10 @@ public class StockListPanel extends ImageJPanel {
         stockTable.addMouseListener(new DefaultMouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    MessageShowByText.show("药品描述",
-                            (String) stockTable.getValueAt(stockTable.getSelectedRow(), 4),
-                            new Font(null, Font.PLAIN, 20)
-                    );
-                }
                 if (e.isMetaDown()) {
                     jPopupMenu.show(stockTable, e.getX(), e.getY());
+                } else if (e.getClickCount() == 2) {
+                    addButton.doClick();
                 }
             }
         });
@@ -265,6 +263,10 @@ public class StockListPanel extends ImageJPanel {
                     (String) stockTable.getValueAt(stockTable.getSelectedRow(), 4),
                     new Font(null, Font.PLAIN, 20)
             );
+        });
+
+        fullButton.addActionListener(e -> {
+            descriptionButton.doClick();
         });
 
         //添加采购组

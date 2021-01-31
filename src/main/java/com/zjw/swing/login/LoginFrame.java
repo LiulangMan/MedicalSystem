@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.Date;
@@ -95,7 +97,7 @@ public class LoginFrame extends JFrame {
         inner.add(serviceAddressFlag);
 
         //输入框
-        JTextField username = new JTextField("admin");
+        JTextField username = new JTextField("请输入用户名");
         username.setSize(200, 30);
         username.setLocation(200, 200);
         inner.add(username);
@@ -106,7 +108,7 @@ public class LoginFrame extends JFrame {
         inner.add(usernameFlag);
 
         //密码框
-        JPasswordField password = new JPasswordField("123456");
+        JPasswordField password = new JPasswordField();
         password.setSize(200, 30);
         password.setLocation(200, 250);
         inner.add(password);
@@ -164,8 +166,24 @@ public class LoginFrame extends JFrame {
 
 
         //监听
-        JFrame temp = this;
+        username.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (username.getText().equals("请输入用户名")) {
+                    username.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (username.getText().equals("")) {
+                    username.setText("请输入用户名");
+                }
+            }
+        });
+
         /*登陆*/
+        JFrame temp = this;
         loginButton.addActionListener(e -> {
 
             //加载数据

@@ -1,9 +1,11 @@
 package com.zjw.swing.utils;
 
+import com.zjw.utils.interfaceImpl.DefaultMouseListener;
+
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
+import javax.swing.table.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
 
 /**
  * @program: medical_sales_management_system
@@ -27,11 +29,13 @@ public class DefaultJTable extends JTable {
     public java.awt.Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
 
         java.awt.Component c = super.prepareRenderer(renderer, row, column);
-        if (c instanceof JComponent) {
-            ((JComponent) c).setOpaque(false);
-        }
+//        if (c instanceof JComponent) {
+//            ((JComponent) c).setOpaque(false);
+//        }
+
         return c;
     }
+
 
     public DefaultJTable(Object[] colName, DefaultTableModel tableModel) {
         super(tableModel);

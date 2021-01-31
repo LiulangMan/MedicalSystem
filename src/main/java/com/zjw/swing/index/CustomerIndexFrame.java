@@ -1,5 +1,6 @@
 package com.zjw.swing.index;
 
+import com.zjw.config.StaticConfiguration;
 import com.zjw.constant.IndexConstant;
 import com.zjw.domain.Customer;
 import com.zjw.service.LoginService;
@@ -8,9 +9,7 @@ import com.zjw.swing.home.HomeFrame;
 import com.zjw.swing.salesManager.SaleListPanel;
 import com.zjw.swing.salesManager.SaleRecordPanel;
 import com.zjw.swing.selfInformation.SelfInformationFrame;
-import com.zjw.swing.setting.SettingFrame;
 import com.zjw.swing.utils.ImageJPanel;
-import com.zjw.config.StaticConfiguration;
 import com.zjw.swing.utils.MySwingUtils;
 import com.zjw.utils.interfaceImpl.DefaultMouseListener;
 import com.zjw.utils.interfaceImpl.DefaultWindowsListener;
@@ -34,9 +33,6 @@ public class CustomerIndexFrame extends JFrame {
 
     @Autowired
     private SelfInformationFrame selfInformationFrame;
-
-    @Autowired
-    private SettingFrame settingFrame;
 
     @Autowired
     private HomeFrame homeFrame;
@@ -68,7 +64,6 @@ public class CustomerIndexFrame extends JFrame {
     private void initField() {
         homeFrame.init();
         selfInformationFrame.init();
-        settingFrame.init();
         goodsFrame.init();
         saleRecordPanel.init();
         helpOnline.init();
@@ -125,26 +120,24 @@ public class CustomerIndexFrame extends JFrame {
         this.setContentPane(mainPanel);
 
         //菜单面板
-        JPanel menu = new JPanel(new GridLayout(8, 1));
+        JPanel menu = new JPanel(new GridLayout(5, 1));
         menu.setSize(200, 800);
         menu.setLocation(50, 100);
         mainPanel.add(menu);
         menu.setBackground(null);
         menu.setOpaque(false);
 
-        JButton button0 = new JButton("主页");
+        JButton button0 = new JButton("公告");
         JButton button1 = new JButton("药物浏览");
         JButton button2 = new JButton("购买记录");
         JButton button3 = new JButton("问题咨询");
         JButton button4 = new JButton("个人信息");
-        JButton button5 = new JButton("个性设置");
 
         menu.add(button0);
         menu.add(button1);
         menu.add(button2);
         menu.add(button3);
         menu.add(button4);
-        menu.add(button5);
 
         //对应8个菜单的卡片面板
         CardLayout cardLayout = new CardLayout();
@@ -158,7 +151,6 @@ public class CustomerIndexFrame extends JFrame {
         card.add(saleRecordPanel, "购买记录");
         card.add(helpOnline, "问题咨询");
         card.add(selfInformationFrame, "个人信息");
-        card.add(settingFrame, "个性设置");
 
         //顶部信息面板
         JPanel top = new JPanel(null);
@@ -255,15 +247,6 @@ public class CustomerIndexFrame extends JFrame {
             if (lastButton != button4) {
                 lastButton.setBackground(null);
                 lastButton = button4;
-            }
-        });
-
-        button5.addActionListener(e -> {
-            cardLayout.show(card, "个性设置");
-            button5.setBackground(Color.GREEN);
-            if (lastButton != button5) {
-                lastButton.setBackground(null);
-                lastButton = button5;
             }
         });
 

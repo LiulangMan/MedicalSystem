@@ -1,18 +1,17 @@
 package com.zjw.swing.index;
 
+import com.zjw.config.StaticConfiguration;
 import com.zjw.constant.IndexConstant;
 import com.zjw.domain.Employ;
 import com.zjw.service.LoginService;
 import com.zjw.swing.helpEmployee.HelpEmployPlane;
 import com.zjw.swing.home.HomeFrame;
 import com.zjw.swing.log.LogFrame;
-import com.zjw.swing.stockManager.StockManagerFrame;
 import com.zjw.swing.salesManager.SalesMangerFrame;
 import com.zjw.swing.selfInformation.SelfInformationFrame;
-import com.zjw.swing.setting.SettingFrame;
+import com.zjw.swing.stockManager.StockManagerFrame;
 import com.zjw.swing.userManager.UserMangerFrame;
 import com.zjw.swing.utils.ImageJPanel;
-import com.zjw.config.StaticConfiguration;
 import com.zjw.swing.utils.MySwingUtils;
 import com.zjw.utils.interfaceImpl.DefaultMouseListener;
 import com.zjw.utils.interfaceImpl.DefaultWindowsListener;
@@ -49,9 +48,6 @@ public class EmployIndexFrame extends JFrame {
     private SelfInformationFrame selfInformationFrame;
 
     @Autowired
-    private SettingFrame settingFrame;
-
-    @Autowired
     private UserMangerFrame userMangerFrame;
 
     @Autowired
@@ -78,7 +74,6 @@ public class EmployIndexFrame extends JFrame {
         procurementManagerFrame.init();
         salesMangerFrame.init();
         selfInformationFrame.init();
-        settingFrame.init();
         if (StaticConfiguration.getEmploy().getType() == IndexConstant.LOGIN_TYPE_ADMIN) {
             userMangerFrame.init();
             logFrame.init();
@@ -142,28 +137,26 @@ public class EmployIndexFrame extends JFrame {
         this.setContentPane(mainPanel);
 
         //菜单面板
-        JPanel menu = new JPanel(new GridLayout(8, 1));
+        JPanel menu = new JPanel(new GridLayout(StaticConfiguration.getLoginType() == IndexConstant.LOGIN_TYPE_ADMIN ? 7 : 5, 1));
         menu.setSize(200, 800);
         menu.setLocation(50, 100);
         menu.setBackground(null);
         menu.setOpaque(false);
         mainPanel.add(menu);
 
-        JButton button0 = new JButton("主页");
+        JButton button0 = new JButton("公告");
         JButton button1 = new JButton("销售管理");
         JButton button2 = new JButton("采购管理");
         JButton button3 = new JButton("用户管理");
         JButton button4 = new JButton("问题答疑");
         JButton button5 = new JButton("日志记录");
         JButton button6 = new JButton("个人信息");
-        JButton button7 = new JButton("个性设置");
 
         menu.add(button0);
         menu.add(button1);
         menu.add(button2);
         menu.add(button4);
         menu.add(button6);
-        menu.add(button7);
 
         //对应8个菜单的卡片面板
         CardLayout cardLayout = new CardLayout();
@@ -177,7 +170,6 @@ public class EmployIndexFrame extends JFrame {
         card.add(procurementManagerFrame, "采购管理");
         card.add(helpEmployPlane, "问题答疑");
         card.add(selfInformationFrame, "个人信息");
-        card.add(settingFrame, "个性设置");
 
         //超级管理员模块
         if (StaticConfiguration.getEmploy().getType() == IndexConstant.LOGIN_TYPE_ADMIN) {
@@ -300,15 +292,6 @@ public class EmployIndexFrame extends JFrame {
             if (lastButton != button6) {
                 lastButton.setBackground(null);
                 lastButton = button6;
-            }
-        });
-
-        button7.addActionListener(e -> {
-            cardLayout.show(card, "个性设置");
-            button7.setBackground(Color.GREEN);
-            if (lastButton != button7) {
-                lastButton.setBackground(null);
-                lastButton = button7;
             }
         });
 

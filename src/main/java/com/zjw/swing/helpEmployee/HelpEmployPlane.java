@@ -2,6 +2,7 @@ package com.zjw.swing.helpEmployee;
 
 import com.zjw.config.FontConfiguration;
 import com.zjw.config.StaticConfiguration;
+import com.zjw.constant.IndexConstant;
 import com.zjw.domain.Question;
 import com.zjw.service.QuestionService;
 import com.zjw.swing.message.MessageShowByText;
@@ -52,7 +53,10 @@ public class HelpEmployPlane extends ImageJPanel {
         JMenuItem answerButton = new JMenuItem("回答问题");
         JMenuItem deleteButton = new JMenuItem("删除问题");
         jPopupMenu.add(answerButton);
-        jPopupMenu.add(deleteButton);
+
+        if (StaticConfiguration.getLoginType() == IndexConstant.LOGIN_TYPE_ADMIN) {
+            jPopupMenu.add(deleteButton);
+        }
 
         //搜索栏
         JLabel searchF = new JLabel("问题");
@@ -89,19 +93,17 @@ public class HelpEmployPlane extends ImageJPanel {
         answerButton.addActionListener(e -> {
             Integer id = (Integer) questionTable.getValueAt(questionTable.getSelectedRow(), 0);
             Question question = questionService.queryOneById(id);
-            StaticConfiguration.addThreadPoolTask(new Runnable() {
-                @Override
-                public void run() {
-                    helpQuestionEditFrame.run(question);
-                }
-            });
+            StaticConfiguration.addThreadPoolTask(() -> helpQuestionEditFrame.run(question));
         });
 
         deleteButton.addActionListener(e -> {
-            boolean b = MessageShows.ShowMessageAboutMakeSure(this, "确认删除该问题？");
+            boolean b = MessageShows.ShowMessageAboutMakeSure(this, "确认删除选中问题？");
             if (!b) return;
 
-            questionService.deleteQuestionById((Integer) questionTable.getValueAt(questionTable.getSelectedRow(), 0));
+            int[] rows = questionTable.getSelectedRows();
+            for (int row : rows) {
+                questionService.deleteQuestionById((Integer) questionTable.getValueAt(row, 0));
+            }
             MessageShows.ShowMessageText(this, null, "删除成功");
             this.refreshData();
         });

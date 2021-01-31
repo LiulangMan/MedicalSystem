@@ -29,16 +29,19 @@ public class MessageShowByText {
         JPanel show = new ImageJPanel(null, "/images/login/t4.jpg");
         jf.setContentPane(show);
 
-        JTextPane labelF = new JTextPane();
-        labelF.setText(text);
-        labelF.setEditable(false);
-        labelF.setFont(FontConfiguration.getFont("宋体", 25));
+        JTextPane textPane = new JTextPane();
+        textPane.setText(text);
+        textPane.setEditable(false);
+        textPane.setOpaque(false);
+        textPane.setFont(FontConfiguration.getFont("宋体", 25));
 
-        JScrollPane label = new JScrollPane(labelF);
-        label.setSize(1000, 800);
-        label.setLocation(0, 0);
-        label.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
-        show.add(label);
+        JScrollPane scrollPane = new JScrollPane(textPane);
+        scrollPane.setSize(1000, 800);
+        scrollPane.setLocation(0, 0);
+        scrollPane.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+        show.add(scrollPane);
 
         jf.setVisible(true);
     }
