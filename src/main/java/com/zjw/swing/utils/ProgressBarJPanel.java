@@ -50,12 +50,4 @@ public class ProgressBarJPanel extends JPanel {
         label.setText(title);
     }
 
-
-    public static void main(String[] args) {
-        ProgressBarJPanel panel = new ProgressBarJPanel();
-        panel.setTitle("正在备份数据库");
-        JPanelTest.setSize(400, 200);
-        JPanelTest.test(panel);
-    }
-
 }

@@ -79,6 +79,7 @@
             <artifactId>shiro-core</artifactId>
             <version>1.4.1</version>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
@@ -105,7 +106,6 @@
             <artifactId>jieba-analysis</artifactId>
             <version>1.0.2</version>
         </dependency>
-
 
     </dependencies>
 

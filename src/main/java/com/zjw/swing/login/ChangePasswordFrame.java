@@ -167,10 +167,20 @@ public class ChangePasswordFrame {
             newPwdFlag.setLocation(350, 550);
             content.add(newPwdFlag);
 
+            JPasswordField newPwd2 = new JPasswordField();
+            newPwd2.setSize(200, 30);
+            newPwd2.setLocation(400, 600);
+            content.add(newPwd2);
+
+            JLabel newPwdFlag2 = new JLabel("新密码");
+            newPwdFlag2.setSize(100, 30);
+            newPwdFlag2.setLocation(350, 600);
+            content.add(newPwdFlag2);
+
             //确认按钮
             JButton okButton = new JButton("确认修改");
             okButton.setSize(100, 30);
-            okButton.setLocation(450, 600);
+            okButton.setLocation(450, 650);
             content.add(okButton);
 
             this.setContentPane(content);
@@ -179,6 +189,10 @@ public class ChangePasswordFrame {
 
             okButton.addActionListener(e -> {
                 try {
+                    if (!Arrays.equals(newPwd.getPassword(), newPwd2.getPassword())){
+                        MessageShows.ShowMessageText(this,"fail","两次新密码不同");
+                        return;
+                    }
                     String pwd = Md5Utils.Md5(String.valueOf(oldPwd.getPassword()));
                     if (StaticConfiguration.getEmploy() != null) {
                         if (!StaticConfiguration.getEmploy().getLoginPassword().equals(pwd)) {
