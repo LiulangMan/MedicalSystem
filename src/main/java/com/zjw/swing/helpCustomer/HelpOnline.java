@@ -19,7 +19,11 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.net.URI;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +41,7 @@ public class HelpOnline extends ImageJPanel {
     private QuestionService questionService;
 
     public HelpOnline() {
-        super(null,"/images/index/t7.jpg");
+        super(null, "/images/index/t7.jpg");
     }
 
     public void init() {
@@ -65,6 +69,11 @@ public class HelpOnline extends ImageJPanel {
         searchButton.setLocation(400, 600);
         this.add(searchButton);
 
+        JButton urlButton = new JButton("百度一下");
+        urlButton.setSize(100, 30);
+        urlButton.setLocation(1000, 700);
+        this.add(urlButton);
+
         //提问
         JButton questionButton = new JButton("提问");
         questionButton.setBounds(1000, 600, 100, 30);
@@ -86,6 +95,21 @@ public class HelpOnline extends ImageJPanel {
                     String answerText = (String) questionTable.getValueAt(row, 3);
                     MessageShowByText.show(questionText, answerText, FontConfiguration.getFont("宋体", 25));
                 }
+            }
+        });
+
+        urlButton.addActionListener(e -> {
+            try {
+                URI uri = URI.create("http://www.baidu.com");
+                Desktop desktop = Desktop.getDesktop();
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                    desktop.browse(uri);
+                } else {
+                    MessageShows.ShowMessageText(this, "", "不支持浏览器");
+                }
+
+            } catch (Exception e1) {
+                MessageShows.ShowMessageText(this, "", e1.toString());
             }
         });
 

@@ -43,7 +43,7 @@ public class StaticConfiguration {
     private static Map<Integer, Goods> stockGoodsCache = new HashMap<>(100);
     private static Map<String, StockOrder> stockGoodsOrderCache = new HashMap<>(100);
 
-    //字体
+    //字体a'a
     private static Font font = new Font(null, Font.PLAIN, 25);
 
     //初始化Config
