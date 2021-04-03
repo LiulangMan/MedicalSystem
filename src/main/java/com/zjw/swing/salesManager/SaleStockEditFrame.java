@@ -42,9 +42,6 @@ public class SaleStockEditFrame extends JFrame {
     @Autowired
     private OptionLogPanel optionLogPanel;
 
-    @Autowired
-    private OptionService optionService;
-
     public void run(Goods goods, Goods stockGoods) {
         this.setSize(800, 200);
         this.setLocationRelativeTo(null);
@@ -149,6 +146,10 @@ public class SaleStockEditFrame extends JFrame {
                 protected void done() {
                     MySwingUtils.ProgressBar.closeProgressBar();
                     MessageShows.ShowMessageText(temp, null, "调整成功");
+                    saleListPanel.refreshData();
+                    stockListPanel.refreshData();
+                    saleStockPanel.refreshData();
+                    optionLogPanel.refreshData();
                     temp.setVisible(false);
                     temp.dispose();
                 }
@@ -161,11 +162,6 @@ public class SaleStockEditFrame extends JFrame {
                         OptionUtils.recordCurrentOption("调整了药品 id:" + goods.getGoodId() + "-" + goods.getGoodName() + " 销售量为" + goods.getGoodStock());
                         goodService.updateByGoodsId(goods);
                         goodService.updateStockGoodsById(stockGoods);
-
-                        saleListPanel.refreshData();
-                        stockListPanel.refreshData();
-                        saleStockPanel.refreshData();
-                        optionLogPanel.refreshData();
                         return 0;
                     } catch (Exception ex) {
                         ex.printStackTrace();
