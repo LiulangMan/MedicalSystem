@@ -116,7 +116,7 @@ public class SaleRecordPanel extends ImageJPanel {
             builder.append("医疗销售订单\n")
                     .append("- 订单号:").append(order.getOrderId()).append("\n")
                     .append("- 时间:").append(DataUtils.defaultDataFormat.format(order.getOrderTime())).append("\n")
-                    .append("- 销售列表:").append("\n");
+                    .append("- 药品明细:").append("\n");
             for (GoodsIdAndGoodsCntForOrder o : order.getGoodsIdMap()) {
                 Goods goods = StaticConfiguration.getGoodsInCache(o.getGoodsId());
                 builder.append("---- ").append(goods.getGoodName())

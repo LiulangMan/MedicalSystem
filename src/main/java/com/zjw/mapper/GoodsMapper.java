@@ -31,6 +31,10 @@ public interface GoodsMapper {
 
     /*采购相关*/
 
+    Goods selectOneFromStockGoodsById(Integer id);
+
+    Goods selectOneFromStockGoodsByName(String name);
+
     int insertToStockList(Goods goods);
 
     List<Goods> selectAllStockGoods();

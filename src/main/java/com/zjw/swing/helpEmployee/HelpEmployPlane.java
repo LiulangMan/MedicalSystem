@@ -17,7 +17,9 @@ import org.springframework.stereotype.Component;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.net.URI;
 import java.util.List;
 
 /**
@@ -74,6 +76,16 @@ public class HelpEmployPlane extends ImageJPanel {
         searchButton.setLocation(400, 600);
         this.add(searchButton);
 
+        JTextField baiduText = new JTextField();
+        baiduText.setSize(200, 30);
+        baiduText.setLocation(780, 700);
+        this.add(baiduText);
+
+        JButton urlButton = new JButton("百度一下");
+        urlButton.setSize(100, 30);
+        urlButton.setLocation(1000, 700);
+        this.add(urlButton);
+
 
         /*监听*/
         questionTable.addMouseListener(new DefaultMouseListener() {
@@ -116,6 +128,21 @@ public class HelpEmployPlane extends ImageJPanel {
             }
             List<Question> questions = questionService.queryAllByQuestion(text);
             questionTable.refreshData(DataUtils.QuestionToArray(questions));
+        });
+
+        urlButton.addActionListener(e -> {
+            try {
+                URI uri = URI.create("https://www.baidu.com/s?wd=" + baiduText.getText());
+                Desktop desktop = Desktop.getDesktop();
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                    desktop.browse(uri);
+                } else {
+                    MessageShows.ShowMessageText(this, "", "不支持浏览器");
+                }
+
+            } catch (Exception e1) {
+                MessageShows.ShowMessageText(this, "", e1.toString());
+            }
         });
     }
 

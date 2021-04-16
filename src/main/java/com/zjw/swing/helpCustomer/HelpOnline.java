@@ -69,6 +69,11 @@ public class HelpOnline extends ImageJPanel {
         searchButton.setLocation(400, 600);
         this.add(searchButton);
 
+        JTextField baiduText = new JTextField();
+        baiduText.setSize(200, 30);
+        baiduText.setLocation(780, 700);
+        this.add(baiduText);
+
         JButton urlButton = new JButton("百度一下");
         urlButton.setSize(100, 30);
         urlButton.setLocation(1000, 700);
@@ -100,7 +105,7 @@ public class HelpOnline extends ImageJPanel {
 
         urlButton.addActionListener(e -> {
             try {
-                URI uri = URI.create("http://www.baidu.com");
+                URI uri = URI.create("https://www.baidu.com/s?wd=" + baiduText.getText());
                 Desktop desktop = Desktop.getDesktop();
                 if (desktop.isSupported(Desktop.Action.BROWSE)) {
                     desktop.browse(uri);

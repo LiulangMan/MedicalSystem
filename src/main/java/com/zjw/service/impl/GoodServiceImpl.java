@@ -76,7 +76,7 @@ public class GoodServiceImpl implements GoodService {
 
     @Override
     public boolean checkIdOrNameInDataBase(int id, String name) {
-        return (goodsMapper.selectByPrimaryKey(id) != null) || (goodsMapper.selectOneByName(name) != null);
+        return (goodsMapper.selectOneFromStockGoodsById(id) != null) || (goodsMapper.selectOneFromStockGoodsByName(name) != null);
     }
 
     @Override

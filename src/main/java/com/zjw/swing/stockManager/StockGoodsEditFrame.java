@@ -85,6 +85,11 @@ public class StockGoodsEditFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(descriptionText);
         scrollPane.setBounds(100, 160, 1000, 300);
         scrollPane.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
+        descriptionText.setText("【药效】\n" +
+                "\n" + "\n" +
+                "【适用人群】\n" +
+                "\n" + "\n" +
+                "【副作用】\n");
         panel.add(scrollPane);
 
         JLabel descriptionF = new JLabel("描述");
@@ -199,7 +204,7 @@ public class StockGoodsEditFrame extends JFrame {
                 this.setVisible(false);
                 this.dispose();
             } catch (Exception ex) {
-                ex.printStackTrace();
+                MessageShows.ShowMessageText(this,"failed","参数错误");
             }
         });
     }

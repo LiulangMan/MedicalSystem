@@ -53,7 +53,6 @@
         select
         <include refid="Base_Column_List"/>
         from bus_goods
-        
     </select>
 
     <select id="selectByLeftPrice" parameterType="java.lang.Double" resultMap="BaseResultMap">
@@ -181,13 +180,25 @@
         select
         <include refid="Base_Column_List"/>
         from bus_stock_goods
-        
+    </select>
+
+    <select id="selectOneFromStockGoodsById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bus_stock_goods
+        where good_name = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectOneFromStockGoodsByName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bus_stock_goods
+        where good_name = #{name,jdbcType=VARCHAR}
     </select>
 
     <select id="selectMaxStockGoodsId" resultType="java.lang.Integer">
         select max(good_id)
         from bus_stock_goods
-        
     </select>
 
     <delete id="deleteStockGoodsById" parameterType="_integer">
