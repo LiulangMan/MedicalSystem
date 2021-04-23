@@ -32,9 +32,6 @@ public class HomeFrame extends ImageJPanel {
     private AnnouncementService announcementService;
 
     @Autowired
-    private HomeEditFrame homeEditFrame;
-
-    @Autowired
     private HomeListFrame homeListFrame;
 
     //弹出菜单
@@ -70,22 +67,8 @@ public class HomeFrame extends ImageJPanel {
         JMenuItem refreshMenu = new JMenuItem("刷新");
         refreshMenu.setFont(new Font(null, Font.PLAIN, 20));
 
-        JMenuItem editMenu = new JMenuItem("编辑");
-        editMenu.setFont(new Font(null, Font.PLAIN, 20));
-
-        JMenuItem deleteMenu = new JMenuItem("删除");
-        deleteMenu.setFont(new Font(null, Font.PLAIN, 20));
-
-        JMenuItem addMenu = new JMenuItem("添加");
-        addMenu.setFont(new Font(null, Font.PLAIN, 20));
-
-
         popupMenu.add(refreshMenu);
-        if (StaticConfiguration.getLoginType() == IndexConstant.LOGIN_TYPE_ADMIN) {
-            popupMenu.add(editMenu);
-            popupMenu.add(deleteMenu);
-            popupMenu.add(addMenu);
-        }
+
 
         /*监听*/
         announcementPanel.addMouseListener(new DefaultMouseListener() {
@@ -99,35 +82,6 @@ public class HomeFrame extends ImageJPanel {
 
         refreshMenu.addActionListener(e -> {
             refreshAnnouncementPanel();
-        });
-        editMenu.addActionListener(e -> {
-
-            //首页展示
-            Point point = announcementPanel.getMousePosition();
-            java.awt.Component component = announcementPanel.getComponentAt(point.x, point.y - 30);
-            if (component instanceof FontJLabel) {
-                FontJLabel jLabel = (FontJLabel) component;
-                StaticConfiguration.addThreadPoolTask(() -> homeEditFrame.run(jLabel.getAnnouncement()));
-            }
-        });
-
-        deleteMenu.addActionListener(e -> {
-            boolean b = MessageShows.ShowMessageAboutMakeSure(this,"确认删除该公告吗？");
-            if (!b) return;
-            Point point = announcementPanel.getMousePosition();
-            java.awt.Component component = announcementPanel.getComponentAt(point.x, point.y - 60);
-            if (component instanceof FontJLabel) {
-                FontJLabel jLabel = (FontJLabel) component;
-                announcementService.deleteAnnouncement(jLabel.getAnnouncement());
-                refreshAnnouncementPanel();
-            }
-        });
-
-        addMenu.addActionListener(e -> {
-            StaticConfiguration.addThreadPoolTask(() -> {
-                homeEditFrame.run(null);
-            });
-
         });
 
         listButton.addActionListener(e -> {

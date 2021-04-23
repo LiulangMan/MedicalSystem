@@ -198,11 +198,19 @@ public class SelfInformationFrame extends ImageJPanel {
 
         //注销账户
         deleteButton.addActionListener(e -> {
-            if (MessageShows.ShowMessageAboutMakeSure(this,"确认删除该账户吗")) {
+            if (MessageShows.ShowMessageAboutMakeSure(this, "确认删除该账户吗")) {
                 if (isEmploy) {
+                    //不能注销超级管理员
+                    if (employ.getType() == IndexConstant.LOGIN_TYPE_ADMIN) {
+                        MessageShows.ShowMessageText(this, "success", "不能注销注超级管理员");
+                        return;
+                    }
+                    //注销员工
                     employService.deleteById(employ.getId());
+                    loginService.logout(employ.getLoginName(), IndexConstant.LOGIN_TYPE_EMPLOY);
                 } else {
                     customerService.delete(customer.getId());
+                    loginService.logout(customer.getLoginName(), IndexConstant.LOGIN_TYPE_CUSTOMER);
                 }
 
                 MessageShows.ShowMessageText(this, "success", "注销成功");

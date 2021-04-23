@@ -195,6 +195,7 @@ public class StockOrderFrame extends JFrame {
                         StaticConfiguration.addStockGoodsOrderCache(order);
                         return 0;
                     } catch (Exception ex) {
+                        ex.printStackTrace();
                         return 1;
                     }
                 }

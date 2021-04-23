@@ -148,8 +148,9 @@ public class UserMangerFrame extends ImageJPanel {
             if (type == IndexConstant.LOGIN_TYPE_CUSTOMER) {
                 customerService.deleteByUserName(userName);
             }
+            //如果已经登陆，强制退出。
+            loginService.logout(userName, type);
             MessageShows.ShowMessageText(this, null, "删除成功");
-
             refreshData();
         });
 
@@ -171,6 +172,7 @@ public class UserMangerFrame extends ImageJPanel {
             Object object = null;
             if (type.equals(IndexConstant.LOGIN_TYPE_ADMIN)) {
                 MessageShows.ShowMessageText(this, null, "不可编辑超级管理员");
+                return;
             } else if (type.equals(IndexConstant.LOGIN_TYPE_EMPLOY)) {
                 object = employService.queryByLoginNameForOne(username);
             } else if (type.equals(IndexConstant.LOGIN_TYPE_CUSTOMER)) {

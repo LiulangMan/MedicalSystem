@@ -214,7 +214,7 @@ public class LoginFrame extends JFrame {
                     String usernameText = username.getText();
                     char[] passwordText = password.getPassword();
 
-                    if (EmptyUtils.isEmptyOfUserNameOrPwd(usernameText, Arrays.toString(passwordText))) {
+                    if (EmptyUtils.isEmptyOfUserNameOrPwd(usernameText, String.valueOf(passwordText))) {
                         //弹出用户名或者密码不能为空
                         //MessageShows.EmptyUserOrPwd(this);
                         return 1;

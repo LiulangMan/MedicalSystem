@@ -169,10 +169,10 @@
     <insert id="insertToStockList" parameterType="com.zjw.domain.Goods">
         <!--@mbg.generated-->
         insert into bus_stock_goods (good_id, good_name,
-                                     good_text, good_money, good_type, good_supplier_id)
+                                     good_text, good_money, good_type, good_supplier_id,good_stock)
         values (#{goodId,jdbcType=INTEGER}, #{goodName,jdbcType=VARCHAR},
                 #{goodText,jdbcType=VARCHAR}, #{goodMoney,jdbcType=DOUBLE}, #{goodType,jdbcType=INTEGER},
-                #{supplierId,jdbcType=INTEGER})
+                #{supplierId,jdbcType=INTEGER},#{goodStock,jdbcType=INTEGER})
     </insert>
 
     <select id="selectAllStockGoods" resultMap="BaseResultMap">
